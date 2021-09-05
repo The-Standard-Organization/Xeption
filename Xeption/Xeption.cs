@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Xeption
+namespace Xeptions
 {
     public class Xeption : Exception
     {

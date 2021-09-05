@@ -8,7 +8,7 @@ using FluentAssertions;
 using Xunit;
 using CollectionDictionary = System.Collections.IDictionary;
 
-namespace Xeption.Tests
+namespace Xeptions.Tests
 {
     public partial class XeptionTests
     {

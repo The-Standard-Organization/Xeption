@@ -6,7 +6,7 @@
 
 using Tynamix.ObjectFiller;
 
-namespace Xeption.Tests
+namespace Xeptions.Tests
 {
     public partial class XeptionTests
     {
