@@ -10,10 +10,8 @@ namespace Xeption.Tests
 {
     public partial class XeptionTests
     {
-        private readonly Xeption xeption;
-
-        public XeptionTests() =>
-            this.xeption = new Xeption();
+        private static string GetRandomMessage() =>
+            new MnemonicString().GetValue();
 
         private static Dictionary<string, List<object>> CreateRandomDictionary()
         {

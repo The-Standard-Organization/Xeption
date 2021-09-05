@@ -21,25 +21,41 @@ namespace Xeption.Tests
         }
 
         [Fact]
+        public void ShouldExposeMessageApi()
+        {
+            // given
+            string randomMessage = GetRandomMessage();
+            string inputMessage = randomMessage;
+            string expectedMessage = inputMessage;
+
+            // when
+            var xeption = new Xeption(message: inputMessage);
+
+            // then
+            xeption.Message.Should().BeEquivalentTo(expectedMessage);
+        }
+
+        [Fact]
         public void ShouldAppendListOfKeyValues()
         {
             // given
+            var xeption = new Xeption();
+            
             Dictionary<string, List<object>> randomDictionary =
                 CreateRandomDictionary();
 
             Dictionary<string, List<object>> expectedDictionary =
                 randomDictionary;
 
-            var xeption = new Xeption();
 
             // when
             foreach (string key in randomDictionary.Keys)
             {
                 randomDictionary[key].ForEach(value =>
-                    this.xeption.UpsertDataList(key, value));
+                    xeption.UpsertDataList(key, value));
             }
 
-            CollectionDictionary actualDictionary = this.xeption.Data;
+            CollectionDictionary actualDictionary = xeption.Data;
 
             // then
             foreach (string key in expectedDictionary.Keys)
