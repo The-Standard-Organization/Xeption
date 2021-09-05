@@ -4,9 +4,11 @@ A Better Exception for .NET
 This simple library is engineered to expose a new API for the standard .NET `Exception` model to allow upserting a list of values against a key in the `Data` property of that very exception.
 
 ## The Purpose
-The purpose of this library is to allow .NET engineers to collect errors for any given flow or attribute before throwing the exception.
+The purpose of this library is to allow .NET engineers to easily collect errors for any given flow or attribute before throwing the exception.
 
 This new API simplifies the process of appending and being able to access the `Data` aspect of any exception to collect errors at any point in time.
+
+The key value implementation for the `Data` attribute should make it simpler for engineers to represent errors around the same issue, attribute or value such as validation errors easily without any additional work-around code.
 
 
 ## How to Use
