@@ -31,7 +31,9 @@ namespace Xeption
             }
         }
 
-        public void ThrowIfContainsErrors() =>
-            throw new NotImplementedException();
+        public void ThrowIfContainsErrors()
+        {
+            throw this;
+        }
     }
 }
