@@ -33,7 +33,10 @@ namespace Xeption
 
         public void ThrowIfContainsErrors()
         {
-            throw this;
+            if (this.Data.Count > 0)
+            {
+                throw this;
+            }
         }
     }
 }
