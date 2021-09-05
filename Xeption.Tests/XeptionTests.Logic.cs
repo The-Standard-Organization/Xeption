@@ -83,5 +83,23 @@ namespace Xeption.Tests
                 actualDictionary[key].Should().BeEquivalentTo(expectedDictionary[key]);
             }
         }
+
+        [Fact]
+        public void ShouldThrowIfContainsErrors()
+        {
+            // given
+            var xeption = new Xeption();
+            string someKey = GetRandomMessage();
+            string someValue = GetRandomMessage();
+
+            // when
+            xeption.UpsertDataList(
+                key: someKey,
+                value: someValue);
+
+            // then
+            Assert.Throws<Xeption>(() => 
+                xeption.ThrowIfContainsErrors());
+        }
     }
 }

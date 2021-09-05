@@ -30,5 +30,8 @@ namespace Xeption
                 this.Data.Add(key, new List<object> { value });
             }
         }
+
+        public void ThrowIfContainsErrors() =>
+            throw new NotImplementedException();
     }
 }
