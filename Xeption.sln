@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xeption", "Xeption\Xeption.csproj", "{903BFBDD-0C7E-4E76-8680-5461F659EACF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xeption.Tests", "Xeption.Tests\Xeption.Tests.csproj", "{C72AD7F5-15EA-485B-A997-9F5C3772CC5E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{903BFBDD-0C7E-4E76-8680-5461F659EACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{903BFBDD-0C7E-4E76-8680-5461F659EACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{903BFBDD-0C7E-4E76-8680-5461F659EACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{903BFBDD-0C7E-4E76-8680-5461F659EACF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C72AD7F5-15EA-485B-A997-9F5C3772CC5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C72AD7F5-15EA-485B-A997-9F5C3772CC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C72AD7F5-15EA-485B-A997-9F5C3772CC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C72AD7F5-15EA-485B-A997-9F5C3772CC5E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B0D28EC-C885-4BC2-942E-835DA222E9DE}
+	EndGlobalSection
+EndGlobal
