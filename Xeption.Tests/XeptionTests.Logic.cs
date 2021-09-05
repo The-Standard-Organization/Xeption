@@ -13,6 +13,14 @@ namespace Xeption.Tests
     public partial class XeptionTests
     {
         [Fact]
+        public void ShouldInheritFromSystemException()
+        {
+            // given . when . then
+            typeof(Xeption).IsSubclassOf(typeof(Exception))
+                .Should().BeTrue();
+        }
+
+        [Fact]
         public void ShouldAppendListOfKeyValues()
         {
             // given
