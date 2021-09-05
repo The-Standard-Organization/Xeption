@@ -11,11 +11,9 @@ namespace Xeption
 {
     public class Xeption : Exception
     {
-        public Xeption() : base()
-        { }
+        public Xeption() : base() { }
 
-        public Xeption(string message) : base(message)
-        { }
+        public Xeption(string message) : base(message) { }
 
         public Xeption(string message, Exception innerException)
             : base(message, innerException)

@@ -36,6 +36,26 @@ namespace Xeption.Tests
         }
 
         [Fact]
+        public void ShouldExposeMessageAndExceptionApi()
+        {
+            // given
+            string randomMessage = GetRandomMessage();
+            string inputMessage = randomMessage;
+            string expectedMessage = inputMessage;
+            var inputInnerException = new Exception();
+            Exception expectedInnerException = inputInnerException;
+
+            // when
+            var xeption = new Xeption(
+                message: inputMessage,
+                innerException: inputInnerException);
+
+            // then
+            xeption.Message.Should().BeEquivalentTo(expectedMessage);
+            xeption.InnerException.Should().BeEquivalentTo(expectedInnerException);
+        }
+
+        [Fact]
         public void ShouldAppendListOfKeyValues()
         {
             // given
