@@ -35,5 +35,27 @@ Xeption also provides the ability to throw the local exception iff the data dict
 myLocalException.ThrowIfContainsErrors();
 ```
 
+## Native APIs
+Xeption will maintain the native APIs for the `Exception` native class.
+
+```csharp
+var xeption = new Xeption();
+
+var xeptionWithMessage = new Xeption(message: "Some Message");
+
+var xeptionWithInnerException = new Xeption(
+	message: "Some Message",
+	innerException: someInnerException);
+
+```
+
+If you have any suggestions, comments or questions, please feel free to contact me on:
+<br />
+Twitter: @hassanrezkhabib
+<br />
+LinkedIn: hassanrezkhabib
+<br />
+E-Mail: hassanhabib@live.com
+<br />
 
 
