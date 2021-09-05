@@ -28,14 +28,14 @@ var myLocalException = new MyLocalException();
 myLocalException.UpsertDataList(key: "MyKey", value: "MyValue");
 ```
 
-## Throwing If Contains Errors
+### Throwing If Contains Errors
 Xeption also provides the ability to throw the local exception iff the data dictionary contains values in it. You can simply call that API from your local instance as follows:
 
 ```csharp
 myLocalException.ThrowIfContainsErrors();
 ```
 
-## Native APIs
+### Native APIs
 Xeption will maintain the native APIs for the `Exception` native class.
 
 ```csharp
