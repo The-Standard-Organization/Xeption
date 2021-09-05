@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="25%" height="25%" src="https://raw.githubusercontent.com/hassanhabib/Xeption/master/Xeption/Resources/Xeption.png">
+</p>
+
 # Xeption
 A Better Exception for .NET
 
