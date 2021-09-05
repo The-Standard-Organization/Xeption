@@ -13,28 +13,11 @@ namespace Xeptions.Tests
         private static string GetRandomMessage() =>
             new MnemonicString().GetValue();
 
-        private static Dictionary<string, List<object>> CreateRandomDictionary()
+        private static Dictionary<string, List<string>> CreateRandomDictionary()
         {
-            var filler = new Filler<Dictionary<string, List<object>>>();
-
-            filler.Setup()
-                .OnType<object>().Use(GetRandomObject());
+            var filler = new Filler<Dictionary<string, List<string>>>();
 
             return filler.Create();
-        }
-
-        private static object GetRandomObject()
-        {
-            int randomValue = new IntRange(min: 0, max: 4).GetValue();
-
-            return randomValue switch
-            {
-                0 => new MnemonicString().GetValue(),
-                1 => new DateTimeRange(earliestDate: new DateTime()).GetValue(),
-                2 => new EmailAddresses().GetValue(),
-                3 => new IntRange().GetValue(),
-                _ => Randomizer<bool>.Create()
-            };
         }
     }
 }

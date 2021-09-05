@@ -61,10 +61,10 @@ namespace Xeptions.Tests
             // given
             var xeption = new Xeption();
             
-            Dictionary<string, List<object>> randomDictionary =
+            Dictionary<string, List<string>> randomDictionary =
                 CreateRandomDictionary();
 
-            Dictionary<string, List<object>> expectedDictionary =
+            Dictionary<string, List<string>> expectedDictionary =
                 randomDictionary;
 
 

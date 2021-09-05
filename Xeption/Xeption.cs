@@ -19,15 +19,15 @@ namespace Xeptions
             : base(message, innerException)
         { }
 
-        public void UpsertDataList(string key, object value)
+        public void UpsertDataList(string key, string value)
         {
             if (this.Data.Contains(key))
             {
-                (this.Data[key] as List<object>)?.Add(value);
+                (this.Data[key] as List<string>)?.Add(value);
             }
             else
             {
-                this.Data.Add(key, new List<object> { value });
+                this.Data.Add(key, new List<string> { value });
             }
         }
 
