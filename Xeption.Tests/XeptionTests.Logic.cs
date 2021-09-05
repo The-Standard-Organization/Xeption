@@ -107,17 +107,13 @@ namespace Xeption.Tests
         {
             // given
             var xeption = new Xeption();
-            string someKey = GetRandomMessage();
-            string someValue = GetRandomMessage();
 
             // when
-            xeption.UpsertDataList(
-                key: someKey,
-                value: someValue);
+            Exception actualException = Record.Exception(() => 
+                xeption.ThrowIfContainsErrors());
 
             // then
-            Record.Exception(() => xeption.ThrowIfContainsErrors())
-                .Should().BeNull();
+            actualException.Should().BeNull();
         }
     }
 }
