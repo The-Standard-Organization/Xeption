@@ -1,41 +1,42 @@
+// ---------------------------------------------------------------
+// Copyright (c) Hassan Habib All rights reserved.
+// Licensed under the MIT License.
+// See License.txt in the project root for license information.
+// ---------------------------------------------------------------
+
 using Tynamix.ObjectFiller;
-using Xunit;
 
 namespace Xeption.Tests
 {
-    public class XeptionTests
+    public partial class XeptionTests
     {
         private readonly Xeption xeption;
 
         public XeptionTests() =>
             this.xeption = new Xeption();
 
-        [Fact]
-        public void ShouldAppendListOfKeyValues()
+        private static Dictionary<string, List<object>> CreateRandomDictionary()
         {
-            // given
-            Dictionary<string, List<string>> randomDictionary = 
-                CreateRandomDictionary();
+            var filler = new Filler<Dictionary<string, List<object>>>();
 
-            Dictionary<string, List<string>> expectedDictionary =
-                randomDictionary;
+            filler.Setup()
+                .OnType<object>().Use(GetRandomObject());
 
-            var xeption = new Xeption();
-
-            // when
-            foreach(string key in randomDictionary.Keys)
-            {
-                randomDictionary[key].ForEach(value =>
-                {
-                    this.xeption.
-                });
-            }
-
-            // then
-
+            return filler.Create();
         }
 
-        private static Dictionary<string, List<string>> CreateRandomDictionary() =>
-            new Filler<Dictionary<string, List<string>>>().Create();
+        private static object GetRandomObject()
+        {
+            int randomValue = new IntRange(min: 0, max: 4).GetValue();
+
+            return randomValue switch
+            {
+                0 => new MnemonicString().GetValue(),
+                1 => new DateTimeRange(earliestDate: new DateTime()).GetValue(),
+                2 => new EmailAddresses().GetValue(),
+                3 => new IntRange().GetValue(),
+                _ => Randomizer<bool>.Create()
+            };
+        }
     }
 }
