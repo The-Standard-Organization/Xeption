@@ -4,9 +4,10 @@
 // See License.txt in the project root for license information.
 // ---------------------------------------------------------------
 
+using System.Collections;
 using FluentAssertions;
 using Xunit;
-using CollectionDictionary = System.Collections.IDictionary;
+using ICollectionDictionary = System.Collections.IDictionary;
 
 namespace Xeptions.Tests
 {
@@ -75,7 +76,7 @@ namespace Xeptions.Tests
                     xeption.UpsertDataList(key, value));
             }
 
-            CollectionDictionary actualDictionary = xeption.Data;
+            ICollectionDictionary actualDictionary = xeption.Data;
 
             // then
             foreach (string key in expectedDictionary.Keys)
@@ -96,17 +97,32 @@ namespace Xeptions.Tests
             Dictionary<string, List<string>> expectedDictionary =
                 randomDictionary;
 
-
             // when
             xeption.AddData(randomDictionary);
 
-            CollectionDictionary actualDictionary = xeption.Data;
+            ICollectionDictionary actualDictionary = xeption.Data;
 
             // then
             foreach (string key in expectedDictionary.Keys)
             {
                 actualDictionary[key].Should().BeEquivalentTo(expectedDictionary[key]);
             }
+        }
+
+        [Fact]
+        public void ShouldDoNothingOnAddDictionaryIfNull()
+        {
+            // given
+            var xeption = new Xeption();
+            ICollectionDictionary nullDictionary = null;
+
+            // when
+            xeption.AddData(dictionary: nullDictionary);
+
+            ICollectionDictionary actualDictionary = xeption.Data;
+
+            // then
+            actualDictionary.Count.Should().Be(0);
         }
 
         [Fact]
