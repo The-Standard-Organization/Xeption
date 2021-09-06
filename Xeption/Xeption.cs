@@ -5,7 +5,9 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using CollectionDictionary = System.Collections.IDictionary;
 
 namespace Xeptions
 {
@@ -39,9 +41,15 @@ namespace Xeptions
             }
         }
 
-        public void AddData(IDictionary<string, List<string>> dictionary)
+        public void AddData(CollectionDictionary dictionary)
         {
-            throw new NotImplementedException();
+            if (dictionary != null)
+            {
+                foreach (DictionaryEntry item in dictionary)
+                {
+                    this.Data.Add(item.Key, item.Value);
+                }
+            }
         }
     }
 }
