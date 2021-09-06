@@ -38,5 +38,10 @@ namespace Xeptions
                 throw this;
             }
         }
+
+        public void AddData(IDictionary<string, List<string>> dictionary)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

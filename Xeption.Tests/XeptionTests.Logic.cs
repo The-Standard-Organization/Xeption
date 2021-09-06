@@ -85,6 +85,31 @@ namespace Xeptions.Tests
         }
 
         [Fact]
+        public void ShouldAddDictionary()
+        {
+            // given
+            var xeption = new Xeption();
+
+            Dictionary<string, List<string>> randomDictionary =
+                CreateRandomDictionary();
+
+            Dictionary<string, List<string>> expectedDictionary =
+                randomDictionary;
+
+
+            // when
+            xeption.AddData(randomDictionary);
+
+            CollectionDictionary actualDictionary = xeption.Data;
+
+            // then
+            foreach (string key in expectedDictionary.Keys)
+            {
+                actualDictionary[key].Should().BeEquivalentTo(expectedDictionary[key]);
+            }
+        }
+
+        [Fact]
         public void ShouldThrowIfContainsErrors()
         {
             // given
