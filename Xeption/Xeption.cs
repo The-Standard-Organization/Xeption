@@ -57,7 +57,7 @@ namespace Xeptions
 
         public bool DataEquals(IDictionary dictionary)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
