@@ -61,7 +61,7 @@ namespace Xeptions.Tests
         {
             // given
             var xeption = new Xeption();
-            
+
             Dictionary<string, List<string>> randomDictionary =
                 CreateRandomDictionary();
 
@@ -121,14 +121,10 @@ namespace Xeptions.Tests
             Dictionary<string, List<string>> expectedDictionary =
                 randomDictionary;
 
-
             // when
             foreach (string key in randomDictionary.Keys)
             {
-                randomDictionary[key].ForEach(value =>
-                {
-                    xeption.AddData(key, randomDictionary[key].ToArray());
-                });
+                xeption.AddData(key, randomDictionary[key].ToArray());
             }
 
             ICollectionDictionary actualDictionary = xeption.Data;
@@ -170,7 +166,7 @@ namespace Xeptions.Tests
                 value: someValue);
 
             // then
-            Assert.Throws<Xeption>(() => 
+            Assert.Throws<Xeption>(() =>
                 xeption.ThrowIfContainsErrors());
         }
 
@@ -181,7 +177,7 @@ namespace Xeptions.Tests
             var xeption = new Xeption();
 
             // when
-            Exception actualException = Record.Exception(() => 
+            Exception actualException = Record.Exception(() =>
                 xeption.ThrowIfContainsErrors());
 
             // then
