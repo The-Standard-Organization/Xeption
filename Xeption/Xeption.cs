@@ -51,5 +51,10 @@ namespace Xeptions
                 }
             }
         }
+
+        public void AddData(string key, params string[] values)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

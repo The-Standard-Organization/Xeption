@@ -86,7 +86,7 @@ namespace Xeptions.Tests
         }
 
         [Fact]
-        public void ShouldAddDictionary()
+        public void ShouldAddDataAsDictionary()
         {
             // given
             var xeption = new Xeption();
@@ -99,6 +99,37 @@ namespace Xeptions.Tests
 
             // when
             xeption.AddData(randomDictionary);
+
+            ICollectionDictionary actualDictionary = xeption.Data;
+
+            // then
+            foreach (string key in expectedDictionary.Keys)
+            {
+                actualDictionary[key].Should().BeEquivalentTo(expectedDictionary[key]);
+            }
+        }
+
+        [Fact]
+        public void ShouldAddDataAsParameters()
+        {
+            // given
+            var xeption = new Xeption();
+
+            Dictionary<string, List<string>> randomDictionary =
+                CreateRandomDictionary();
+
+            Dictionary<string, List<string>> expectedDictionary =
+                randomDictionary;
+
+
+            // when
+            foreach (string key in randomDictionary.Keys)
+            {
+                randomDictionary[key].ForEach(value =>
+                {
+                    xeption.AddData(key, randomDictionary[key].ToArray());
+                });
+            }
 
             ICollectionDictionary actualDictionary = xeption.Data;
 
