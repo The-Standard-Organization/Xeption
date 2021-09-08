@@ -54,5 +54,10 @@ namespace Xeptions
 
         public void AddData(string key, params string[] values) =>
             this.Data.Add(key, values);
+
+        public bool DataEquals(IDictionary dictionary)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

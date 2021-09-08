@@ -183,5 +183,28 @@ namespace Xeptions.Tests
             // then
             actualException.Should().BeNull();
         }
+
+        [Fact]
+        public void ShouldReturnTrueIfDataIsTheSame()
+        {
+            // given
+            var xeption = new Xeption();
+
+            Dictionary<string, List<string>> randomDictionary =
+                CreateRandomDictionary();
+
+            Dictionary<string, List<string>> expectedDictionary =
+                randomDictionary;
+
+            xeption.AddData(randomDictionary);
+
+            ICollectionDictionary actualDictionary = xeption.Data;
+
+            // when
+            bool isEqual = xeption.DataEquals(randomDictionary);
+
+            // then
+            isEqual.Should().BeTrue();
+        }
     }
 }
