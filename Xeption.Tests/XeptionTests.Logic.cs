@@ -68,7 +68,6 @@ namespace Xeptions.Tests
             Dictionary<string, List<string>> expectedDictionary =
                 randomDictionary;
 
-
             // when
             foreach (string key in randomDictionary.Keys)
             {
