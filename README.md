@@ -2,6 +2,8 @@
   <img width="25%" height="25%" src="https://raw.githubusercontent.com/hassanhabib/Xeption/master/Xeption/Resources/Xeption.png">
 </p>
 
+[![The Standard - COMPLIANT](https://img.shields.io/badge/The_Standard-COMPLIANT-2ea44f)](https://github.com/hassanhabib/The-Standard)
+
 # Xeption
 A Better Exception for .NET
 
