@@ -4,6 +4,8 @@
 // See License.txt in the project root for license information.
 // ---------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Xunit;
 using ICollectionDictionary = System.Collections.IDictionary;
