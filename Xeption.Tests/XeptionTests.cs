@@ -4,6 +4,7 @@
 // See License.txt in the project root for license information.
 // ---------------------------------------------------------------
 
+using System.Collections.Generic;
 using Tynamix.ObjectFiller;
 
 namespace Xeptions.Tests
