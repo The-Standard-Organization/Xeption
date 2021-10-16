@@ -62,11 +62,16 @@ namespace Xeptions
             {
                 bool isKeyNotExists = this.Data.Contains(entry.Key) is false;
 
+                if (isKeyNotExists)
+                {
+                    return false;
+                }
+
                 bool isDataNotSame = CompareData(
                     firstObject: this.Data[entry.Key],
                     secondObject: dictionary[entry.Key]);
 
-                if (isKeyNotExists || isDataNotSame)
+                if (isDataNotSame)
                 {
                     return false;
                 }
