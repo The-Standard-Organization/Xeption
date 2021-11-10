@@ -86,6 +86,40 @@ namespace Xeptions.Tests
         }
 
         [Fact]
+        public void ShouldAppendListOfKeyValuesWhenUpsertDataListIsCalledAfterAddData()
+        {
+            string keyName = "Name";
+            string textRequiredValue = "Text is required";
+            string textLengthValue = "Text must be between 2 and 25 characters";
+
+            // given
+            var xeption = new Xeption();
+
+            xeption.AddData(
+                key: keyName,
+                values: textRequiredValue);
+
+            xeption.UpsertDataList(
+                key: keyName,
+                value: textLengthValue);
+
+            Dictionary<string, List<string>> randomDictionary = new Dictionary<string, List<string>>();
+            randomDictionary.Add(keyName, new List<string> { textRequiredValue, textLengthValue });
+
+            Dictionary<string, List<string>> expectedDictionary =
+                randomDictionary;
+
+            ICollectionDictionary actualDictionary = xeption.Data;
+
+            // then
+            foreach (string key in expectedDictionary.Keys)
+            {
+                actualDictionary[key].Should().BeEquivalentTo(expectedDictionary[key]);
+            }
+        }
+
+
+        [Fact]
         public void ShouldAddDataAsDictionary()
         {
             // given
