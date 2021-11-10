@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 
@@ -26,7 +27,17 @@ namespace Xeptions
         {
             if (this.Data.Contains(key))
             {
-                (this.Data[key] as List<string>)?.Add(value);
+                if(this.Data[key] is Array)
+                {
+                    List<string> valueList = (this.Data[key] as string[]).ToList();
+                    valueList.Add(value);
+                    this.Data.Remove(key);
+                    this.Data.Add(key, valueList);
+                }
+                else
+                {
+                    (this.Data[key] as List<string>)?.Add(value);
+                }
             }
             else
             {
