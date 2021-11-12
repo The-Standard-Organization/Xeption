@@ -222,5 +222,36 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
         }
+
+        [Fact]
+        public void ShouldTranscendDataFromAnotherException()
+        {
+            // given
+            string randomMessage = GetRandomMessage();
+            string exceptionMessage = randomMessage;
+            var exception = new Exception(exceptionMessage);
+
+            Dictionary<string, List<string>> randomData =
+                CreateRandomDictionary();
+
+            Dictionary<string, List<string>> exceptionData =
+                randomData;
+
+            Dictionary<string, List<string>> expectedExceptionData =
+                exceptionData;
+
+            foreach (string key in exceptionData.Keys)
+            {
+                exception.Data.Add(key, randomData[key].ToArray());
+            }
+
+            // when
+            var xeption = new Xeption(exception, exception.Data);
+
+            // then
+            xeption.Data.Should().BeEquivalentTo(expectedExceptionData);
+            xeption.InnerException.Should().BeEquivalentTo(exception);
+            xeption.Message.Should().BeEquivalentTo(exception.Message);
+        }
     }
 }
