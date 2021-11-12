@@ -22,6 +22,12 @@ namespace Xeptions
             : base(message, innerException)
         { }
 
+        public Xeption(Exception exception, IDictionary data)
+            : base(exception.Message, exception)
+        {
+            this.AddData(data);
+        }
+
         public void UpsertDataList(string key, string value)
         {
             if (this.Data.Contains(key))
