@@ -31,7 +31,7 @@ namespace Xeptions
         public Xeption(string message, Exception innerException, IDictionary data)
             : base(message, innerException)
         {
-
+            this.AddData(data);
         }
 
         public void UpsertDataList(string key, string value)
