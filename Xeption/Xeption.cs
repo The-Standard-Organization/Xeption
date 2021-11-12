@@ -22,10 +22,16 @@ namespace Xeptions
             : base(message, innerException)
         { }
 
-        public Xeption(Exception exception, IDictionary data)
-            : base(exception.Message, exception)
+        public Xeption(Exception innerException, IDictionary data)
+            : base(innerException.Message, innerException)
         {
             this.AddData(data);
+        }
+
+        public Xeption(string message, Exception innerException, IDictionary data)
+            : base(message, innerException)
+        {
+
         }
 
         public void UpsertDataList(string key, string value)
