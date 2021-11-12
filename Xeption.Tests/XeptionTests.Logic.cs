@@ -242,14 +242,19 @@ namespace Xeptions.Tests
 
             foreach (string key in exceptionData.Keys)
             {
-                exception.Data.Add(key, randomData[key].ToArray());
+                exception.Data.Add(key, randomData[key]);
             }
 
             // when
             var xeption = new Xeption(exception, exception.Data);
 
             // then
-            xeption.Data.Should().BeEquivalentTo(expectedExceptionData);
+
+            foreach (string key in expectedExceptionData.Keys)
+            {
+                xeption.Data[key].Should().BeEquivalentTo(expectedExceptionData[key]);
+            }
+
             xeption.InnerException.Should().BeEquivalentTo(exception);
             xeption.Message.Should().BeEquivalentTo(exception.Message);
         }
