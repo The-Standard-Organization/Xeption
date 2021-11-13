@@ -89,22 +89,22 @@ namespace Xeptions.Tests
         public void ShouldAppendListOfKeyValuesWhenUpsertDataListIsCalledAfterAddData()
         {
             string keyName = "Name";
-            string textRequiredValue = "Text is required";
-            string textLengthValue = "Text must be between 2 and 25 characters";
+            string textRandomValidationMessage1 = GetRandomMessage();
+            string textRandomValidationMessage2 = GetRandomMessage();
 
             // given
             var xeption = new Xeption();
 
             xeption.AddData(
                 key: keyName,
-                values: textRequiredValue);
+                values: textRandomValidationMessage1);
 
             xeption.UpsertDataList(
                 key: keyName,
-                value: textLengthValue);
+                value: textRandomValidationMessage2);
 
             Dictionary<string, List<string>> randomDictionary = new Dictionary<string, List<string>>();
-            randomDictionary.Add(keyName, new List<string> { textRequiredValue, textLengthValue });
+            randomDictionary.Add(keyName, new List<string> { textRandomValidationMessage1, textRandomValidationMessage2 });
 
             Dictionary<string, List<string>> expectedDictionary =
                 randomDictionary;
