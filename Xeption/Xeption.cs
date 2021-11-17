@@ -23,6 +23,18 @@ namespace Xeptions
             : base(message, innerException)
         { }
 
+        public Xeption(Exception innerException, IDictionary data)
+            : base(innerException.Message, innerException)
+        {
+            this.AddData(data);
+        }
+
+        public Xeption(string message, Exception innerException, IDictionary data)
+            : base(message, innerException)
+        {
+            this.AddData(data);
+        }
+
         public void UpsertDataList(string key, string value)
         {
             if (this.Data.Contains(key))

@@ -256,5 +256,78 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
         }
+
+        [Fact]
+        public void ShouldTranscendDataFromAnotherException()
+        {
+            // given
+            string randomMessage = GetRandomMessage();
+            string exceptionMessage = randomMessage;
+            var exception = new Exception(exceptionMessage);
+
+            Dictionary<string, List<string>> randomData =
+                CreateRandomDictionary();
+
+            Dictionary<string, List<string>> exceptionData =
+                randomData;
+
+            Dictionary<string, List<string>> expectedExceptionData =
+                exceptionData;
+
+            foreach (string key in exceptionData.Keys)
+            {
+                exception.Data.Add(key, randomData[key]);
+            }
+
+            // when
+            var xeption = new Xeption(exception, exception.Data);
+
+            // then
+
+            foreach (string key in expectedExceptionData.Keys)
+            {
+                xeption.Data[key].Should().BeEquivalentTo(expectedExceptionData[key]);
+            }
+
+            xeption.InnerException.Should().BeEquivalentTo(exception);
+            xeption.Message.Should().BeEquivalentTo(exception.Message);
+        }
+
+        [Fact]
+        public void ShouldTranscendDataFromAnotherExceptionWithCustomMessage()
+        {
+            // given
+            string randomMessage = GetRandomMessage();
+            string customMessage = randomMessage;
+            string expectedMessage = customMessage;
+            var exception = new Exception();
+
+            Dictionary<string, List<string>> randomData =
+                CreateRandomDictionary();
+
+            Dictionary<string, List<string>> exceptionData =
+                randomData;
+
+            Dictionary<string, List<string>> expectedExceptionData =
+                exceptionData;
+
+            foreach (string key in exceptionData.Keys)
+            {
+                exception.Data.Add(key, randomData[key]);
+            }
+
+            // when
+            var xeption = new Xeption(customMessage, exception, exception.Data);
+
+            // then
+
+            foreach (string key in expectedExceptionData.Keys)
+            {
+                xeption.Data[key].Should().BeEquivalentTo(expectedExceptionData[key]);
+            }
+
+            xeption.InnerException.Should().BeEquivalentTo(exception);
+            xeption.Message.Should().BeEquivalentTo(expectedMessage);
+        }
     }
 }
