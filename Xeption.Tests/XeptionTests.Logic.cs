@@ -269,13 +269,10 @@ namespace Xeptions.Tests
 
             var leftDictionary = randomDictionary;
             var rightDictionary = randomDictionary.DeepClone();
-
             var leftXeption = new Xeption();
             leftXeption.AddData(leftDictionary);
-
             var rightXeption = new Xeption();
             rightXeption.AddData(rightDictionary);
-
 
             // when
             bool leftIsEqualToRight = leftXeption.DataEquals(rightXeption.Data);
@@ -302,7 +299,6 @@ namespace Xeptions.Tests
 
             var leftXeption = new Xeption();
             leftXeption.AddData(leftDictionary);
-
             var rightXeption = new Xeption();
             rightXeption.AddData(rightDictionary);
 
