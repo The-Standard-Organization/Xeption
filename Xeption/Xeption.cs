@@ -27,17 +27,7 @@ namespace Xeptions
         {
             if (this.Data.Contains(key))
             {
-                if(this.Data[key] is Array)
-                {
-                    List<string> valueList = (this.Data[key] as string[]).ToList();
-                    valueList.Add(value);
-                    this.Data.Remove(key);
-                    this.Data.Add(key, valueList);
-                }
-                else
-                {
-                    (this.Data[key] as List<string>)?.Add(value);
-                }
+                (this.Data[key] as List<string>)?.Add(value);
             }
             else
             {
@@ -65,7 +55,7 @@ namespace Xeptions
         }
 
         public void AddData(string key, params string[] values) =>
-            this.Data.Add(key, values);
+            this.Data.Add(key, values.ToList());
 
         public bool DataEquals(IDictionary dictionary)
         {
