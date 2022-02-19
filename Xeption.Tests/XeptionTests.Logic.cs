@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Force.DeepCloner;
+using Tynamix.ObjectFiller;
 using Xunit;
 using ICollectionDictionary = System.Collections.IDictionary;
 
@@ -75,6 +77,41 @@ namespace Xeptions.Tests
                 randomDictionary[key].ForEach(value =>
                     xeption.UpsertDataList(key, value));
             }
+
+            ICollectionDictionary actualDictionary = xeption.Data;
+
+            // then
+            foreach (string key in expectedDictionary.Keys)
+            {
+                actualDictionary[key].Should().BeEquivalentTo(expectedDictionary[key]);
+            }
+        }
+
+        [Fact]
+        public void ShouldAppendListOfKeyValuesWhenUpsertDataListIsCalledAfterAddData()
+        {
+            string keyName = "Name";
+            string textRandomValidationMessage1 = GetRandomMessage();
+            string textRandomValidationMessage2 = GetRandomMessage();
+
+            // given
+            var xeption = new Xeption();
+
+            xeption.AddData(
+                key: keyName,
+                values: textRandomValidationMessage1);
+
+            xeption.UpsertDataList(
+                key: keyName,
+                value: textRandomValidationMessage2);
+
+            Dictionary<string, List<string>> randomDictionary = new Dictionary<string, List<string>>
+            {
+                { keyName, new List<string> { textRandomValidationMessage1, textRandomValidationMessage2 } }
+            };
+
+            Dictionary<string, List<string>> expectedDictionary =
+                randomDictionary;
 
             ICollectionDictionary actualDictionary = xeption.Data;
 
@@ -221,6 +258,57 @@ namespace Xeptions.Tests
 
             // then
             isEqual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ShouldReturnTrueIfDataFromExceptionsIsTheSame()
+        {
+            // given
+            Dictionary<string, List<string>> randomDictionary =
+                CreateRandomDictionary();
+
+            var leftDictionary = randomDictionary;
+            var rightDictionary = randomDictionary.DeepClone();
+            var leftXeption = new Xeption();
+            leftXeption.AddData(leftDictionary);
+            var rightXeption = new Xeption();
+            rightXeption.AddData(rightDictionary);
+
+            // when
+            bool leftIsEqualToRight = leftXeption.DataEquals(rightXeption.Data);
+            bool rightIsEqualToleft = leftXeption.DataEquals(rightXeption.Data);
+
+            // then
+            leftIsEqualToRight.Should().BeTrue();
+            rightIsEqualToleft.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ShouldReturnFalseIfDataFromExceptionsIsNotTheSame()
+        {
+            // given
+            Dictionary<string, List<string>> randomDictionary =
+                CreateRandomDictionary();
+
+            var leftDictionary = randomDictionary;
+            var rightDictionary = randomDictionary.DeepClone();
+
+            rightDictionary.Add(
+                new MnemonicString().GetValue(),
+                new List<string> { new MnemonicString().GetValue() });
+
+            var leftXeption = new Xeption();
+            leftXeption.AddData(leftDictionary);
+            var rightXeption = new Xeption();
+            rightXeption.AddData(rightDictionary);
+
+            // when
+            bool leftIsEqualToRight = leftXeption.DataEquals(rightXeption.Data);
+            bool rightIsEqualToleft = rightXeption.DataEquals(leftXeption.Data);
+
+            // then
+            Assert.False(leftIsEqualToRight, "Left data dictionary not matching the right.");
+            Assert.False(rightIsEqualToleft, "Right data dictionary not matching the left.");
         }
 
         [Fact]

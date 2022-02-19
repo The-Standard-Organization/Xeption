@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 
@@ -66,19 +67,37 @@ namespace Xeptions
         }
 
         public void AddData(string key, params string[] values) =>
-            this.Data.Add(key, values);
+            this.Data.Add(key, values.ToList());
 
         public bool DataEquals(IDictionary dictionary)
         {
+            if (this.Data.Count != dictionary.Count)
+            {
+                return false;
+            }
+
             foreach (DictionaryEntry entry in dictionary)
             {
                 bool isKeyNotExists = this.Data.Contains(entry.Key) is false;
+                if (isKeyNotExists)
+                {
+                    return false;
+                }
 
                 bool isDataNotSame = CompareData(
                     firstObject: this.Data[entry.Key],
                     secondObject: dictionary[entry.Key]);
 
-                if (isKeyNotExists || isDataNotSame)
+                if (isDataNotSame)
+                {
+                    return false;
+                }
+            }
+
+            foreach (DictionaryEntry entry in this.Data)
+            {
+                bool isKeyNotExists = dictionary.Contains(entry.Key) is false;
+                if (isKeyNotExists)
                 {
                     return false;
                 }
