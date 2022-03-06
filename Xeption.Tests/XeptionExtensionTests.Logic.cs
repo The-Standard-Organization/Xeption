@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Xeption.Tests
 {
-    public partial class XeptionExtensions
+    public partial class XeptionExtensionTests
     {
         [Fact]
         public void ShouldReturnFalseIfTargetSiteIsNull()
@@ -32,10 +32,10 @@ namespace Xeption.Tests
         public void ShouldReturnTrueIfTargetMatchesOrigin()
         {
             // given
-            string targetOrigin = nameof(XeptionExtensions);
+            string targetOrigin = nameof(XeptionExtensionTests);
 
             // when
-            bool actualResult;
+            bool actualResult = false;
 
             try
             {
@@ -48,6 +48,29 @@ namespace Xeption.Tests
 
             // then
             actualResult.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ShouldReturnFalseIfTargetNotMatchOrigin()
+        {
+            // given
+            string currentOrigin = nameof(XeptionExtensionTests);
+            var otherTarget = new OtherTarget();
+
+            // when
+            bool actualResult = true;
+
+            try
+            {
+                OtherTarget.ThrowingExceptionMethod();
+            }
+            catch (Exception exception)
+            {
+                actualResult = exception.IsFrom(currentOrigin);
+            }
+
+            // then
+            actualResult.Should().BeFalse();
         }
     }
 }
