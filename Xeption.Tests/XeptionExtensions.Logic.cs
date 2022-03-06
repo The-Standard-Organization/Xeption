@@ -25,7 +25,7 @@ namespace Xeption.Tests
                 exception.IsFrom(inputOrigin);
 
             // then
-            actualResult.Should().BeTrue();
+            actualResult.Should().BeFalse();
         }
     }
 }

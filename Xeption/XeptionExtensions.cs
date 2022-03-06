@@ -11,6 +11,6 @@ namespace Xeption
     public static class XeptionExtensions
     {
         public static bool IsFrom(this Exception exception, string origin) =>
-            throw new NotImplementedException();
+            false;
     }
 }
