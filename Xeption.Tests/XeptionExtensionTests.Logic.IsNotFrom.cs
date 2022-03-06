@@ -49,5 +49,27 @@ namespace Xeption.Tests
             // then
             actualResult.Should().BeFalse();
         }
+
+        [Fact]
+        public void ShouldReturnTrueOnIsNotFromIfTargetNotMatchOrigin()
+        {
+            // given
+            string currentOrigin = nameof(XeptionExtensionTests);
+
+            // when
+            bool actualResult = true;
+
+            try
+            {
+                OtherTarget.ThrowingExceptionMethod();
+            }
+            catch (Exception exception)
+            {
+                actualResult = exception.IsNotFrom(currentOrigin);
+            }
+
+            // then
+            actualResult.Should().BeTrue();
+        }
     }
 }
