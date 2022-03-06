@@ -14,6 +14,6 @@ namespace Xeption
             exception.TargetSite?.ReflectedType?.Name == origin;
 
         public static bool IsNotFrom(this Exception exception, string origin) =>
-            throw new NotImplementedException();
+            true;
     }
 }
