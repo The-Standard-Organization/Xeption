@@ -27,5 +27,27 @@ namespace Xeption.Tests
             // then
             actualResult.Should().BeFalse();
         }
+
+        [Fact]
+        public void ShouldReturnTrueIfTargetMatchesOrigin()
+        {
+            // given
+            string targetOrigin = nameof(XeptionExtensions);
+
+            // when
+            bool actualResult;
+
+            try
+            {
+                throw new Exception();
+            }
+            catch (Exception exception)
+            {
+                actualResult = exception.IsFrom(targetOrigin);
+            }
+
+            // then
+            actualResult.Should().BeTrue();
+        }
     }
 }
