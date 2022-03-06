@@ -55,7 +55,6 @@ namespace Xeption.Tests
         {
             // given
             string currentOrigin = nameof(XeptionExtensionTests);
-            var otherTarget = new OtherTarget();
 
             // when
             bool actualResult = true;
