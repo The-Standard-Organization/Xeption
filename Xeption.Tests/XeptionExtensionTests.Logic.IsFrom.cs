@@ -8,7 +8,7 @@ using System;
 using FluentAssertions;
 using Xunit;
 
-namespace Xeption.Tests
+namespace Xeptions.Tests
 {
     public partial class XeptionExtensionTests
     {

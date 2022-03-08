@@ -7,7 +7,7 @@
 using System;
 using Tynamix.ObjectFiller;
 
-namespace Xeption.Tests
+namespace Xeptions.Tests
 {
     public partial class XeptionExtensionTests
     {

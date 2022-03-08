@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Xeption
+namespace Xeptions
 {
     public static class XeptionExtensions
     {
