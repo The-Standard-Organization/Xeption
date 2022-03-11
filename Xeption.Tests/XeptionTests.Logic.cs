@@ -325,5 +325,28 @@ namespace Xeptions.Tests
             Assert.False(leftIsEqualToRight, "Left data dictionary not matching the right.");
             Assert.False(rightIsEqualToleft, "Right data dictionary not matching the left.");
         }
+
+        [Fact]
+        public void ShouldReturnTrueIfDataFromExceptionsIsTheSame()
+        {
+            // given
+            Dictionary<string, List<string>> randomDictionary =
+                CreateRandomDictionary();
+
+            var leftDictionary = randomDictionary;
+            var rightDictionary = randomDictionary.DeepClone();
+            var leftXeption = new Xeption();
+            leftXeption.AddData(leftDictionary);
+            var rightXeption = new Xeption();
+            rightXeption.AddData(rightDictionary);
+
+            // when
+            bool leftIsEqualToRight = leftXeption.DataEquals(rightXeption.Data);
+            bool rightIsEqualToleft = leftXeption.DataEquals(rightXeption.Data);
+
+            // then
+            leftIsEqualToRight.Should().BeTrue();
+            rightIsEqualToleft.Should().BeTrue();
+        }
     }
 }
