@@ -295,5 +295,40 @@ namespace Xeptions.Tests
             xeption.InnerException.Should().BeEquivalentTo(exception);
             xeption.Message.Should().BeEquivalentTo(expectedMessage);
         }
+
+        [Fact]
+        public void ShouldAppendListOfKeyValuesWhenUpsertDataListIsCalledAfterAddData()
+        {
+            string keyName = "Name";
+            string textRandomValidationMessage1 = GetRandomMessage();
+            string textRandomValidationMessage2 = GetRandomMessage();
+
+            // given
+            var xeption = new Xeption();
+
+            xeption.AddData(
+                key: keyName,
+                values: textRandomValidationMessage1);
+
+            xeption.UpsertDataList(
+                key: keyName,
+                value: textRandomValidationMessage2);
+
+            Dictionary<string, List<string>> randomDictionary = new Dictionary<string, List<string>>
+            {
+                { keyName, new List<string> { textRandomValidationMessage1, textRandomValidationMessage2 } }
+            };
+
+            Dictionary<string, List<string>> expectedDictionary =
+                randomDictionary;
+
+            ICollectionDictionary actualDictionary = xeption.Data;
+
+            // then
+            foreach (string key in expectedDictionary.Keys)
+            {
+                actualDictionary[key].Should().BeEquivalentTo(expectedDictionary[key]);
+            }
+        }
     }
 }
