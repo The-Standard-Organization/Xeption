@@ -70,15 +70,34 @@ namespace Xeptions
 
         public bool DataEquals(IDictionary dictionary)
         {
+            if (this.Data.Count != dictionary.Count)
+            {
+                return false;
+            }
+
             foreach (DictionaryEntry entry in dictionary)
             {
                 bool isKeyNotExists = this.Data.Contains(entry.Key) is false;
+
+                if (isKeyNotExists)
+                {
+                    return false;
+                }
 
                 bool isDataNotSame = CompareData(
                     firstObject: this.Data[entry.Key],
                     secondObject: dictionary[entry.Key]);
 
-                if (isKeyNotExists || isDataNotSame)
+                if (isDataNotSame)
+                {
+                    return false;
+                }
+            }
+
+            foreach (DictionaryEntry entry in this.Data)
+            {
+                bool isKeyNotExists = dictionary.Contains(entry.Key) is false;
+                if (isKeyNotExists)
                 {
                     return false;
                 }
