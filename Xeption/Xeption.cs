@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 
@@ -66,7 +67,7 @@ namespace Xeptions
         }
 
         public void AddData(string key, params string[] values) =>
-            this.Data.Add(key, values);
+            this.Data.Add(key, values.ToList());
 
         public bool DataEquals(IDictionary dictionary)
         {
