@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Force.DeepCloner;
+using Tynamix.ObjectFiller;
 using Xunit;
 using ICollectionDictionary = System.Collections.IDictionary;
 
@@ -294,6 +296,34 @@ namespace Xeptions.Tests
 
             xeption.InnerException.Should().BeEquivalentTo(exception);
             xeption.Message.Should().BeEquivalentTo(expectedMessage);
+        }
+
+        [Fact]
+        public void ShouldReturnFalseIfDataFromExceptionsIsNotTheSame()
+        {
+            // given
+            Dictionary<string, List<string>> randomDictionary =
+                CreateRandomDictionary();
+
+            var leftDictionary = randomDictionary;
+            var rightDictionary = randomDictionary.DeepClone();
+
+            rightDictionary.Add(
+                new MnemonicString().GetValue(),
+                new List<string> { new MnemonicString().GetValue() });
+
+            var leftXeption = new Xeption();
+            leftXeption.AddData(leftDictionary);
+            var rightXeption = new Xeption();
+            rightXeption.AddData(rightDictionary);
+
+            // when
+            bool leftIsEqualToRight = leftXeption.DataEquals(rightXeption.Data);
+            bool rightIsEqualToleft = rightXeption.DataEquals(leftXeption.Data);
+
+            // then
+            Assert.False(leftIsEqualToRight, "Left data dictionary not matching the right.");
+            Assert.False(rightIsEqualToleft, "Right data dictionary not matching the left.");
         }
     }
 }
