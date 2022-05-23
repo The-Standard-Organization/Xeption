@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Force.DeepCloner;
-using Tynamix.ObjectFiller;
 using Xunit;
 using ICollectionDictionary = System.Collections.IDictionary;
 
@@ -307,10 +306,12 @@ namespace Xeptions.Tests
 
             var leftDictionary = randomDictionary;
             var rightDictionary = randomDictionary.DeepClone();
+            string additionalKey = GetRandomMessage();
+            List<string> additionalValue = new() { GetRandomMessage() };
 
             rightDictionary.Add(
-                new MnemonicString().GetValue(),
-                new List<string> { new MnemonicString().GetValue() });
+                key: additionalKey,
+                value: additionalValue);
 
             var leftXeption = new Xeption();
             leftXeption.AddData(leftDictionary);
