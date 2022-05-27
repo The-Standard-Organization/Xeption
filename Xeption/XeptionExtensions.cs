@@ -18,7 +18,10 @@ namespace Xeptions
 
         public static bool SameExceptionAs(this Xeption exception, Xeption otherException)
         {
-            throw new NotImplementedException();
+            return
+                exception.Message == otherException.Message
+                && exception.InnerException.Message == otherException.InnerException.Message
+                && ((Xeption)exception.InnerException).DataEquals(otherException.InnerException.Data);
         }
     }
 }
