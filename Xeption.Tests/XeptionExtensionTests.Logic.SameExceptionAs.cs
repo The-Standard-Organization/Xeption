@@ -33,5 +33,26 @@ namespace Xeptions.Tests
             // then
             actualResult.Should().BeFalse();
         }
+
+        [Fact]
+        public void ShouldReturnFalseIfExceptionMessageDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string otherExceptionMessage = GetRandomString();
+
+            string innerExceptionMessage = GetRandomString();
+            var innerException = new Xeption(innerExceptionMessage);
+
+            var exception = new Xeption(exceptionMessage, innerException);
+            var otherException = new Xeption(otherExceptionMessage, innerException);
+
+            // when
+            bool actualResult =
+                exception.SameExceptionAs(otherException);
+
+            // then
+            actualResult.Should().BeFalse();
+        }
     }
 }
