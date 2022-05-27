@@ -79,5 +79,30 @@ namespace Xeptions.Tests
             // then
             actualResult.Should().BeFalse();
         }
+
+        [Fact]
+        public void ShouldReturnFalseIfInnerExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string otherExceptionMessage = GetRandomString();
+            string innerExceptionMessage = GetRandomString();
+            var innerException = new Xeption(innerExceptionMessage);
+            var otherInnerException = innerException.DeepClone();
+
+            otherInnerException.AddData(
+                key: GetRandomString(),
+                values: GetRandomString());
+
+            var exception = new Xeption(exceptionMessage, innerException);
+            var otherException = new Xeption(exceptionMessage, otherInnerException);
+
+            // when
+            bool actualResult =
+                exception.SameExceptionAs(otherException);
+
+            // then
+            actualResult.Should().BeFalse();
+        }
     }
 }
