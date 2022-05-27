@@ -17,13 +17,16 @@ namespace Xeptions.Tests
         {
             // given
             string exceptionMessage = GetRandomString();
-            var innerException = new Xeption(exceptionMessage);
+            var innerException = new Xeption(message: exceptionMessage);
 
             innerException.AddData(
                 key: GetRandomString(),
                 values: GetRandomString());
 
-            var exception = new Xeption(exceptionMessage, innerException);
+            var exception = new Xeption(
+                message: exceptionMessage,
+                innerException: innerException);
+
             var otherException = exception.DeepClone();
 
             // when
@@ -42,10 +45,15 @@ namespace Xeptions.Tests
             string otherExceptionMessage = GetRandomString();
 
             string innerExceptionMessage = GetRandomString();
-            var innerException = new Xeption(innerExceptionMessage);
+            var innerException = new Xeption(message: innerExceptionMessage);
 
-            var exception = new Xeption(exceptionMessage, innerException);
-            var otherException = new Xeption(otherExceptionMessage, innerException);
+            var exception = new Xeption(
+                message: exceptionMessage, 
+                innerException: innerException);
+
+            var otherException = new Xeption(
+                message: otherExceptionMessage, 
+                innerException: innerException);
 
             // when
             bool actualResult =
@@ -60,17 +68,18 @@ namespace Xeptions.Tests
         {
             // given
             string exceptionMessage = GetRandomString();
-            string otherExceptionMessage = GetRandomString();
-
             string innerExceptionMessage = GetRandomString();
-            var innerException = new Xeption(innerExceptionMessage);
-
+            var innerException = new Xeption(message: innerExceptionMessage);
             string otherInnerExceptionMessage = GetRandomString();
-            var otherInnerException = new Xeption(otherInnerExceptionMessage);
+            var otherInnerException = new Xeption(message: otherInnerExceptionMessage);
 
-
-            var exception = new Xeption(exceptionMessage, innerException);
-            var otherException = new Xeption(exceptionMessage, otherInnerException);
+            var exception = new Xeption(
+                message: exceptionMessage, 
+                innerException: innerException);
+            
+            var otherException = new Xeption(
+                message: exceptionMessage, 
+                innerException: otherInnerException);
 
             // when
             bool actualResult =
@@ -87,15 +96,20 @@ namespace Xeptions.Tests
             string exceptionMessage = GetRandomString();
             string otherExceptionMessage = GetRandomString();
             string innerExceptionMessage = GetRandomString();
-            var innerException = new Xeption(innerExceptionMessage);
+            var innerException = new Xeption(message: innerExceptionMessage);
             var otherInnerException = innerException.DeepClone();
 
             otherInnerException.AddData(
                 key: GetRandomString(),
                 values: GetRandomString());
 
-            var exception = new Xeption(exceptionMessage, innerException);
-            var otherException = new Xeption(exceptionMessage, otherInnerException);
+            var exception = new Xeption(
+                message: exceptionMessage, 
+                innerException: innerException);
+
+            var otherException = new Xeption(
+                message: exceptionMessage, 
+                innerException: otherInnerException);
 
             // when
             bool actualResult =
