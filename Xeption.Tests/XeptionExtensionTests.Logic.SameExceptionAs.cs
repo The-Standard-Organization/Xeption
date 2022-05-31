@@ -16,51 +16,45 @@ namespace Xeptions.Tests
         public void ShouldReturnTrueIfExceptionsMatch()
         {
             // given
-            string exceptionMessage = GetRandomString();
-            var innerException = new Xeption(message: exceptionMessage);
+            string randomMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: randomMessage);
 
-            innerException.AddData(
+            expectedInnerException.AddData(
                 key: GetRandomString(),
                 values: GetRandomString());
 
-            var exception = new Xeption(
-                message: exceptionMessage,
-                innerException: innerException);
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
 
-            var otherException = exception.DeepClone();
+            var actualException = expectedException.DeepClone();
 
-            // when
-            bool actualResult =
-                exception.SameExceptionAs(otherException);
-
-            // then
-            actualResult.Should().BeFalse();
+            // when then
+            expectedException.SameExceptionAs(actualException).Should().BeTrue();
         }
 
         [Fact]
         public void ShouldReturnFalseIfExceptionMessageDontMatch()
         {
             // given
-            string exceptionMessage = GetRandomString();
-            string otherExceptionMessage = GetRandomString();
+            string randomExceptionMessage = GetRandomString();
+            string innerExceptionMessage = randomExceptionMessage;
+            string expectedExceptionMessage = GetRandomString();
+            string actualExceptionMessage = GetRandomString();
 
-            string innerExceptionMessage = GetRandomString();
-            var innerException = new Xeption(message: innerExceptionMessage);
+            var innerException = new Xeption(
+                message: innerExceptionMessage);
 
-            var exception = new Xeption(
-                message: exceptionMessage, 
+            var expectedException = new Xeption(
+                message: expectedExceptionMessage,
                 innerException: innerException);
 
-            var otherException = new Xeption(
-                message: otherExceptionMessage, 
+            var actualException = new Xeption(
+                message: actualExceptionMessage,
                 innerException: innerException);
 
-            // when
-            bool actualResult =
-                exception.SameExceptionAs(otherException);
-
-            // then
-            actualResult.Should().BeFalse();
+            // when then
+            expectedException.SameExceptionAs(actualException).Should().BeFalse();
         }
 
         [Fact]
@@ -68,25 +62,21 @@ namespace Xeptions.Tests
         {
             // given
             string exceptionMessage = GetRandomString();
-            string innerExceptionMessage = GetRandomString();
-            var innerException = new Xeption(message: innerExceptionMessage);
-            string otherInnerExceptionMessage = GetRandomString();
-            var otherInnerException = new Xeption(message: otherInnerExceptionMessage);
+            string expectedInnerExceptionMessage = GetRandomString();
+            string actualInnerExceptionMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: expectedInnerExceptionMessage);
+            var actualInnerException = new Xeption(message: actualInnerExceptionMessage);
 
-            var exception = new Xeption(
-                message: exceptionMessage, 
-                innerException: innerException);
-            
-            var otherException = new Xeption(
-                message: exceptionMessage, 
-                innerException: otherInnerException);
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
 
-            // when
-            bool actualResult =
-                exception.SameExceptionAs(otherException);
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
 
-            // then
-            actualResult.Should().BeFalse();
+            // when then
+            expectedException.SameExceptionAs(actualException).Should().BeFalse();
         }
 
         [Fact]
@@ -94,29 +84,32 @@ namespace Xeptions.Tests
         {
             // given
             string exceptionMessage = GetRandomString();
-            string otherExceptionMessage = GetRandomString();
-            string innerExceptionMessage = GetRandomString();
-            var innerException = new Xeption(message: innerExceptionMessage);
-            var otherInnerException = innerException.DeepClone();
+            string expectedInnerExceptionDataKey = GetRandomString();
+            string expectedInnerExceptionDataValue = GetRandomString();
+            string actualInnerExceptionDataKey = GetRandomString();
+            string actualInnerExceptionDataValue = GetRandomString();
 
-            otherInnerException.AddData(
-                key: GetRandomString(),
-                values: GetRandomString());
+            var expectedInnerException = new Xeption(message: exceptionMessage);
+            var actualInnerException = new Xeption(message: exceptionMessage);
 
-            var exception = new Xeption(
-                message: exceptionMessage, 
-                innerException: innerException);
+            expectedInnerException.AddData(
+                key: expectedInnerExceptionDataKey,
+                values: expectedInnerExceptionDataValue);
 
-            var otherException = new Xeption(
-                message: exceptionMessage, 
-                innerException: otherInnerException);
+            actualInnerException.AddData(
+                key: actualInnerExceptionDataKey,
+                values: actualInnerExceptionDataValue);
 
-            // when
-            bool actualResult =
-                exception.SameExceptionAs(otherException);
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
 
-            // then
-            actualResult.Should().BeFalse();
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            // when then
+            expectedException.SameExceptionAs(actualException).Should().BeFalse();
         }
     }
 }
