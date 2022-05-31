@@ -5,10 +5,8 @@
 // ---------------------------------------------------------------
 
 using System;
-using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
-using static Xeptions.Tests.XeptionTests;
 
 namespace Xeptions.Tests
 {
@@ -32,7 +30,7 @@ namespace Xeptions.Tests
             var actualException = expectedException.DeepClone();
 
             // when then
-            expectedException.SameExceptionAs(actualException).Should().BeTrue();
+            Assert.True(expectedException.SameExceptionAs(actualException));
         }
 
         [Fact]
@@ -46,16 +44,16 @@ namespace Xeptions.Tests
                 key: GetRandomString(),
                 values: GetRandomString());
 
-            var expectedException = new StudentValidationException(
+            var expectedException = new Xeption(
                 message: randomMessage,
                 innerException: expectedInnerException);
 
-            var actualException = new StudentServiceException(
+            var actualException = new Exception(
                 message: randomMessage,
                 innerException: expectedInnerException);
 
             // when then
-            expectedException.SameExceptionAs(actualException).Should().BeFalse();
+            Assert.False(expectedException.SameExceptionAs(actualException));
         }
 
 
@@ -80,7 +78,7 @@ namespace Xeptions.Tests
                 innerException: innerException);
 
             // when then
-            expectedException.SameExceptionAs(actualException).Should().BeFalse();
+            Assert.False(expectedException.SameExceptionAs(actualException));
         }
 
         [Fact]
@@ -102,7 +100,7 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             // when then
-            expectedException.SameExceptionAs(actualException).Should().BeFalse();
+            Assert.False(expectedException.SameExceptionAs(actualException));
         }
 
         [Fact]
@@ -135,7 +133,7 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             // when then
-            expectedException.SameExceptionAs(actualException).Should().BeFalse();
+            Assert.False(expectedException.SameExceptionAs(actualException));
         }
     }
 }
