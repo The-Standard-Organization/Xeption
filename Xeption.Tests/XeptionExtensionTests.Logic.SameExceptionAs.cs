@@ -56,6 +56,25 @@ namespace Xeptions.Tests
             Assert.False(expectedException.SameExceptionAs(actualException));
         }
 
+        [Fact]
+        public void ShouldReturnFalseIfInnerExceptionsDontMatchOnType()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerException = new Exception(message: randomMessage);
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            // when then
+            Assert.False(expectedException.SameExceptionAs(actualException));
+        }
 
         [Fact]
         public void ShouldReturnFalseIfExceptionMessageDontMatch()
