@@ -19,7 +19,10 @@ namespace Xeptions
 
         public static bool SameExceptionAs(this Exception exception, Exception otherException)
         {
-            return exception.Message == otherException.Message
+            return
+                exception.GetType().FullName == otherException.GetType().FullName
+                && exception.Message == otherException.Message
+                && exception.InnerException.GetType().FullName == otherException.InnerException.GetType().FullName
                 && exception.InnerException.Message == otherException.InnerException.Message
                 && ((Xeption)exception.InnerException).DataEquals(otherException.InnerException.Data)
                 && exception.GetType().FullName == otherException.GetType().FullName;
