@@ -46,11 +46,11 @@ namespace Xeptions.Tests
                 key: GetRandomString(),
                 values: GetRandomString());
 
-            var expectedException = new Xeption(
+            var expectedException = new StudentValidationException(
                 message: randomMessage,
                 innerException: expectedInnerException);
 
-            var actualException = new Exception(
+            var actualException = new StudentServiceException(
                 message: randomMessage,
                 innerException: expectedInnerException);
 
