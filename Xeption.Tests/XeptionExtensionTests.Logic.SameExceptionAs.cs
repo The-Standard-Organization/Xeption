@@ -4,9 +4,11 @@
 // See License.txt in the project root for license information.
 // ---------------------------------------------------------------
 
+using System;
 using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
+using static Xeptions.Tests.XeptionTests;
 
 namespace Xeptions.Tests
 {
@@ -32,6 +34,30 @@ namespace Xeptions.Tests
             // when then
             expectedException.SameExceptionAs(actualException).Should().BeTrue();
         }
+
+        [Fact]
+        public void ShouldReturnFalseIfExceptionsDontMatchOnType()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: randomMessage);
+
+            expectedInnerException.AddData(
+                key: GetRandomString(),
+                values: GetRandomString());
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Exception(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            // when then
+            expectedException.SameExceptionAs(actualException).Should().BeFalse();
+        }
+
 
         [Fact]
         public void ShouldReturnFalseIfExceptionMessageDontMatch()

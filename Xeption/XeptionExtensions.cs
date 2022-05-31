@@ -5,6 +5,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Xeptions
 {
@@ -16,12 +17,12 @@ namespace Xeptions
         public static bool IsNotFrom(this Exception exception, string origin) =>
             exception.TargetSite?.ReflectedType?.Name != origin;
 
-        public static bool SameExceptionAs(this Xeption exception, Xeption otherException)
+        public static bool SameExceptionAs(this Xeption exception, Exception otherException)
         {
-            return
-                exception.Message == otherException.Message
+            return exception.Message == otherException.Message
                 && exception.InnerException.Message == otherException.InnerException.Message
-                && ((Xeption)exception.InnerException).DataEquals(otherException.InnerException.Data);
+                && ((Xeption)exception.InnerException).DataEquals(otherException.InnerException.Data)
+                && exception.GetType().FullName == otherException.GetType().FullName;
         }
     }
 }
