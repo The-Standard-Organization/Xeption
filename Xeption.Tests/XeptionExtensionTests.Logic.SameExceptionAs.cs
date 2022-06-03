@@ -5,6 +5,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
 
@@ -29,8 +30,12 @@ namespace Xeptions.Tests
 
             var actualException = expectedException.DeepClone();
 
-            // when then
-            Assert.True(expectedException.SameExceptionAs(actualException));
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            actualComparisonResult.Should().BeTrue();
         }
 
         [Fact]
@@ -52,8 +57,12 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: expectedInnerException);
 
-            // when then
-            Assert.False(expectedException.SameExceptionAs(actualException));
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            actualComparisonResult.Should().BeFalse();
         }
 
         [Fact]
@@ -72,8 +81,12 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: actualInnerException);
 
-            // when then
-            Assert.False(expectedException.SameExceptionAs(actualException));
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            actualComparisonResult.Should().BeFalse();
         }
 
         [Fact]
@@ -96,8 +109,12 @@ namespace Xeptions.Tests
                 message: actualExceptionMessage,
                 innerException: innerException);
 
-            // when then
-            Assert.False(expectedException.SameExceptionAs(actualException));
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            actualComparisonResult.Should().BeFalse();
         }
 
         [Fact]
@@ -118,8 +135,12 @@ namespace Xeptions.Tests
                 message: exceptionMessage,
                 innerException: actualInnerException);
 
-            // when then
-            Assert.False(expectedException.SameExceptionAs(actualException));
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            actualComparisonResult.Should().BeFalse(); ;
         }
 
         [Fact]
@@ -151,8 +172,12 @@ namespace Xeptions.Tests
                 message: exceptionMessage,
                 innerException: actualInnerException);
 
-            // when then
-            Assert.False(expectedException.SameExceptionAs(actualException));
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            actualComparisonResult.Should().BeFalse();
         }
     }
 }

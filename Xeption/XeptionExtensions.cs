@@ -24,8 +24,7 @@ namespace Xeptions
                 && exception.Message == otherException.Message
                 && exception.InnerException.GetType().FullName == otherException.InnerException.GetType().FullName
                 && exception.InnerException.Message == otherException.InnerException.Message
-                && ((Xeption)exception.InnerException).DataEquals(otherException.InnerException.Data)
-                && exception.GetType().FullName == otherException.GetType().FullName;
+                && ((Xeption)exception.InnerException).DataEquals(otherException.InnerException.Data);
         }
     }
 }
