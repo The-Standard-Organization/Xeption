@@ -35,7 +35,7 @@ namespace Xeptions.Tests
                 expectedException.SameExceptionAs(actualException);
 
             // then
-            actualComparisonResult.Should().BeTrue();
+            Assert.True(actualComparisonResult);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Xeptions.Tests
                 expectedException.SameExceptionAs(actualException);
 
             // then
-            actualComparisonResult.Should().BeFalse();
+            Assert.False(actualComparisonResult);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Xeptions.Tests
                 expectedException.SameExceptionAs(actualException);
 
             // then
-            actualComparisonResult.Should().BeFalse();
+            Assert.False(actualComparisonResult);
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace Xeptions.Tests
                 expectedException.SameExceptionAs(actualException);
 
             // then
-            actualComparisonResult.Should().BeFalse();
+            Assert.False(actualComparisonResult);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace Xeptions.Tests
                 expectedException.SameExceptionAs(actualException);
 
             // then
-            actualComparisonResult.Should().BeFalse(); ;
+            Assert.False(actualComparisonResult);
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace Xeptions.Tests
                 expectedException.SameExceptionAs(actualException);
 
             // then
-            actualComparisonResult.Should().BeFalse();
+            Assert.False(actualComparisonResult);
         }
     }
 }
