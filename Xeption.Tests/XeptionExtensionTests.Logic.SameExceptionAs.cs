@@ -5,7 +5,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
 
@@ -80,6 +79,30 @@ namespace Xeptions.Tests
             var actualException = new Xeption(
                 message: randomMessage,
                 innerException: actualInnerException);
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            Assert.False(actualComparisonResult);
+        }
+
+        [Fact]
+        public void ShouldReturnFalseIfActualInnerExceptionIsNullWhileExpectedInnerExceptionIsPresent()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerException = new Exception(message: randomMessage);
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: null);
 
             // when
             bool actualComparisonResult =
