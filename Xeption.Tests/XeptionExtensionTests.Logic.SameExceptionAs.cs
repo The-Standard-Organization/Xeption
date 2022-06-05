@@ -38,6 +38,21 @@ namespace Xeptions.Tests
         }
 
         [Fact]
+        public void ShouldReturnTrueIfBothExceptionsMatchOnNull()
+        {
+            // given
+            Xeption expectedException = null;
+            Xeption actualException = null;
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            Assert.True(actualComparisonResult);
+        }
+
+        [Fact]
         public void ShouldReturnFalseIfExceptionsDontMatchOnType()
         {
             // given
