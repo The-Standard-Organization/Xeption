@@ -94,6 +94,30 @@ namespace Xeptions.Tests
             // given
             string randomMessage = GetRandomString();
             Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerException = null;
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            Assert.False(actualComparisonResult);
+        }
+
+        [Fact]
+        public void ShouldReturnFalseIfExpectedInnerExceptionIsNullWhileActualInnerExceptionIsPresent()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = null;
             Exception actualInnerException = new Exception(message: randomMessage);
 
             var expectedException = new Xeption(
@@ -102,7 +126,7 @@ namespace Xeptions.Tests
 
             var actualException = new Xeption(
                 message: randomMessage,
-                innerException: null);
+                innerException: actualInnerException);
 
             // when
             bool actualComparisonResult =
