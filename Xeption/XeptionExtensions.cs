@@ -5,7 +5,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Runtime.CompilerServices;
 
 namespace Xeptions
 {
@@ -22,9 +21,9 @@ namespace Xeptions
             return
                 exception.GetType().FullName == otherException.GetType().FullName
                 && exception.Message == otherException.Message
-                && exception.InnerException.GetType().FullName == otherException.InnerException.GetType().FullName
-                && exception.InnerException.Message == otherException.InnerException.Message
-                && ((Xeption)exception.InnerException).DataEquals(otherException.InnerException.Data);
+                && exception?.InnerException?.GetType()?.FullName == otherException?.InnerException?.GetType()?.FullName
+                && exception?.InnerException?.Message == otherException?.InnerException?.Message
+                && ((Xeption)(exception?.InnerException)).DataEquals(otherException?.InnerException?.Data);
         }
     }
 }
