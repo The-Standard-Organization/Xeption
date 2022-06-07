@@ -40,7 +40,7 @@ namespace Xeptions.Tests
             // given
             string randomMessage = GetRandomString();
             var expectedException = new Xeption(message: randomMessage);
-            var actualException = new Xeption(message: GetRandomString());
+            var actualException = new Xeption(message: randomMessage);
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
