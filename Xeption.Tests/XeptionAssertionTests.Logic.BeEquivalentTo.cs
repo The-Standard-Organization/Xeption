@@ -4,6 +4,7 @@
 // See License.txt in the project root for license information.
 // ---------------------------------------------------------------
 
+using System;
 using FluentAssertions;
 using Xunit;
 
@@ -41,6 +42,26 @@ namespace Xeptions.Tests
             string randomMessage = GetRandomString();
             var expectedException = new Xeption(message: randomMessage);
             var actualException = new Xeption(message: randomMessage);
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
+        }
+
+        [Fact]
+        public void BeEquivalentToShouldPassIfInnerExceptionsMatchOnType()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerException = new Exception(message: randomMessage);
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
