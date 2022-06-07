@@ -5,7 +5,6 @@
 // ---------------------------------------------------------------
 
 using FluentAssertions;
-using Force.DeepCloner;
 using Xunit;
 
 namespace Xeptions.Tests
@@ -18,7 +17,7 @@ namespace Xeptions.Tests
             // given
             string randomMessage = GetRandomString();
             var expectedException = new Xeption(message: randomMessage);
-            var actualException = expectedException.DeepClone();
+            var actualException = new Xeption(message: randomMessage);
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
@@ -30,6 +29,18 @@ namespace Xeptions.Tests
             // given
             Xeption expectedException = null;
             Xeption actualException = null;
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
+        }
+
+        [Fact]
+        public void BeEquivalentToShouldPassIfExceptionMessagesMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedException = new Xeption(message: randomMessage);
+            var actualException = new Xeption(message: GetRandomString());
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);

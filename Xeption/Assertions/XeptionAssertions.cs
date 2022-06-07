@@ -19,6 +19,9 @@ namespace FluentAssertions.Exceptions
                 .ForCondition(subject => subject?.GetType()?.FullName == expectation?.GetType()?.FullName)
                 .FailWith("type to be {0}, but found the type to be {1}.", expectation?.GetType()?.FullName, Subject?.GetType()?.FullName)
                 .Then
+                .ForCondition(subject => subject?.Message == expectation?.Message)
+                .FailWith("message to be {0}, but found {1}.", expectation?.Message, Subject?.Message)
+                .Then
                 .ClearExpectation();
 
             return new AndConstraint<XeptionAssertions<TException>>(this);
