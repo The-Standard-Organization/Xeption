@@ -13,13 +13,23 @@ namespace Xeptions.Tests
     public partial class XeptionAssertionTests
     {
         [Fact]
-        public void BeEquivalentToShouldPassIfExceptionsMatch()
+        public void BeEquivalentToShouldPassIfExceptionsMatchOnType()
         {
             // given
             string randomMessage = GetRandomString();
             var expectedException = new Xeption(message: randomMessage);
-
             var actualException = expectedException.DeepClone();
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
+        }
+
+        [Fact]
+        public void BeEquivalentToShouldPassIfNullExceptionsMatchOnType()
+        {
+            // given
+            Xeption expectedException = null;
+            Xeption actualException = null;
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
