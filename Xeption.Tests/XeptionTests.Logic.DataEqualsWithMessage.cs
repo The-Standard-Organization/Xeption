@@ -95,5 +95,32 @@ namespace Xeptions.Tests
                 .Contain($"- Expected to find key '{randomKey}'.");
 
         }
+
+        [Fact]
+        public void ShouldReturnFalseAndMessageStringIfExpectedDataContainsKeysMatchingKeysWithUnmatchedValues()
+        {
+            // given
+            Xeption randomXeption = new Xeption();
+            string randomKey = GetRandomMessage();
+            string randomValue1 = GetRandomMessage();
+            string randomValue2 = GetRandomMessage();
+
+            Xeption expectedXeption = randomXeption;
+            Xeption actualXeption = expectedXeption.DeepClone();
+            expectedXeption.UpsertDataList(randomKey, randomValue1);
+            actualXeption.UpsertDataList(randomKey, randomValue2);
+
+            // when
+            var actualComparisonResult = actualXeption
+                .DataEqualsWithDetail(expectedXeption.Data);
+
+            // then
+            actualComparisonResult.IsEqual.Should().BeFalse();
+            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
+
+            actualComparisonResult.Message.Should()
+                .Contain($"- Expected matching values for key '{randomKey}' but found");
+
+        }
     }
 }
