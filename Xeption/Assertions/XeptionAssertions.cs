@@ -44,6 +44,12 @@ namespace FluentAssertions.Exceptions
                     expectation?.InnerException?.Message,
                     Subject?.InnerException?.Message)
                 .Then
+                .ForCondition(subject => subject?.InnerException?.Data?.Count == expectation?.InnerException?.Data?.Count)
+                .FailWith(
+                    "inner exception data to have {0} items, but found {1}.",
+                    expectation?.InnerException?.Data?.Count,
+                    Subject?.InnerException?.Data?.Count)
+                .Then
                 .ClearExpectation();
 
             return new AndConstraint<XeptionAssertions<TException>>(this);

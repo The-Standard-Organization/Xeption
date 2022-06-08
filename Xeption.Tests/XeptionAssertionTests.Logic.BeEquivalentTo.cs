@@ -77,5 +77,34 @@ namespace Xeptions.Tests
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
         }
+
+        [Fact]
+        public void ShouldPassIfInnerExceptionDataCountMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string expectedInnerExceptionDataKey = GetRandomString();
+            string expectedInnerExceptionDataValue = GetRandomString();
+            string actualInnerExceptionDataKey = GetRandomString();
+            string actualInnerExceptionDataValue = GetRandomString();
+
+            var expectedInnerException = new Xeption(message: exceptionMessage);
+            var actualInnerException = new Xeption(message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedInnerExceptionDataKey,
+                values: expectedInnerExceptionDataValue);
+
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
+        }
     }
 }
