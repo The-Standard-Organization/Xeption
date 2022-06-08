@@ -46,17 +46,19 @@ namespace FluentAssertions.Exceptions
                     expectation?.InnerException?.Message,
                     Subject?.InnerException?.Message)
                 .Then
-                .ForCondition(subject => subject?.InnerException?.Data?.Count == expectation?.InnerException?.Data?.Count)
+                .ForCondition(subject =>
+                    (subject?.InnerException?.Data is null && expectation?.InnerException?.Data is null) ||
+                        (subject?.InnerException?.Data?.Count == expectation?.InnerException?.Data?.Count))
                 .FailWith(
                     "inner exception data to have {0} items, but found {1}.",
                     expectation?.InnerException?.Data?.Count,
                     Subject?.InnerException?.Data?.Count)
                 .Then
-                .ForCondition(subject => ((Xeption)(subject?.InnerException)).DataEquals(expectation?.InnerException?.Data))
+                .ForCondition(subject =>
+                    ((subject?.InnerException?.Data is null && expectation?.InnerException?.Data is null) ||
+                        ((Xeption)(subject?.InnerException)).DataEquals(expectation?.InnerException?.Data)))
                 .FailWith(
-                    "inner exception data to have {0} items, but found {1}.",
-                    expectation?.InnerException?.Data?.Count,
-                    Subject?.InnerException?.Data?.Count)
+                    "inner exception data to match.")
                 .Then
                 .ClearExpectation();
 

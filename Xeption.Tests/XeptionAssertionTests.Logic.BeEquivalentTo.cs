@@ -83,21 +83,8 @@ namespace Xeptions.Tests
         {
             // given
             string exceptionMessage = GetRandomString();
-            string expectedInnerExceptionDataKey = GetRandomString();
-            string expectedInnerExceptionDataValue = GetRandomString();
-            string actualInnerExceptionDataKey = GetRandomString();
-            string actualInnerExceptionDataValue = GetRandomString();
-
             var expectedInnerException = new Xeption(message: exceptionMessage);
             var actualInnerException = new Xeption(message: exceptionMessage);
-
-            expectedInnerException.AddData(
-                key: expectedInnerExceptionDataKey,
-                values: expectedInnerExceptionDataValue);
-
-            actualInnerException.AddData(
-                key: actualInnerExceptionDataKey,
-                values: actualInnerExceptionDataValue);
 
             var expectedException = new Xeption(
                 message: exceptionMessage,
@@ -120,8 +107,8 @@ namespace Xeptions.Tests
             string randomValue = GetRandomString();
             string expectedInnerExceptionDataKey = randomKey;
             string expectedInnerExceptionDataValue = randomValue;
-            string actualInnerExceptionDataKey = GetRandomString();
-            string actualInnerExceptionDataValue = GetRandomString();
+            string actualInnerExceptionDataKey = randomKey;
+            string actualInnerExceptionDataValue = randomValue;
 
             var expectedInnerException = new Xeption(message: exceptionMessage);
             var actualInnerException = new Xeption(message: exceptionMessage);
