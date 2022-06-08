@@ -150,22 +150,25 @@ namespace Xeptions
 
         private bool EvaluateSharedKeys(bool isEqual, StringBuilder messageStringBuilder, IDictionary? sharedItems)
         {
-            foreach (DictionaryEntry dictionaryEntry in sharedItems)
+            if (sharedItems?.Count > 0)
             {
+                foreach (DictionaryEntry dictionaryEntry in sharedItems)
+                {
 
-                var expectedValues = ((List<string>)dictionaryEntry.Value)
+                    var expectedValues = ((List<string>)dictionaryEntry.Value)
+                            .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
+
+                    var actualValues = ((List<string>)this.Data[dictionaryEntry.Key])
                         .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
-                var actualValues = ((List<string>)this.Data[dictionaryEntry.Key])
-                    .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
+                    if (actualValues != expectedValues)
+                    {
+                        isEqual = false;
 
-                if (actualValues != expectedValues)
-                {
-                    isEqual = false;
-
-                    AppendMessage(
-                        messageStringBuilder,
-                        $"- Expected to find key '{dictionaryEntry.Key}' with value(s) ['{expectedValues}'], but found value(s) ['{actualValues}'].");
+                        AppendMessage(
+                            messageStringBuilder,
+                            $"- Expected to find key '{dictionaryEntry.Key}' with value(s) ['{expectedValues}'], but found value(s) ['{actualValues}'].");
+                    }
                 }
             }
 
