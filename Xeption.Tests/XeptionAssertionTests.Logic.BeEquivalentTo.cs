@@ -95,6 +95,10 @@ namespace Xeptions.Tests
                 key: expectedInnerExceptionDataKey,
                 values: expectedInnerExceptionDataValue);
 
+            actualInnerException.AddData(
+                key: actualInnerExceptionDataKey,
+                values: actualInnerExceptionDataValue);
+
             var expectedException = new Xeption(
                 message: exceptionMessage,
                 innerException: expectedInnerException);
