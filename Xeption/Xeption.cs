@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -90,7 +91,34 @@ namespace Xeptions
 
         public (bool IsEqual, string Message) DataEqualsWithDetail(IDictionary dictionary)
         {
-            throw new NotImplementedException();
+            bool isEqual = true;
+            
+            StringBuilder messageStringBuilder = 
+                new StringBuilder();
+
+            isEqual = CompareDataKeys(dictionary, isEqual, messageStringBuilder);
+
+            return (isEqual, messageStringBuilder.ToString());
+        }
+
+        private bool CompareDataKeys(IDictionary dictionary, bool isEqual, StringBuilder messageStringBuilder)
+        {
+            if (this.Data.Count != dictionary.Count)
+            {
+                isEqual = false;
+                AppendMessage(messageStringBuilder, $"data item count to be {this.Data.Count}, but found {dictionary.Count}.");
+            }
+
+            return isEqual;
+        }
+
+
+        private void AppendMessage(StringBuilder builder, string message)
+        {
+            if (string.IsNullOrEmpty(builder.ToString()))
+            {
+                builder.AppendLine("Ex");
+            }
         }
 
         private bool CompareData(object firstObject, object secondObject)

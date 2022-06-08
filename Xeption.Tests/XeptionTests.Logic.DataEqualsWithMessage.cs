@@ -33,7 +33,5 @@ namespace Xeptions.Tests
             actualComparisonResult.IsEqual.Should().BeTrue();
             actualComparisonResult.Message.Should().BeNullOrEmpty();
         }
-
-
     }
 }
