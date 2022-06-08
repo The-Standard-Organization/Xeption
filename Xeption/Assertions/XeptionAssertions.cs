@@ -1,4 +1,10 @@
-﻿using System;
+﻿// ---------------------------------------------------------------
+// Copyright (c) Hassan Habib All rights reserved.
+// Licensed under the MIT License.
+// See License.txt in the project root for license information.
+// ---------------------------------------------------------------
+
+using System;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 using Xeptions;
@@ -17,6 +23,13 @@ namespace FluentAssertions.Exceptions
             string because = "",
             params object[] becauseArgs)
         {
+            var actualException = Subject as Xeption ?? new Xeption();
+            var expectedException = expectation ?? new Exception();
+            var actualInnerException = Subject?.InnerException as Xeption ?? new Xeption();
+            var expectedInnerException = expectation?.InnerException ?? new Exception();
+            var exceptionDataComparisonResult = actualException.DataEqualsWithDetail(expectedException.Data);
+            var innerExceptionDataComparisonResult = actualInnerException.DataEqualsWithDetail(expectedInnerException.Data);
+
             Execute.Assertion
                 .BecauseOf(because, becauseArgs)
                 .WithExpectation("Expected the ")
@@ -54,11 +67,15 @@ namespace FluentAssertions.Exceptions
                     expectation?.InnerException?.Data?.Count,
                     Subject?.InnerException?.Data?.Count)
                 .Then
-                .ForCondition(subject =>
-                    ((subject?.InnerException?.Data is null && expectation?.InnerException?.Data is null) ||
-                        ((Xeption)(subject?.InnerException)).DataEquals(expectation?.InnerException?.Data)))
+                .ForCondition(subject => exceptionDataComparisonResult.IsEqual == true)
                 .FailWith(
-                    "inner exception data to match.")
+                    "exception data to match but found: "
+                    + Environment.NewLine + exceptionDataComparisonResult.Message)
+                .Then
+                .ForCondition(subject => innerExceptionDataComparisonResult.IsEqual == true)
+                .FailWith(
+                    "exception data to match but found: "
+                    + Environment.NewLine + innerExceptionDataComparisonResult.Message)
                 .Then
                 .ClearExpectation();
 

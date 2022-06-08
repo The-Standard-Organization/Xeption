@@ -69,25 +69,13 @@ namespace Xeptions
         }
 
         public void AddData(string key, params string[] values) =>
-            this.Data.Add(key, values);
+            this.Data.Add(key, values.ToList());
 
         public bool DataEquals(IDictionary dictionary)
         {
-            foreach (DictionaryEntry entry in dictionary)
-            {
-                bool isKeyNotExists = this.Data.Contains(entry.Key) is false;
+            (var isEqual, var message) = this.DataEqualsWithDetail(dictionary);
 
-                bool isDataNotSame = CompareData(
-                    firstObject: this.Data[entry.Key],
-                    secondObject: dictionary[entry.Key]);
-
-                if (isKeyNotExists || isDataNotSame)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return isEqual;
         }
 
         public (bool IsEqual, string Message) DataEqualsWithDetail(IDictionary dictionary)
@@ -104,6 +92,11 @@ namespace Xeptions
 
         private bool CompareDataKeys(IDictionary dictionary, bool isEqual, StringBuilder messageStringBuilder)
         {
+            if (this.Data.Count == 0 && dictionary.Count == 0)
+            {
+                return isEqual;
+            }
+
             if (this.Data.Count != dictionary.Count)
             {
                 isEqual = false;
