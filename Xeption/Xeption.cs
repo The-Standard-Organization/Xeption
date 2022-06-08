@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using FluentAssertions;
 using FluentAssertions.Execution;
 
@@ -85,6 +86,11 @@ namespace Xeptions
             }
 
             return true;
+        }
+
+        public (bool IsEqual, string Message) DataEqualsWithDetail(IDictionary dictionary)
+        {
+            throw new NotImplementedException();
         }
 
         private bool CompareData(object firstObject, object secondObject)

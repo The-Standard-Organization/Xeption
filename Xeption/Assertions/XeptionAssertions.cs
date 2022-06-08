@@ -19,7 +19,7 @@ namespace FluentAssertions.Exceptions
         {
             Execute.Assertion
                 .BecauseOf(because, becauseArgs)
-                .WithExpectation("Expected the {reason}, ")
+                .WithExpectation("Expected the ")
                 .Given(() => Subject)
                 .ForCondition(subject => subject?.GetType()?.FullName == expectation?.GetType()?.FullName)
                 .FailWith(
