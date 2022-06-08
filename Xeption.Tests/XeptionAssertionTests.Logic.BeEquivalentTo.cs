@@ -4,7 +4,6 @@
 // See License.txt in the project root for license information.
 // ---------------------------------------------------------------
 
-using System;
 using FluentAssertions;
 using Xunit;
 
@@ -53,7 +52,7 @@ namespace Xeptions.Tests
             // given
             string randomMessage = GetRandomString();
             Xeption expectedInnerException = new Xeption(message: randomMessage);
-            Exception actualInnerException = new Exception(message: randomMessage);
+            Xeption actualInnerException = new Xeption(message: randomMessage);
 
             var expectedException = new Xeption(
                 message: randomMessage,

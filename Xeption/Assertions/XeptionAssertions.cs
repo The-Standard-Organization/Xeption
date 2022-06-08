@@ -22,8 +22,8 @@ namespace FluentAssertions.Exceptions
                 .ForCondition(subject => subject?.Message == expectation?.Message)
                 .FailWith("message to be {0}, but found {1}.", expectation?.Message, Subject?.Message)
                 .Then
-                .ForCondition(subject => subject?.InnerException.GetType()?.FullName == expectation?.InnerException.GetType()?.FullName)
-                .FailWith("inner exception type to be {0}, but found the inner exception type to be {1}.", expectation?.InnerException.GetType()?.FullName, Subject?.InnerException.GetType()?.FullName)
+                .ForCondition(subject => ((subject?.InnerException is null && expectation?.InnerException is null)) || (subject?.InnerException?.GetType()?.FullName == expectation?.InnerException?.GetType()?.FullName))
+                .FailWith("inner exception type to be {0}, but found the inner exception type to be {1}.", expectation?.InnerException?.GetType()?.FullName, Subject?.InnerException?.GetType()?.FullName)
                 .Then
                 .ClearExpectation();
 
