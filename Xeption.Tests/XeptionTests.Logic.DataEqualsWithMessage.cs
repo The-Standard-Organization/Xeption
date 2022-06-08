@@ -4,12 +4,10 @@
 // See License.txt in the project root for license information.
 // ---------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
-using ICollectionDictionary = System.Collections.IDictionary;
 
 namespace Xeptions.Tests
 {
@@ -32,6 +30,25 @@ namespace Xeptions.Tests
             // then
             actualComparisonResult.IsEqual.Should().BeTrue();
             actualComparisonResult.Message.Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void ShouldReturnFalsAndMessageStringIfActualDataContainsKeysNotInExpectedData()
+        {
+            // given
+            Xeption randomXeption = new Xeption();
+
+            Dictionary<string, List<string>> randomDictionary = CreateRandomDictionary();
+            randomXeption.AddData(randomDictionary);
+            Xeption expectedXeption = randomXeption;
+            Xeption actualXeption = expectedXeption.DeepClone();
+
+            // when
+            var actualComparisonResult = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
+
+            // then
+            actualComparisonResult.IsEqual.Should().BeFalse();
+            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
         }
     }
 }
