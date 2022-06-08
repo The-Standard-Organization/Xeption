@@ -74,7 +74,7 @@ namespace FluentAssertions.Exceptions
                 .Then
                 .ForCondition(subject => innerExceptionDataComparisonResult.IsEqual == true)
                 .FailWith(
-                    "exception data to match but found: "
+                    "inner exception data to match but found: "
                     + Environment.NewLine + innerExceptionDataComparisonResult.Message)
                 .Then
                 .ClearExpectation();
