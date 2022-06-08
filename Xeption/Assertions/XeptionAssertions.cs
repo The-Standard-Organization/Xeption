@@ -10,23 +10,39 @@ namespace FluentAssertions.Exceptions
         {
         }
 
-        public AndConstraint<XeptionAssertions<TException>> BeEquivalentTo(Exception expectation, string because = "", params object[] becauseArgs)
+        public AndConstraint<XeptionAssertions<TException>> BeEquivalentTo(
+            Exception expectation,
+            string because = "",
+            params object[] becauseArgs)
         {
             Execute.Assertion
                 .BecauseOf(because, becauseArgs)
                 .WithExpectation("Expected the {reason}, ")
                 .Given(() => Subject)
                 .ForCondition(subject => subject?.GetType()?.FullName == expectation?.GetType()?.FullName)
-                .FailWith("type to be {0}, but found the type to be {1}.", expectation?.GetType()?.FullName, Subject?.GetType()?.FullName)
+                .FailWith(
+                    "type to be {0}, but found the type to be {1}.",
+                    expectation?.GetType()?.FullName,
+                    Subject?.GetType()?.FullName)
                 .Then
                 .ForCondition(subject => subject?.Message == expectation?.Message)
-                .FailWith("message to be {0}, but found {1}.", expectation?.Message, Subject?.Message)
+                .FailWith(
+                    "message to be {0}, but found {1}.",
+                    expectation?.Message,
+                    Subject?.Message)
                 .Then
-                .ForCondition(subject => ((subject?.InnerException is null && expectation?.InnerException is null)) || (subject?.InnerException?.GetType()?.FullName == expectation?.InnerException?.GetType()?.FullName))
-                .FailWith("inner exception type to be {0}, but found the inner exception type to be {1}.", expectation?.InnerException?.GetType()?.FullName, Subject?.InnerException?.GetType()?.FullName)
+                .ForCondition(subject => ((subject?.InnerException is null && expectation?.InnerException is null)) ||
+                    (subject?.InnerException?.GetType()?.FullName == expectation?.InnerException?.GetType()?.FullName))
+                .FailWith(
+                    "inner exception type to be {0}, but found the inner exception type to be {1}.",
+                    expectation?.InnerException?.GetType()?.FullName,
+                    Subject?.InnerException?.GetType()?.FullName)
                 .Then
                 .ForCondition(subject => subject?.InnerException?.Message == expectation?.InnerException?.Message)
-                .FailWith("inner exception message to be {0}, but found {1}.", expectation?.InnerException?.Message, Subject?.InnerException?.Message)
+                .FailWith(
+                    "inner exception message to be {0}, but found {1}.",
+                    expectation?.InnerException?.Message,
+                    Subject?.InnerException?.Message)
                 .Then
                 .ClearExpectation();
 
