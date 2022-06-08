@@ -1,6 +1,8 @@
 ﻿using System;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
+using Xeptions;
+
 namespace FluentAssertions.Exceptions
 {
     public class XeptionAssertions<TException> : ReferenceTypeAssertions<Exception, XeptionAssertions<TException>>
@@ -45,6 +47,12 @@ namespace FluentAssertions.Exceptions
                     Subject?.InnerException?.Message)
                 .Then
                 .ForCondition(subject => subject?.InnerException?.Data?.Count == expectation?.InnerException?.Data?.Count)
+                .FailWith(
+                    "inner exception data to have {0} items, but found {1}.",
+                    expectation?.InnerException?.Data?.Count,
+                    Subject?.InnerException?.Data?.Count)
+                .Then
+                .ForCondition(subject => ((Xeption)(subject?.InnerException)).DataEquals(expectation?.InnerException?.Data))
                 .FailWith(
                     "inner exception data to have {0} items, but found {1}.",
                     expectation?.InnerException?.Data?.Count,
