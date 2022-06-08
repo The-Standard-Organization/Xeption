@@ -65,5 +65,17 @@ namespace Xeptions.Tests
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
         }
+
+        [Fact]
+        public void BeEquivalentToShouldPassIfInnerExceptionMessagesMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedException = new Xeption(message: randomMessage);
+            var actualException = new Xeption(message: GetRandomString());
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
+        }
     }
 }
