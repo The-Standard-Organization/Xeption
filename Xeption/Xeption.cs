@@ -113,15 +113,15 @@ namespace Xeptions
             }
 
             (var additionalItems, var missingItems) = GetDataDifferences(dictionary);
-            isEqual = EvaluateAdditionalItems(isEqual, messageStringBuilder, additionalItems);
-            isEqual = EvaluateMissingItems(isEqual, messageStringBuilder, missingItems);
+            isEqual = EvaluateAdditionalKeys(isEqual, messageStringBuilder, additionalItems);
+            isEqual = EvaluateMissingKeys(isEqual, messageStringBuilder, missingItems);
 
             return isEqual;
         }
 
-        private bool EvaluateAdditionalItems(bool isEqual, StringBuilder messageStringBuilder, IDictionary? additionalItems)
+        private bool EvaluateAdditionalKeys(bool isEqual, StringBuilder messageStringBuilder, IDictionary? additionalItems)
         {
-            if (additionalItems.Count > 0)
+            if (additionalItems?.Count > 0)
             {
                 isEqual = false;
 
@@ -136,9 +136,9 @@ namespace Xeptions
             return isEqual;
         }
 
-        private bool EvaluateMissingItems(bool isEqual, StringBuilder messageStringBuilder, IDictionary? missingItems)
+        private bool EvaluateMissingKeys(bool isEqual, StringBuilder messageStringBuilder, IDictionary? missingItems)
         {
-            if (missingItems.Count > 0)
+            if (missingItems?.Count > 0)
             {
                 isEqual = false;
 
