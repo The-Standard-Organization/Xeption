@@ -113,7 +113,14 @@ namespace Xeptions
             }
 
             (var additionalItems, var missingItems) = GetDataDifferences(dictionary);
+            isEqual = EvaluateAdditionalItems(isEqual, messageStringBuilder, additionalItems);
+            isEqual = EvaluateMissingItems(isEqual, messageStringBuilder, missingItems);
 
+            return isEqual;
+        }
+
+        private bool EvaluateAdditionalItems(bool isEqual, StringBuilder messageStringBuilder, IDictionary? additionalItems)
+        {
             if (additionalItems.Count > 0)
             {
                 isEqual = false;
@@ -123,6 +130,23 @@ namespace Xeptions
                     AppendMessage(
                         messageStringBuilder,
                         $"- Did not expect to find key '{dictionaryEntry.Key}'.");
+                }
+            }
+
+            return isEqual;
+        }
+
+        private bool EvaluateMissingItems(bool isEqual, StringBuilder messageStringBuilder, IDictionary? missingItems)
+        {
+            if (missingItems.Count > 0)
+            {
+                isEqual = false;
+
+                foreach (DictionaryEntry dictionaryEntry in missingItems)
+                {
+                    AppendMessage(
+                        messageStringBuilder,
+                        $"- Expected to find key '{dictionaryEntry.Key}'.");
                 }
             }
 

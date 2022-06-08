@@ -92,7 +92,8 @@ namespace Xeptions.Tests
                     $"but found {actualXeption.Data.Count}.");
 
             actualComparisonResult.Message.Should()
-                .Contain($"- Did not expect to find key '{randomKey}'.");
+                .Contain($"- Expected to find key '{randomKey}'.");
+
         }
     }
 }
