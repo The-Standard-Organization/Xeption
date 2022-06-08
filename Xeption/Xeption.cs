@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -112,9 +113,10 @@ namespace Xeptions
                     $"- Expected data item count to be {dictionary.Count}, but found {this.Data.Count}.");
             }
 
-            (var additionalItems, var missingItems) = GetDataDifferences(dictionary);
+            (var additionalItems, var missingItems, var sharedItems) = GetDataDifferences(dictionary);
             isEqual = EvaluateAdditionalKeys(isEqual, messageStringBuilder, additionalItems);
             isEqual = EvaluateMissingKeys(isEqual, messageStringBuilder, missingItems);
+            isEqual = EvaluateSharedKeys(isEqual, messageStringBuilder, sharedItems);
 
             return isEqual;
         }
@@ -153,13 +155,39 @@ namespace Xeptions
             return isEqual;
         }
 
+        private bool EvaluateSharedKeys(bool isEqual, StringBuilder messageStringBuilder, IDictionary? sharedItems)
+        {
+            foreach (DictionaryEntry dictionaryEntry in sharedItems)
+            {
+
+                var expectedValues = ((List<string>)dictionaryEntry.Value)
+                        .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
+
+                var actualValues = ((List<string>)this.Data[dictionaryEntry.Key])
+                    .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
+
+                if (actualValues != expectedValues)
+                {
+                    isEqual = false;
+
+                    AppendMessage(
+                        messageStringBuilder,
+                        $"- Expected to find key '{dictionaryEntry.Key}' with value(s) ['{expectedValues}'], but found value(s) ['{actualValues}'].");
+                }
+            }
+
+            return isEqual;
+        }
+
         private (
             IDictionary AdditionalItems,
-            IDictionary MissingItems)
+            IDictionary MissingItems,
+            IDictionary SharedItems)
             GetDataDifferences(IDictionary dictionary)
         {
             var additionalItems = this.Data.DeepClone();
             var missingItems = dictionary.DeepClone();
+            var sharedItems = dictionary.DeepClone();
 
             foreach (DictionaryEntry dictionaryEntry in dictionary)
             {
@@ -171,7 +199,17 @@ namespace Xeptions
                 missingItems.Remove(dictionaryEntry.Key);
             }
 
-            return (additionalItems, missingItems);
+            foreach (DictionaryEntry dictionaryEntry in additionalItems)
+            {
+                sharedItems.Remove(dictionaryEntry.Key);
+            }
+
+            foreach (DictionaryEntry dictionaryEntry in missingItems)
+            {
+                sharedItems.Remove(dictionaryEntry.Key);
+            }
+
+            return (additionalItems, missingItems, sharedItems);
         }
 
         private void AppendMessage(StringBuilder builder, string message)

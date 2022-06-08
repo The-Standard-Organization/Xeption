@@ -5,6 +5,7 @@
 // ---------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
@@ -104,11 +105,21 @@ namespace Xeptions.Tests
             string randomKey = GetRandomMessage();
             string randomValue1 = GetRandomMessage();
             string randomValue2 = GetRandomMessage();
+            string randomValue3 = GetRandomMessage();
+            string randomValue4 = GetRandomMessage();
 
             Xeption expectedXeption = randomXeption;
             Xeption actualXeption = expectedXeption.DeepClone();
             expectedXeption.UpsertDataList(randomKey, randomValue1);
-            actualXeption.UpsertDataList(randomKey, randomValue2);
+            expectedXeption.UpsertDataList(randomKey, randomValue2);
+            actualXeption.UpsertDataList(randomKey, randomValue3);
+            actualXeption.UpsertDataList(randomKey, randomValue4);
+
+            string expectedValues = ((List<string>)expectedXeption.Data[randomKey])
+                .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
+
+            string actualValues = ((List<string>)actualXeption.Data[randomKey])
+                .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
             // when
             var actualComparisonResult = actualXeption
@@ -119,7 +130,8 @@ namespace Xeptions.Tests
             actualComparisonResult.Message.Should().NotBeNullOrEmpty();
 
             actualComparisonResult.Message.Should()
-                .Contain($"- Expected matching values for key '{randomKey}' but found");
+                .Contain($"- Expected to find key '{randomKey}' with value(s) ['{expectedValues}'], " +
+                    $"but found value(s) ['{actualValues}'].");
 
         }
     }
