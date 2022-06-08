@@ -37,11 +37,14 @@ namespace Xeptions.Tests
         {
             // given
             Xeption randomXeption = new Xeption();
+            string randomKey = GetRandomMessage();
+            string randomValue = GetRandomMessage();
 
             Dictionary<string, List<string>> randomDictionary = CreateRandomDictionary();
             randomXeption.AddData(randomDictionary);
             Xeption expectedXeption = randomXeption;
             Xeption actualXeption = expectedXeption.DeepClone();
+            actualXeption.UpsertDataList(randomKey, randomValue);
 
             // when
             var actualComparisonResult = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
@@ -49,6 +52,13 @@ namespace Xeptions.Tests
             // then
             actualComparisonResult.IsEqual.Should().BeFalse();
             actualComparisonResult.Message.Should().NotBeNullOrEmpty();
+
+            actualComparisonResult.Message.Should()
+                .Contain($"- Expected data item count to be {expectedXeption.Data.Count}, " +
+                    $"but found {actualXeption.Data.Count}.");
+
+            actualComparisonResult.Message.Should()
+                .Contain($"- Did not expect to find key '{randomKey}'.");
         }
     }
 }

@@ -7,10 +7,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Force.DeepCloner;
 
 namespace Xeptions
 {
@@ -92,8 +92,8 @@ namespace Xeptions
         public (bool IsEqual, string Message) DataEqualsWithDetail(IDictionary dictionary)
         {
             bool isEqual = true;
-            
-            StringBuilder messageStringBuilder = 
+
+            StringBuilder messageStringBuilder =
                 new StringBuilder();
 
             isEqual = CompareDataKeys(dictionary, isEqual, messageStringBuilder);
@@ -106,19 +106,68 @@ namespace Xeptions
             if (this.Data.Count != dictionary.Count)
             {
                 isEqual = false;
-                AppendMessage(messageStringBuilder, $"data item count to be {this.Data.Count}, but found {dictionary.Count}.");
+
+                AppendMessage(
+                    messageStringBuilder,
+                    $"- Expected data item count to be {dictionary.Count}, but found {this.Data.Count}.");
+            }
+
+            (var additionalItems, var missingItems) = GetDataDifferences(dictionary);
+
+            if (additionalItems.Count > 0)
+            {
+                isEqual = false;
+
+                foreach (DictionaryEntry dictionaryEntry in additionalItems)
+                {
+                    AppendMessage(
+                        messageStringBuilder,
+                        $"- Did not expect to find key '{dictionaryEntry.Key}'.");
+                }
             }
 
             return isEqual;
         }
 
+        private (
+            IDictionary AdditionalItems,
+            IDictionary MissingItems)
+            GetDataDifferences(IDictionary dictionary)
+        {
+            var additionalItems = this.Data.DeepClone();
+            var missingItems = dictionary.DeepClone();
+
+            foreach (DictionaryEntry dictionaryEntry in dictionary)
+            {
+                additionalItems.Remove(dictionaryEntry.Key);
+            }
+
+            foreach (DictionaryEntry dictionaryEntry in this.Data)
+            {
+                missingItems.Remove(dictionaryEntry.Key);
+            }
+
+            return (additionalItems, missingItems);
+        }
 
         private void AppendMessage(StringBuilder builder, string message)
         {
-            if (string.IsNullOrEmpty(builder.ToString()))
+            if (!string.IsNullOrEmpty(message))
             {
-                builder.AppendLine("Ex");
+                builder.AppendLine(message);
             }
+        }
+
+        private List<DictionaryEntry> ConvertDictionaryToList(IDictionary data)
+        {
+            List<DictionaryEntry> dataList = new List<DictionaryEntry>();
+
+            foreach (DictionaryEntry dictionaryEntry in data)
+            {
+                dataList.Add(dictionaryEntry);
+            }
+
+            return dataList;
         }
 
         private bool CompareData(object firstObject, object secondObject)
