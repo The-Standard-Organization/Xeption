@@ -23,7 +23,7 @@ namespace FluentAssertions.Exceptions
             string because = "",
             params object[] becauseArgs)
         {
-            var actualException = Subject as Xeption ?? new Xeption();
+            var actualException = Subject == null ? new Xeption() : new Xeption(Subject.Message, Subject.InnerException, Subject.Data);
             var expectedException = expectation ?? new Exception();
             var actualInnerException = Subject?.InnerException as Xeption ?? new Xeption();
             var expectedInnerException = expectation?.InnerException ?? new Exception();
