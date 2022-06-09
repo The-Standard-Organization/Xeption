@@ -9,8 +9,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FluentAssertions;
-using FluentAssertions.Execution;
 using Force.DeepCloner;
 
 namespace Xeptions
@@ -81,10 +79,7 @@ namespace Xeptions
         public (bool IsEqual, string Message) DataEqualsWithDetail(IDictionary dictionary)
         {
             bool isEqual = true;
-
-            StringBuilder messageStringBuilder =
-                new StringBuilder();
-
+            StringBuilder messageStringBuilder = new StringBuilder();
             isEqual = CompareDataKeys(dictionary, isEqual, messageStringBuilder);
 
             return (isEqual, messageStringBuilder.ToString());
@@ -114,7 +109,10 @@ namespace Xeptions
             return isEqual;
         }
 
-        private bool EvaluateAdditionalKeys(bool isEqual, StringBuilder messageStringBuilder, IDictionary? additionalItems)
+        private bool EvaluateAdditionalKeys(
+            bool isEqual,
+            StringBuilder messageStringBuilder,
+            IDictionary? additionalItems)
         {
             if (additionalItems?.Count > 0)
             {
@@ -131,7 +129,10 @@ namespace Xeptions
             return isEqual;
         }
 
-        private bool EvaluateMissingKeys(bool isEqual, StringBuilder messageStringBuilder, IDictionary? missingItems)
+        private bool EvaluateMissingKeys(
+            bool isEqual,
+            StringBuilder messageStringBuilder,
+            IDictionary? missingItems)
         {
             if (missingItems?.Count > 0)
             {
@@ -148,7 +149,10 @@ namespace Xeptions
             return isEqual;
         }
 
-        private bool EvaluateSharedKeys(bool isEqual, StringBuilder messageStringBuilder, IDictionary? sharedItems)
+        private bool EvaluateSharedKeys(
+            bool isEqual,
+            StringBuilder messageStringBuilder,
+            IDictionary? sharedItems)
         {
             if (sharedItems?.Count > 0)
             {
@@ -167,7 +171,9 @@ namespace Xeptions
 
                         AppendMessage(
                             messageStringBuilder,
-                            $"- Expected to find key '{dictionaryEntry.Key}' with value(s) ['{expectedValues}'], but found value(s) ['{actualValues}'].");
+                            $"- Expected to find key '{dictionaryEntry.Key}' " +
+                            $"with value(s) ['{expectedValues}'], " +
+                            $"but found value(s) ['{actualValues}'].");
                     }
                 }
             }
@@ -214,26 +220,6 @@ namespace Xeptions
             {
                 builder.AppendLine(message);
             }
-        }
-
-        private List<DictionaryEntry> ConvertDictionaryToList(IDictionary data)
-        {
-            List<DictionaryEntry> dataList = new List<DictionaryEntry>();
-
-            foreach (DictionaryEntry dictionaryEntry in data)
-            {
-                dataList.Add(dictionaryEntry);
-            }
-
-            return dataList;
-        }
-
-        private bool CompareData(object firstObject, object secondObject)
-        {
-            var assertionScope = new AssertionScope();
-            firstObject.Should().BeEquivalentTo(secondObject);
-
-            return assertionScope.HasFailures();
         }
     }
 }
