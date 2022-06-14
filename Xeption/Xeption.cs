@@ -159,10 +159,10 @@ namespace Xeptions
                 foreach (DictionaryEntry dictionaryEntry in sharedItems)
                 {
 
-                    var expectedValues = ((List<string>)dictionaryEntry.Value)
+                    string expectedValues = ((List<string>)dictionaryEntry.Value)
                             .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
-                    var actualValues = ((List<string>)this.Data[dictionaryEntry.Key])
+                    string actualValues = ((List<string>)this.Data[dictionaryEntry.Key])
                         .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
                     if (actualValues != expectedValues)
@@ -185,30 +185,30 @@ namespace Xeptions
             IDictionary AdditionalItems,
             IDictionary MissingItems,
             IDictionary SharedItems)
-            GetDataDifferences(IDictionary dictionary)
+            GetDataDifferences(IDictionary<string, string> dictionary)
         {
-            var additionalItems = this.Data.DeepClone();
-            var missingItems = dictionary.DeepClone();
-            var sharedItems = dictionary.DeepClone();
+            Dictionary<string, string> additionalItems = (Dictionary<string, string>)this.Data.DeepClone();
+            Dictionary<string, string> missingItems = (Dictionary<string, string>)dictionary.DeepClone();
+            Dictionary<string, string> sharedItems = (Dictionary<string, string>)dictionary.DeepClone();
 
-            foreach (DictionaryEntry dictionaryEntry in dictionary)
+            foreach (KeyValuePair<string, string> dictionaryEntry in dictionary)
             {
-                additionalItems.Remove(dictionaryEntry.Key);
+                additionalItems.Remove(dictionaryEntry.Key.ToString());
             }
 
-            foreach (DictionaryEntry dictionaryEntry in this.Data)
+            foreach (KeyValuePair<string, string> dictionaryEntry in (Dictionary<string, string>)this.Data)
             {
-                missingItems.Remove(dictionaryEntry.Key);
+                missingItems.Remove(dictionaryEntry.Key.ToString());
             }
 
-            foreach (DictionaryEntry dictionaryEntry in additionalItems)
+            foreach (KeyValuePair<string, string> dictionaryEntry in additionalItems)
             {
-                sharedItems.Remove(dictionaryEntry.Key);
+                sharedItems.Remove(dictionaryEntry.Key.ToString());
             }
 
-            foreach (DictionaryEntry dictionaryEntry in missingItems)
+            foreach (KeyValuePair<string, string> dictionaryEntry in missingItems)
             {
-                sharedItems.Remove(dictionaryEntry.Key);
+                sharedItems.Remove(dictionaryEntry.Key.ToString());
             }
 
             return (additionalItems, missingItems, sharedItems);
