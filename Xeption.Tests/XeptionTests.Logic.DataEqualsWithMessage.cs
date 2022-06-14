@@ -131,7 +131,6 @@ namespace Xeptions.Tests
             actualComparisonResult.Message.Should()
                 .Contain($"- Expected to find key '{randomKey}' with value(s) ['{expectedValues}'], " +
                     $"but found value(s) ['{actualValues}'].");
-
         }
     }
 }
