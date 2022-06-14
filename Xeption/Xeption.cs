@@ -185,30 +185,30 @@ namespace Xeptions
             IDictionary AdditionalItems,
             IDictionary MissingItems,
             IDictionary SharedItems)
-            GetDataDifferences(IDictionary<string, string> dictionary)
+            GetDataDifferences(IDictionary dictionary)
         {
-            Dictionary<string, string> additionalItems = (Dictionary<string, string>)this.Data.DeepClone();
-            Dictionary<string, string> missingItems = (Dictionary<string, string>)dictionary.DeepClone();
-            Dictionary<string, string> sharedItems = (Dictionary<string, string>)dictionary.DeepClone();
+            IDictionary additionalItems = this.Data.DeepClone();
+            IDictionary missingItems = dictionary.DeepClone();
+            IDictionary sharedItems = dictionary.DeepClone();
 
-            foreach (KeyValuePair<string, string> dictionaryEntry in dictionary)
+            foreach (DictionaryEntry dictionaryEntry in dictionary)
             {
-                additionalItems.Remove(dictionaryEntry.Key.ToString());
+                additionalItems.Remove(dictionaryEntry.Key);
             }
 
-            foreach (KeyValuePair<string, string> dictionaryEntry in (Dictionary<string, string>)this.Data)
+            foreach (DictionaryEntry dictionaryEntry in this.Data)
             {
-                missingItems.Remove(dictionaryEntry.Key.ToString());
+                missingItems.Remove(dictionaryEntry.Key);
             }
 
-            foreach (KeyValuePair<string, string> dictionaryEntry in additionalItems)
+            foreach (DictionaryEntry dictionaryEntry in additionalItems)
             {
-                sharedItems.Remove(dictionaryEntry.Key.ToString());
+                sharedItems.Remove(dictionaryEntry.Key);
             }
 
-            foreach (KeyValuePair<string, string> dictionaryEntry in missingItems)
+            foreach (DictionaryEntry dictionaryEntry in missingItems)
             {
-                sharedItems.Remove(dictionaryEntry.Key.ToString());
+                sharedItems.Remove(dictionaryEntry.Key);
             }
 
             return (additionalItems, missingItems, sharedItems);
