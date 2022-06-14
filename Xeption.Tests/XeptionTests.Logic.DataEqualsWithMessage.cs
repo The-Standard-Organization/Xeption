@@ -94,7 +94,6 @@ namespace Xeptions.Tests
 
             actualComparisonResult.Message.Should()
                 .Contain($"- Expected to find key '{randomKey}'.");
-
         }
 
         [Fact]
