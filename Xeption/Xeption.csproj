@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-		<Nullable>enable</Nullable>
-		<Authors>Hassan Habib</Authors>
+		<Nullable>disable</Nullable>
+		<Authors>Hassan Habib, Christo du Toit</Authors>
 		<Company>Hassan Habib</Company>
 		<Description>Exceptional Exceptions</Description>
 		<Copyright>Copyright (c) Hassan Habib</Copyright>
@@ -12,9 +12,9 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageIcon>Xeption.png</PackageIcon>
 		<PackageIconUrl />
-		<Version>2.3</Version>
-		<AssemblyVersion>2.3.0.0</AssemblyVersion>
-		<FileVersion>2.3.0.0</FileVersion>
+		<Version>2.4</Version>
+		<AssemblyVersion>2.4.0.0</AssemblyVersion>
+		<FileVersion>2.4.0.0</FileVersion>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<PackageLicenseExpression></PackageLicenseExpression>
 		<PackageProjectUrl>https://www.xeption.net</PackageProjectUrl>
