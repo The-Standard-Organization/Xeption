@@ -109,7 +109,6 @@ namespace Xeptions.Tests
             string expectedInnerExceptionDataValue = randomValue;
             string actualInnerExceptionDataKey = randomKey;
             string actualInnerExceptionDataValue = randomValue;
-
             var expectedInnerException = new Xeption(message: exceptionMessage);
             var actualInnerException = new Xeption(message: exceptionMessage);
 
