@@ -22,6 +22,7 @@ namespace Xeptions
                 (exception is null && otherException is null) ||
                 (exception?.GetType()?.FullName == otherException?.GetType()?.FullName
                 && exception?.Message == otherException?.Message
+                && ((Xeption)exception).DataEquals(otherException?.Data)
                 && ((exception?.InnerException is null && otherException?.InnerException is null) ||
                 (exception?.InnerException?.GetType()?.FullName == otherException?.InnerException?.GetType()?.FullName
                 && exception?.InnerException?.Message == otherException?.InnerException?.Message
