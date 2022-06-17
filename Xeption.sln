@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xeption", "Xeption\Xeption.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xeption.Tests", "Xeption.Tests\Xeption.Tests.csproj", "{C72AD7F5-15EA-485B-A997-9F5C3772CC5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xeption.Infrastructure.Build", "Xeption.Infrastructure.Build\Xeption.Infrastructure.Build.csproj", "{AF2B0C4C-A457-4B9A-A02C-6DECEE665348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xeption.Infrastructure.Build", "Xeption.Infrastructure.Build\Xeption.Infrastructure.Build.csproj", "{AF2B0C4C-A457-4B9A-A02C-6DECEE665348}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{95739A3B-5FC3-41EB-B265-347E109A692D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

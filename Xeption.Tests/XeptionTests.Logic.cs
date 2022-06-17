@@ -255,8 +255,8 @@ namespace Xeptions.Tests
                 xeption.Data[key].Should().BeEquivalentTo(expectedExceptionData[key]);
             }
 
-            xeption.InnerException.Should().BeEquivalentTo(exception);
             xeption.Message.Should().BeEquivalentTo(exception.Message);
+            xeption.InnerException.Should().BeEquivalentTo(exception);
         }
 
         [Fact]
@@ -292,8 +292,8 @@ namespace Xeptions.Tests
                 xeption.Data[key].Should().BeEquivalentTo(expectedExceptionData[key]);
             }
 
-            xeption.InnerException.Should().BeEquivalentTo(exception);
             xeption.Message.Should().BeEquivalentTo(expectedMessage);
+            xeption.InnerException.Should().BeEquivalentTo(exception);
         }
     }
 }

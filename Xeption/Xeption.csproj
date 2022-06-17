@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<Authors>Hassan Habib</Authors>
+		<Nullable>disable</Nullable>
+		<Authors>Hassan Habib, Christo du Toit</Authors>
 		<Company>Hassan Habib</Company>
 		<Description>Exceptional Exceptions</Description>
 		<Copyright>Copyright (c) Hassan Habib</Copyright>
@@ -12,9 +12,9 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageIcon>Xeption.png</PackageIcon>
 		<PackageIconUrl />
-		<Version>2.2</Version>
-		<AssemblyVersion>2.2.0.0</AssemblyVersion>
-		<FileVersion>2.2.0.0</FileVersion>
+		<Version>2.4</Version>
+		<AssemblyVersion>2.4.0.0</AssemblyVersion>
+		<FileVersion>2.4.0.0</FileVersion>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<PackageLicenseExpression></PackageLicenseExpression>
 		<PackageProjectUrl>https://www.xeption.net</PackageProjectUrl>
@@ -37,13 +37,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="FluentAssertions" Version="6.5.1" />
+		<PackageReference Include="DeepCloner" Version="0.10.4" />
+		<PackageReference Include="FluentAssertions" Version="6.5.1" />
+	  <PackageReference Include="System.Linq" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Update="License.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Assertions\" />
 	</ItemGroup>
 
 </Project>
