@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<Authors>Hassan Habib, Christo du Toit</Authors>
 		<Company>Hassan Habib</Company>
