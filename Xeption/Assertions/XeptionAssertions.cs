@@ -28,7 +28,7 @@ namespace FluentAssertions.Exceptions
                 : new Xeption(Subject.Message, Subject.InnerException, Subject.Data);
 
             var expectedException = expectation ?? new Exception();
-            var actualInnerException = Subject?.InnerException as Xeption ?? new Xeption();
+            var actualInnerException = Subject?.InnerException ?? new Exception();
             var expectedInnerException = expectation?.InnerException ?? new Exception();
             var exceptionDataComparisonResult = actualException.DataEqualsWithDetail(expectedException.Data);
 
