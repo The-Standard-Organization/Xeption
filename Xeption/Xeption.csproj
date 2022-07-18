@@ -2,8 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>disable</Nullable>
 		<Authors>Hassan Habib, Christo du Toit</Authors>
 		<Company>Hassan Habib</Company>
 		<Description>Exceptional Exceptions</Description>
