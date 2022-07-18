@@ -307,5 +307,34 @@ namespace Xeptions.Tests
             // then
             Assert.False(actualComparisonResult);
         }
+
+        [Fact]
+        public void ShouldReturnFalseIfExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string expectedExceptionDataKey = GetRandomString();
+            string expectedExceptionDataValue = GetRandomString();
+            string actualExceptionDataKey = GetRandomString();
+            string actualExceptionDataValue = GetRandomString();
+
+            var expectedException = new Xeption(message: exceptionMessage);
+            var actualException = new Xeption(message: exceptionMessage);
+
+            expectedException.AddData(
+                key: expectedExceptionDataKey,
+                values: expectedExceptionDataValue);
+
+            actualException.AddData(
+                key: actualExceptionDataKey,
+                values: actualExceptionDataValue);
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException);
+
+            // then
+            Assert.False(actualComparisonResult);
+        }
     }
 }
