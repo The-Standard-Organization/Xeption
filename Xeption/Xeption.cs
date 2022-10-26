@@ -101,7 +101,9 @@ namespace Xeptions
                     $"- Expected data item count to be {dictionary.Count}, but found {this.Data.Count}.");
             }
 
-            (var additionalItems, var missingItems, var sharedItems) = GetDataDifferences(dictionary);
+            (IDictionary additionalItems, IDictionary missingItems, IDictionary sharedItems) =
+                GetDataDifferences(dictionary);
+
             isEqual = EvaluateAdditionalKeys(isEqual, messageStringBuilder, additionalItems);
             isEqual = EvaluateMissingKeys(isEqual, messageStringBuilder, missingItems);
             isEqual = EvaluateSharedKeys(isEqual, messageStringBuilder, sharedItems);
@@ -112,7 +114,7 @@ namespace Xeptions
         private bool EvaluateAdditionalKeys(
             bool isEqual,
             StringBuilder messageStringBuilder,
-            IDictionary? additionalItems)
+            IDictionary additionalItems)
         {
             if (additionalItems?.Count > 0)
             {
@@ -132,7 +134,7 @@ namespace Xeptions
         private bool EvaluateMissingKeys(
             bool isEqual,
             StringBuilder messageStringBuilder,
-            IDictionary? missingItems)
+            IDictionary missingItems)
         {
             if (missingItems?.Count > 0)
             {
@@ -152,7 +154,7 @@ namespace Xeptions
         private bool EvaluateSharedKeys(
             bool isEqual,
             StringBuilder messageStringBuilder,
-            IDictionary? sharedItems)
+            IDictionary sharedItems)
         {
             if (sharedItems?.Count > 0)
             {
