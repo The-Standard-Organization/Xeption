@@ -295,5 +295,33 @@ namespace Xeptions.Tests
             xeption.Message.Should().BeEquivalentTo(expectedMessage);
             xeption.InnerException.Should().BeEquivalentTo(exception);
         }
-    }
+
+		[Fact]
+		public void ShouldAppendListOfKeyValuesAndCheckWithIndexer()
+		{
+			// given
+			var xeption = new Xeption();
+
+			Dictionary<string, List<string>> randomDictionary =
+				CreateRandomDictionary();
+
+			Dictionary<string, List<string>> expectedDictionary =
+				randomDictionary;
+
+			// when
+			foreach (string key in randomDictionary.Keys)
+			{
+				randomDictionary[key].ForEach(value =>
+					xeption.UpsertDataList(key, value));
+			}
+
+			ICollectionDictionary actualDictionary = xeption.Data;
+
+			// then
+			foreach (string key in expectedDictionary.Keys)
+			{
+				xeption[key].Should().BeEquivalentTo(expectedDictionary[key]);
+			}
+		}
+	}
 }

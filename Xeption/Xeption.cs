@@ -14,8 +14,10 @@ using Force.DeepCloner;
 namespace Xeptions
 {
     public class Xeption : Exception
-    {
-        public Xeption() : base() { }
+        {
+		public List<string> this[string key] => GetDataList(key);
+
+		public Xeption() : base() { }
 
         public Xeption(string message) : base(message) { }
 
@@ -223,5 +225,10 @@ namespace Xeptions
                 builder.AppendLine(message);
             }
         }
+
+        private List<string> GetDataList(string key)
+            {
+            throw new NotImplementedException();
+            }
     }
 }
