@@ -15,9 +15,9 @@ namespace Xeptions
 {
     public class Xeption : Exception
         {
-		public List<string> this[string key] => GetDataList(key);
+        public List<string> this[string key] => GetDataList(key);
 
-		public Xeption() : base() { }
+        public Xeption() : base() { }
 
         public Xeption(string message) : base(message) { }
 
@@ -228,7 +228,12 @@ namespace Xeptions
 
         private List<string> GetDataList(string key)
             {
-            throw new NotImplementedException();
-            }
+            List<string> dataValues = null;
+
+            if (this.Data.Contains(key))
+                dataValues = this.Data[key] as List<string>;
+
+            return dataValues;
+        }
     }
 }
