@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
 		<Authors>Hassan Habib, Christo du Toit</Authors>
 		<Company>Hassan Habib</Company>
 		<Description>Exceptional Exceptions</Description>
