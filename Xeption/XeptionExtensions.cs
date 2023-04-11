@@ -28,5 +28,8 @@ namespace Xeptions
                 && exception?.InnerException?.Message == otherException?.InnerException?.Message
                 && ((Xeption)(exception?.InnerException)).DataEquals(otherException?.InnerException?.Data))));
         }
+
+        public static string GetValidationSummary(this Exception exception) =>
+            throw new NotImplementedException();
     }
 }
