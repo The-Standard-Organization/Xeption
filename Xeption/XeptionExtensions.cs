@@ -52,7 +52,7 @@ namespace Xeptions
         {
             StringBuilder validationSummary = new StringBuilder();
 
-            if (exception.Data.Count > 0)
+            if (exception != null && exception.Data.Count > 0)
             {
                 validationSummary.Append($"{exception.GetType().Name} Errors:  ");
 
