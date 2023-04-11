@@ -5,6 +5,10 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Xeptions
 {
@@ -37,7 +41,34 @@ namespace Xeptions
                 return string.Empty;
             }
 
-            throw new NotImplementedException();
+            StringBuilder validationSummary = new StringBuilder();
+            validationSummary.Append(GetErrorSummary(exception));
+            validationSummary.Append(GetErrorSummary(exception.InnerException));
+
+            return validationSummary.ToString();
+        }
+
+        private static string GetErrorSummary(Exception exception)
+        {
+            StringBuilder validationSummary = new StringBuilder();
+
+            if (exception.Data.Count > 0)
+            {
+                validationSummary.Append($"{exception.GetType().Name} Errors:  ");
+
+                foreach (DictionaryEntry entry in exception.Data)
+                {
+                    string errorSummary = ((List<string>)entry.Value)
+                        .Select((string value) => value)
+                        .Aggregate((string current, string next) => current + ", " + next);
+
+                    validationSummary.Append($"{entry.Key} => {errorSummary};  ");
+                }
+
+                validationSummary.AppendLine();
+            }
+
+            return validationSummary.ToString();
         }
     }
 }
