@@ -5,6 +5,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Tynamix.ObjectFiller;
 
 namespace Xeptions.Tests
@@ -18,6 +19,13 @@ namespace Xeptions.Tests
         {
             public static void ThrowingExceptionMethod() =>
                 throw new Exception();
+        }
+
+        private static Dictionary<string, List<string>> CreateRandomDictionary()
+        {
+            var filler = new Filler<Dictionary<string, List<string>>>();
+
+            return filler.Create();
         }
     }
 }
