@@ -29,7 +29,15 @@ namespace Xeptions
                 && ((Xeption)(exception?.InnerException)).DataEquals(otherException?.InnerException?.Data))));
         }
 
-        public static string GetValidationSummary(this Exception exception) =>
+        public static string GetValidationSummary(this Exception exception)
+        {
+            if ((exception == null || exception.Data.Count == 0)
+                && (exception?.InnerException == null || exception.InnerException.Data.Count == 0))
+            {
+                return string.Empty;
+            }
+
             throw new NotImplementedException();
+        }
     }
 }
