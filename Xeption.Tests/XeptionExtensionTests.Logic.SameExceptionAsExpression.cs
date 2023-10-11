@@ -37,5 +37,20 @@ namespace Xeptions.Tests
             // then
             result.Should().BeTrue();
         }
+
+        [Fact]
+        public void ExpressionShouldReturnTrueIfBothExceptionsMatchOnNull()
+        {
+            // given
+            Xeption expectedException = null;
+            Xeption actualException = null;
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeTrue();
+        }
     }
 }
