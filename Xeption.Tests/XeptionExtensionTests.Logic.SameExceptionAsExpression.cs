@@ -130,5 +130,73 @@ namespace Xeptions.Tests
             // then
             result.Should().BeFalse();
         }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfExpectedExceptionIsNullWhileActualExceptionIsPresent()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Exception actualInnerException = new Exception(message: randomMessage);
+
+            Xeption expectedException = null;
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfActualExceptionIsNullWhileExpectedExceptionIsPresent()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = null;
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            Xeption actualException = null;
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfExpectedInnerExceptionIsNullWhileActualInnerExceptionIsPresent()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = null;
+            Exception actualInnerException = new Exception(message: randomMessage);
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
     }
 }
