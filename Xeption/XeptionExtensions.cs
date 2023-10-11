@@ -5,6 +5,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 
 namespace Xeptions
 {
@@ -28,5 +29,8 @@ namespace Xeptions
                 && exception?.InnerException?.Message == otherException?.InnerException?.Message
                 && ((Xeption)(exception?.InnerException)).DataEquals(otherException?.InnerException?.Data))));
         }
+
+        public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
+            throw new NotImplementedException();
     }
 }
