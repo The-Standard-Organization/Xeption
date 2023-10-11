@@ -52,5 +52,33 @@ namespace Xeptions.Tests
             // then
             result.Should().BeTrue();
         }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfExceptionsDontMatchOnType()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: randomMessage);
+
+            expectedInnerException.AddData(
+                key: GetRandomString(),
+                values: GetRandomString());
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Exception(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
     }
 }
