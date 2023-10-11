@@ -31,6 +31,6 @@ namespace Xeptions
         }
 
         public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
-            throw new NotImplementedException();
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
