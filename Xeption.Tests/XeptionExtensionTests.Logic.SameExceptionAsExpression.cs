@@ -198,5 +198,59 @@ namespace Xeptions.Tests
             // then
             result.Should().BeFalse();
         }
+
+        [Fact]
+        public void ExpressionShouldReturnTrueIfOuterExceptionsMatchWithNullInnerExceptions()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = null;
+            Xeption actualInnerException = null;
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfExceptionMessageDontMatch()
+        {
+            // given
+            string randomExceptionMessage = GetRandomString();
+            string innerExceptionMessage = randomExceptionMessage;
+            string expectedExceptionMessage = GetRandomString();
+            string actualExceptionMessage = GetRandomString();
+
+            var innerException = new Xeption(
+                message: innerExceptionMessage);
+
+            var expectedException = new Xeption(
+                message: expectedExceptionMessage,
+                innerException: innerException);
+
+            var actualException = new Xeption(
+                message: actualExceptionMessage,
+                innerException: innerException);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
     }
 }
