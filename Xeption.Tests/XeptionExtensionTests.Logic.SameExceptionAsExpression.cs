@@ -252,5 +252,32 @@ namespace Xeptions.Tests
             // then
             result.Should().BeFalse();
         }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfInnerExceptionMessageDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string expectedInnerExceptionMessage = GetRandomString();
+            string actualInnerExceptionMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: expectedInnerExceptionMessage);
+            var actualInnerException = new Xeption(message: actualInnerExceptionMessage);
+
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
     }
 }
