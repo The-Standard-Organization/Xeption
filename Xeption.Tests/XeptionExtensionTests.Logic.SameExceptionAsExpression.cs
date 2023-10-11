@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace Xeptions.Tests
     public partial class XeptionExtensionTests
     {
         [Fact]
-        public void ShouldReturnTrueIfExceptionsMatch()
+        public void ExpressionShouldReturnTrueIfExceptionsMatch()
         {
             // given
             string randomMessage = GetRandomString();
@@ -26,32 +27,32 @@ namespace Xeptions.Tests
                 innerException: expectedInnerException);
 
             var actualException = expectedException.DeepClone();
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
 
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.True(actualComparisonResult);
+            result.Should().BeTrue();
         }
 
         [Fact]
-        public void ShouldReturnTrueIfBothExceptionsMatchOnNull()
+        public void ExpressionShouldReturnTrueIfBothExceptionsMatchOnNull()
         {
             // given
             Xeption expectedException = null;
             Xeption actualException = null;
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
 
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.True(actualComparisonResult);
+            result.Should().BeTrue();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfExceptionsDontMatchOnType()
+        public void ExpressionShouldReturnFalseIfExceptionsDontMatchOnType()
         {
             // given
             string randomMessage = GetRandomString();
@@ -69,16 +70,17 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: expectedInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfInnerExceptionsDontMatchOnType()
+        public void ExpressionShouldReturnFalseIfInnerExceptionsDontMatchOnType()
         {
             // given
             string randomMessage = GetRandomString();
@@ -93,16 +95,17 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: actualInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfActualInnerExceptionIsNullWhileExpectedInnerExceptionIsPresent()
+        public void ExpressionShouldReturnFalseIfActualInnerExceptionIsNullWhileExpectedInnerExceptionIsPresent()
         {
             // given
             string randomMessage = GetRandomString();
@@ -117,16 +120,17 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: actualInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfExpectedExceptionIsNullWhileActualExceptionIsPresent()
+        public void ExpressionShouldReturnFalseIfExpectedExceptionIsNullWhileActualExceptionIsPresent()
         {
             // given
             string randomMessage = GetRandomString();
@@ -138,16 +142,17 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: actualInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfActualExceptionIsNullWhileExpectedExceptionIsPresent()
+        public void ExpressionShouldReturnFalseIfActualExceptionIsNullWhileExpectedExceptionIsPresent()
         {
             // given
             string randomMessage = GetRandomString();
@@ -158,17 +163,17 @@ namespace Xeptions.Tests
                 innerException: expectedInnerException);
 
             Xeption actualException = null;
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
 
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfExpectedInnerExceptionIsNullWhileActualInnerExceptionIsPresent()
+        public void ExpressionShouldReturnFalseIfExpectedInnerExceptionIsNullWhileActualInnerExceptionIsPresent()
         {
             // given
             string randomMessage = GetRandomString();
@@ -183,16 +188,17 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: actualInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnTrueIfOuterExceptionsMatchWithNullInnerExceptions()
+        public void ExpressionShouldReturnTrueIfOuterExceptionsMatchWithNullInnerExceptions()
         {
             // given
             string randomMessage = GetRandomString();
@@ -207,16 +213,17 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: actualInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.True(actualComparisonResult);
+            result.Should().BeTrue();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfExceptionMessageDontMatch()
+        public void ExpressionShouldReturnFalseIfExceptionMessageDontMatch()
         {
             // given
             string randomExceptionMessage = GetRandomString();
@@ -235,16 +242,17 @@ namespace Xeptions.Tests
                 message: actualExceptionMessage,
                 innerException: innerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfInnerExceptionMessageDontMatch()
+        public void ExpressionShouldReturnFalseIfInnerExceptionMessageDontMatch()
         {
             // given
             string exceptionMessage = GetRandomString();
@@ -261,16 +269,17 @@ namespace Xeptions.Tests
                 message: exceptionMessage,
                 innerException: actualInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfInnerExceptionDataDontMatch()
+        public void ExpressionShouldReturnFalseIfInnerExceptionDataDontMatch()
         {
             // given
             string exceptionMessage = GetRandomString();
@@ -298,16 +307,17 @@ namespace Xeptions.Tests
                 message: exceptionMessage,
                 innerException: actualInnerException);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
 
         [Fact]
-        public void ShouldReturnFalseIfExceptionDataDontMatch()
+        public void ExpressionShouldReturnFalseIfExceptionDataDontMatch()
         {
             // given
             string exceptionMessage = GetRandomString();
@@ -327,12 +337,13 @@ namespace Xeptions.Tests
                 key: actualExceptionDataKey,
                 values: actualExceptionDataValue);
 
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
             // when
-            bool actualComparisonResult =
-                expectedException.SameExceptionAs(actualException);
+            bool result = expression(actualException);
 
             // then
-            Assert.False(actualComparisonResult);
+            result.Should().BeFalse();
         }
     }
 }

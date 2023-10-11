@@ -1,10 +1,9 @@
-﻿// ---------------------------------------------------------------
-// Copyright (c) Hassan Habib All rights reserved.
-// Licensed under the MIT License.
-// See License.txt in the project root for license information.
-// ---------------------------------------------------------------
+﻿// ----------------------------------------------------------------------------------
+// Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers
+// ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 
 namespace Xeptions
 {
@@ -28,5 +27,8 @@ namespace Xeptions
                 && exception?.InnerException?.Message == otherException?.InnerException?.Message
                 && ((Xeption)(exception?.InnerException)).DataEquals(otherException?.InnerException?.Data))));
         }
+
+        public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
