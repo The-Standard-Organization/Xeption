@@ -279,5 +279,73 @@ namespace Xeptions.Tests
             // then
             result.Should().BeFalse();
         }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfInnerExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string expectedInnerExceptionDataKey = GetRandomString();
+            string expectedInnerExceptionDataValue = GetRandomString();
+            string actualInnerExceptionDataKey = GetRandomString();
+            string actualInnerExceptionDataValue = GetRandomString();
+
+            var expectedInnerException = new Xeption(message: exceptionMessage);
+            var actualInnerException = new Xeption(message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedInnerExceptionDataKey,
+                values: expectedInnerExceptionDataValue);
+
+            actualInnerException.AddData(
+                key: actualInnerExceptionDataKey,
+                values: actualInnerExceptionDataValue);
+
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ExpressionShouldReturnFalseIfExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string expectedExceptionDataKey = GetRandomString();
+            string expectedExceptionDataValue = GetRandomString();
+            string actualExceptionDataKey = GetRandomString();
+            string actualExceptionDataValue = GetRandomString();
+
+            var expectedException = new Xeption(message: exceptionMessage);
+            var actualException = new Xeption(message: exceptionMessage);
+
+            expectedException.AddData(
+                key: expectedExceptionDataKey,
+                values: expectedExceptionDataValue);
+
+            actualException.AddData(
+                key: actualExceptionDataKey,
+                values: actualExceptionDataValue);
+
+            Func<Exception, bool> expression = XeptionExtensions.SameExceptionAs(expectedException).Compile();
+
+            // when
+            bool result = expression(actualException);
+
+            // then
+            result.Should().BeFalse();
+        }
     }
 }
