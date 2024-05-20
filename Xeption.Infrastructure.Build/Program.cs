@@ -82,7 +82,7 @@ namespace Xeptions.Infrastructure.Build
                         new TagJob(
                             runsOn: BuildMachines.UbuntuLatest,
                             dependsOn: "build",
-                            projectRelativePath: "ADotNet/ADotNet.csproj",
+                            projectRelativePath: "Xeption/Xeption.csproj",
                             githubToken: "${{ secrets.PAT_FOR_TAGGING }}",
                             branchName: branchName)
                     },
