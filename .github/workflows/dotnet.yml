@@ -1,11 +1,11 @@
-name: .Net
+name: Build
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,3 +22,104 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+  add_tag:
+    runs-on: ubuntu-latest
+    needs:
+    - build
+    if: >-
+      needs.build.result == 'success' && 
+
+      github.event.pull_request.merged && 
+
+      github.event.pull_request.base.ref == 'main' && 
+
+      startsWith(github.event.pull_request.title, 'RELEASES:') && 
+
+      contains(github.event.pull_request.labels.*.name, 'RELEASES')
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.PAT_FOR_TAGGING }}
+    - name: Configure Git
+      run: >-
+        git config user.name "GitHub Action"
+
+        git config user.email "action@github.com"
+    - name: Extract Version
+      id: extract_version
+      run: >
+        # Running on Linux/Unix 
+
+        sudo apt-get install xmlstarlet
+
+        version_number=$(xmlstarlet sel -t -v "//Version" -n ADotNet/ADotNet.csproj)
+
+        echo "$version_number"
+
+        echo "version_number<<EOF" >> $GITHUB_OUTPUT 
+
+        echo "$version_number" >> $GITHUB_OUTPUT 
+
+        echo "EOF" >> $GITHUB_OUTPUT 
+      shell: bash
+    - name: Display Version
+      run: 'echo "Version number: ${{ steps.extract_version.outputs.version_number }}"'
+    - name: Extract Package Release Notes
+      id: extract_package_release_notes
+      run: >
+        # Running on Linux/Unix 
+
+        sudo apt-get install xmlstarlet
+
+        package_release_notes=$(xmlstarlet sel -t -v "//PackageReleaseNotes" -n ADotNet/ADotNet.csproj)
+
+        echo "$package_release_notes"
+
+        echo "package_release_notes<<EOF" >> $GITHUB_OUTPUT 
+
+        echo "$package_release_notes" >> $GITHUB_OUTPUT 
+
+        echo "EOF" >> $GITHUB_OUTPUT 
+      shell: bash
+    - name: Display Package Release Notes
+      run: 'echo "Package Release Notes: ${{ steps.extract_package_release_notes.outputs.package_release_notes }}"'
+    - name: Create GitHub Tag
+      run: >-
+        git tag -a "v${{ steps.extract_version.outputs.version_number }}" -m "Release - v${{ steps.extract_version.outputs.version_number }}"
+
+        git push origin --tags
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v${{ steps.extract_version.outputs.version_number }}
+        release_name: Release - v${{ steps.extract_version.outputs.version_number }}
+        body: >-
+          ## Release - v${{ steps.extract_version.outputs.version_number }}
+
+
+          ### Release Notes
+
+          ${{ steps.extract_package_release_notes.outputs.package_release_notes }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_FOR_TAGGING }}
+  publish:
+    runs-on: ubuntu-latest
+    needs:
+    - add_tag
+    if: needs.add_tag.result == 'success'
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+    - name: Setup .Net
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.201
+    - name: Restore
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    - name: Pack NuGet Package
+      run: dotnet pack --configuration Release --include-symbols
+    - name: Push NuGet Package
+      run: dotnet nuget push **/bin/Release/**/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_ACCESS }} --skip-duplicate

@@ -15,22 +15,23 @@ namespace Xeptions.Infrastructure.Build
     {
         static void Main(string[] args)
         {
+            string branchName = "main";
             var adotNetClient = new ADotNetClient();
 
             var githubPipeline = new GithubPipeline
             {
-                Name = ".Net",
+                Name = "Build",
 
                 OnEvents = new Events
                 {
                     Push = new PushEvent
                     {
-                        Branches = new string[] { "master" }
+                        Branches = new string[] { branchName }
                     },
 
                     PullRequest = new PullRequestEvent
                     {
-                        Branches = new string[] { "master" }
+                        Branches = new string[] { branchName }
                     }
                 },
 
@@ -75,6 +76,22 @@ namespace Xeptions.Infrastructure.Build
                                 }
                             }
                         }
+                    },
+                    {
+                        "add_tag",
+                        new TagJob(
+                            runsOn: BuildMachines.UbuntuLatest,
+                            dependsOn: "build",
+                            projectRelativePath: "ADotNet/ADotNet.csproj",
+                            githubToken: "${{ secrets.PAT_FOR_TAGGING }}",
+                            branchName: branchName)
+                    },
+                    {
+                        "publish",
+                        new PublishJob(
+                            runsOn: BuildMachines.UbuntuLatest,
+                            dependsOn: "add_tag",
+                            nugetApiKey: "${{ secrets.NUGET_ACCESS }}")
                     }
                 }
             };
