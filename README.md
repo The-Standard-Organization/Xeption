@@ -4,7 +4,7 @@
 [![Build](https://github.com/The-Standard-Organization/Xeption/actions/workflows/dotnet.yml/badge.svg)](https://github.com/The-Standard-Organization/Xeption/actions/workflows/dotnet.yml)
 [![Nuget](https://img.shields.io/nuget/v/Xeption)](https://www.nuget.org/packages/Xeption/)
 [![The Standard - COMPLIANT](https://img.shields.io/badge/The_Standard-COMPLIANT-2ea44f)](https://github.com/hassanhabib/The-Standard)
-[![The Standard](https://img.shields.io/github/v/release/hassanhabib/The-Standard?style=default&label=Standard%20Version&color=2ea44f)](https://github.com/hassanhabib/The-Standard)
+[![The Standard](https://img.shields.io/github/v/release/hassanhabib/The-Standard?filter=v2.9.0&style=default&label=Standard%20Version&color=2ea44f)](https://github.com/hassanhabib/The-Standard)
 [![The Standard Community](https://img.shields.io/discord/934130100008538142?color=%237289da&label=The%20Standard%20Community&logo=Discord)](https://discord.gg/vdPZ7hS52X)
 
 # Xeption
