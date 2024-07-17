@@ -11,6 +11,19 @@ namespace Xeptions.Tests
 {
     public partial class XeptionAssertionTests
     {
+        [Fact(DisplayName = "01.0 - BeEquivalentToShouldPassIfNullExceptionsMatchOnType")]
+        public void BeEquivalentToShouldPassIfNullExceptionsMatchOnType()
+        {
+            // given
+            Xeption expectedException = null;
+            Xeption actualException = null;
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
+        }
+
+        // TODO: Remove old tests below at the end of the refactoring
+
         [Fact]
         public void BeEquivalentToShouldPassIfExceptionsMatchOnType()
         {
@@ -43,17 +56,6 @@ namespace Xeptions.Tests
 
             //then
             actualError.Message.Should().Contain(expectedMessage);
-        }
-
-        [Fact]
-        public void BeEquivalentToShouldPassIfNullExceptionsMatchOnType()
-        {
-            // given
-            Xeption expectedException = null;
-            Xeption actualException = null;
-
-            // when then
-            actualException.Should().BeEquivalentTo(expectedException);
         }
 
         [Fact]
