@@ -2,8 +2,10 @@
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
+using System;
 using FluentAssertions;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Xeptions.Tests
 {
@@ -19,6 +21,28 @@ namespace Xeptions.Tests
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
+        }
+
+        [Fact]
+        public void BeEquivalentToShouldFailIfExceptionsDontMatchOnType()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedException = new Xeption(message: randomMessage);
+            var actualException = new Exception(message: randomMessage);
+
+            string expectedMessage =
+                "Expected exception type to be \"Xeptions.Xeption\", but found \"System.Exception\".";
+
+            // when
+            Action assertAction = () =>
+                actualException.Should().BeEquivalentTo(expectedException);
+
+            XunitException actualError =
+                Assert.Throws<XunitException>(assertAction);
+
+            //then
+            actualError.Message.Should().Contain(expectedMessage);
         }
 
         [Fact]
