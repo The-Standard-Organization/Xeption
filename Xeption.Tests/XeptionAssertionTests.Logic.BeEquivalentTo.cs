@@ -119,6 +119,79 @@ namespace Xeptions.Tests
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
+        [Fact(DisplayName = "04.2 - BeEquivalentToShouldFailIfExceptionDataDontMatch")]
+        public void BeEquivalentToShouldFailIfExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string mutualKey = GetRandomString();
+            KeyValuePair<string, List<string>> expectedDataOne = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataTwo = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> actualData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+            KeyValuePair<string, List<string>> actualDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+
+            var expectedException = new Xeption(
+                message: exceptionMessage);
+
+            expectedException.AddData(
+                key: expectedDataTwo.Key,
+                values: expectedDataTwo.Value.ToArray());
+
+            expectedException.AddData(
+                key: expectedDataOne.Key,
+                values: expectedDataOne.Value.ToArray());
+
+            expectedException.AddData(
+                key: expectedDataSameKeyName.Key,
+                values: expectedDataSameKeyName.Value.ToArray());
+
+            var actualException = new Xeption(
+                message: exceptionMessage);
+
+            actualException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            actualException.AddData(
+                key: actualDataSameKeyName.Key,
+                values: actualDataSameKeyName.Value.ToArray());
+
+            string titleMessage =
+                $"Expected exception with type '{expectedException.GetType().FullName}' " +
+                $"and message '{expectedException.Message}' to:";
+
+            string errorCountMessage =
+                $"- have an expected data item count to be {expectedException.Data.Count}, " +
+                $"but found {actualException.Data.Count}.";
+
+            string messageOne =
+                $"- contain key '{expectedDataOne.Key}', but it was not found.";
+
+            string messageTwo =
+                $"- contain key '{expectedDataTwo.Key}', but it was not found.";
+
+            string messageThree =
+                $"- not contain key '{actualData.Key}'.";
+
+            string messageFour =
+                $"- not contain key '{actualData.Key}'.";
+
+            // when
+            Action assertAction = () =>
+                actualException.Should().BeEquivalentTo(expectedException);
+
+            XunitException actualError =
+                Assert.Throws<XunitException>(assertAction);
+
+            //then
+            actualError.Message.Should().Contain(errorCountMessage);
+            actualError.Message.Should().Contain(messageOne);
+            actualError.Message.Should().Contain(messageTwo);
+            actualError.Message.Should().Contain(messageThree);
+            actualError.Message.Should().Contain(messageFour);
+        }
+
         // TODO: Remove old tests below at the end of the refactoring
 
         [Fact]
