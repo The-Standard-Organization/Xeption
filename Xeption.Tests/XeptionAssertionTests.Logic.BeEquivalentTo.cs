@@ -3,7 +3,9 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
+using Force.DeepCloner;
 using Xunit;
 using Xunit.Sdk;
 
@@ -88,6 +90,33 @@ namespace Xeptions.Tests
 
             //then
             actualError.Message.Should().Contain(expectedMessage);
+        }
+
+        [Fact(DisplayName = "04.1 - BeEquivalentToShouldPassIfExceptionDataMatch")]
+        public void BeEquivalentToShouldPassIfExceptionDataMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            KeyValuePair<string, List<string>> randomData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedData = randomData.DeepClone();
+            KeyValuePair<string, List<string>> actualData = randomData.DeepClone();
+
+            var expectedException = new Xeption(
+                message: exceptionMessage);
+
+            expectedException.AddData(
+                key: expectedData.Key,
+                values: expectedData.Value.ToArray());
+
+            var actualException = new Xeption(
+                message: exceptionMessage);
+
+            actualException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
         }
 
         // TODO: Remove old tests below at the end of the refactoring
