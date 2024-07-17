@@ -68,6 +68,28 @@ namespace Xeptions.Tests
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
+        [Fact(DisplayName = "03.2 - BeEquivalentToShouldFailIfExceptionMessagesDontMatch")]
+        public void BeEquivalentToShouldFailIfExceptionMessagesDontMatch()
+        {
+            // given
+            var expectedException = new Xeption(message: GetRandomString());
+            var actualException = new Xeption(message: GetRandomString());
+
+            string expectedMessage =
+                $"Expected exception message to be \"{expectedException.Message}\", " +
+                $"but found \"{actualException.Message}\"";
+
+            // when
+            Action assertAction = () =>
+                actualException.Should().BeEquivalentTo(expectedException);
+
+            XunitException actualError =
+                Assert.Throws<XunitException>(assertAction);
+
+            //then
+            actualError.Message.Should().Contain(expectedMessage);
+        }
+
         // TODO: Remove old tests below at the end of the refactoring
 
         [Fact]
