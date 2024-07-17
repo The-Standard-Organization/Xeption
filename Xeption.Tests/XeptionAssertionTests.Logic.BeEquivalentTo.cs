@@ -56,9 +56,7 @@ namespace Xeptions.Tests
             actualError.Message.Should().Contain(expectedMessage);
         }
 
-        // TODO: Remove old tests below at the end of the refactoring
-
-        [Fact]
+        [Fact(DisplayName = "03.1 - BeEquivalentToShouldPassIfExceptionMessagesMatch")]
         public void BeEquivalentToShouldPassIfExceptionMessagesMatch()
         {
             // given
@@ -69,6 +67,8 @@ namespace Xeptions.Tests
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
         }
+
+        // TODO: Remove old tests below at the end of the refactoring
 
         [Fact]
         public void BeEquivalentToShouldPassIfInnerExceptionsMatchOnType()
