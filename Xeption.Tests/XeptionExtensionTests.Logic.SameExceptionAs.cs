@@ -578,6 +578,44 @@ namespace Xeptions.Tests
         }
 
         [Fact]
+        public void ShouldReturnFalseIfInnerExceptionDataDontMatchWithErrorDetails()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string expectedInnerExceptionDataKey = GetRandomString();
+            string expectedInnerExceptionDataValue = GetRandomString();
+            string actualInnerExceptionDataKey = GetRandomString();
+            string actualInnerExceptionDataValue = GetRandomString();
+
+            var expectedInnerException = new Xeption(message: exceptionMessage);
+            var actualInnerException = new Xeption(message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedInnerExceptionDataKey,
+                values: expectedInnerExceptionDataValue);
+
+            actualInnerException.AddData(
+                key: actualInnerExceptionDataKey,
+                values: actualInnerExceptionDataValue);
+
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException, out string message);
+
+            // then
+            Assert.False(actualComparisonResult);
+            message.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Fact]
         public void ShouldReturnFalseIfExceptionDataDontMatch()
         {
             // given
