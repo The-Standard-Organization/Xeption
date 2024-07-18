@@ -263,6 +263,42 @@ namespace Xeptions.Tests
             actualError.Message.Should().Contain(expectedMessage);
         }
 
+        [Fact(DisplayName = "02.4 - BeEquivalentToShouldPassIfInnerExceptionDataMatch")]
+        public void BeEquivalentToShouldPassIfInnerExceptionDataMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            KeyValuePair<string, List<string>> randomData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedData = randomData.DeepClone();
+            KeyValuePair<string, List<string>> actualData = randomData.DeepClone();
+
+            var expectedInnerException = new Xeption(
+                message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedData.Key,
+                values: expectedData.Value.ToArray());
+
+            var actualInnerException = new Xeption(
+                message: exceptionMessage);
+
+            actualInnerException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            // when then
+            actualException.Should().BeEquivalentTo(expectedException);
+        }
+
         // TODO: Remove old tests below at the end of the refactoring
 
         [Fact]
