@@ -311,6 +311,28 @@ namespace Xeptions.Tests
         }
 
         [Fact]
+        public void ShouldReturnFalseIfActualExceptionIsNullWhileExpectedExceptionIsPresentWithErrorDetails()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = null;
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            Xeption actualException = null;
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException, out string message);
+
+            // then
+            Assert.False(actualComparisonResult);
+            message.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Fact]
         public void ShouldReturnFalseIfExpectedInnerExceptionIsNullWhileActualInnerExceptionIsPresent()
         {
             // given
