@@ -13,8 +13,8 @@ namespace Xeptions.Tests
 {
     public partial class XeptionAssertionTests
     {
-        [Fact(DisplayName = "01.0 - BeEquivalentToShouldPassIfNullExceptionsMatchOnType")]
-        public void BeEquivalentToShouldPassIfNullExceptionsMatchOnType()
+        [Fact(DisplayName = "01.0 - BeEquivalentToShouldPassIfNullExceptionsMatch")]
+        public void BeEquivalentToShouldPassIfNullExceptionsMatch()
         {
             // given
             Xeption expectedException = null;
@@ -24,8 +24,8 @@ namespace Xeptions.Tests
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
-        [Fact(DisplayName = "02.1 - BeEquivalentToShouldPassIfExceptionsMatchOnType")]
-        public void BeEquivalentToShouldPassIfExceptionsMatchOnType()
+        [Fact(DisplayName = "02.1 - BeEquivalentToShouldPassIfExceptionsMatch")]
+        public void BeEquivalentToShouldPassIfExceptionsMatch()
         {
             // given
             string randomMessage = GetRandomString();
@@ -59,19 +59,7 @@ namespace Xeptions.Tests
             actualError.Message.Should().Contain(expectedMessage);
         }
 
-        [Fact(DisplayName = "03.1 - BeEquivalentToShouldPassIfExceptionMessagesMatch")]
-        public void BeEquivalentToShouldPassIfExceptionMessagesMatch()
-        {
-            // given
-            string randomMessage = GetRandomString();
-            var expectedException = new Xeption(message: randomMessage);
-            var actualException = new Xeption(message: randomMessage);
-
-            // when then
-            actualException.Should().BeEquivalentTo(expectedException);
-        }
-
-        [Fact(DisplayName = "03.2 - BeEquivalentToShouldFailIfExceptionMessagesDontMatch")]
+        [Fact(DisplayName = "02.3 - BeEquivalentToShouldFailIfExceptionMessagesDontMatch")]
         public void BeEquivalentToShouldFailIfExceptionMessagesDontMatch()
         {
             // given
@@ -93,7 +81,7 @@ namespace Xeptions.Tests
             actualError.Message.Should().Contain(expectedMessage);
         }
 
-        [Fact(DisplayName = "04.1 - BeEquivalentToShouldPassIfExceptionDataMatch")]
+        [Fact(DisplayName = "02.4 - BeEquivalentToShouldPassIfExceptionDataMatch")]
         public void BeEquivalentToShouldPassIfExceptionDataMatch()
         {
             // given
@@ -120,7 +108,7 @@ namespace Xeptions.Tests
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
-        [Fact(DisplayName = "04.2 - BeEquivalentToShouldFailIfExceptionDataDontMatch")]
+        [Fact(DisplayName = "02.5 - BeEquivalentToShouldFailIfExceptionDataDontMatch")]
         public void BeEquivalentToShouldFailIfExceptionDataDontMatch()
         {
             // given
@@ -193,7 +181,7 @@ namespace Xeptions.Tests
             actualError.Message.Should().Contain(messageFour);
         }
 
-        [Fact(DisplayName = "05.1 - BeEquivalentToShouldPassIfInnerExceptionsMatchOnType")]
+        [Fact(DisplayName = "03.1 - BeEquivalentToShouldPassIfInnerExceptionsMatch")]
         public void BeEquivalentToShouldPassIfInnerExceptionsMatchOnType()
         {
             // given
@@ -213,7 +201,7 @@ namespace Xeptions.Tests
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
-        [Fact(DisplayName = "05.2 - BeEquivalentToShouldFailIfInnerExceptionsDontMatchOnType")]
+        [Fact(DisplayName = "03.2 - BeEquivalentToShouldFailIfInnerExceptionsDontMatchOnType")]
         public void BeEquivalentToShouldFailIfInnerExceptionsDontMatchOnType()
         {
             // given
@@ -232,6 +220,37 @@ namespace Xeptions.Tests
             string expectedMessage =
                 $"Expected exception type to be \"{expectedInnerException.GetType().FullName}\", " +
                 $"but found \"{actualInnerException.GetType().FullName}\".";
+
+            // when
+            Action assertAction = () =>
+                actualException.Should().BeEquivalentTo(expectedException);
+
+            XunitException actualError =
+                Assert.Throws<XunitException>(assertAction);
+
+            //then
+            actualError.Message.Should().Contain(expectedMessage);
+        }
+
+        [Fact(DisplayName = "03.3 - BeEquivalentToShouldFailIfInnerExceptionMessagesDontMatch")]
+        public void BeEquivalentToShouldFailIfInnerExceptionMessagesDontMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: GetRandomString());
+            var actualInnerException = new Xeption(message: GetRandomString());
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            string expectedMessage =
+                $"Expected exception message to be \"{expectedInnerException.Message}\", " +
+                $"but found \"{actualInnerException.Message}\"";
 
             // when
             Action assertAction = () =>
