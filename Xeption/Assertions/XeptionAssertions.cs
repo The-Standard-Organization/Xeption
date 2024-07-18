@@ -33,7 +33,10 @@ namespace FluentAssertions.Exceptions
                     .BecauseOf(because, becauseArgs)
                     .WithExpectation("Expected the ")
                     .Given(() => Subject)
-                    .ForCondition(subject => InnerExceptionsMatch(subject, expectation, "aggregate exception", because, becauseArgs))
+
+                    .ForCondition(subject =>
+                        InnerExceptionsMatch(subject, expectation, "aggregate exception", because, becauseArgs))
+
                     .FailWith("to be equivalent to {0}{reason}, but it was not.", expectation)
                     .Then
                     .ClearExpectation();
@@ -44,7 +47,10 @@ namespace FluentAssertions.Exceptions
                     .BecauseOf(because, becauseArgs)
                     .WithExpectation("Expected the ")
                     .Given(() => Subject)
-                    .ForCondition(subject => InnerExceptionsMatch(subject, expectation, "exception", because, becauseArgs))
+
+                    .ForCondition(subject =>
+                        InnerExceptionsMatch(subject, expectation, "exception", because, becauseArgs))
+
                     .FailWith("to be equivalent to {0}{reason}, but it was not.", expectation)
                     .Then
                     .ClearExpectation();
@@ -89,9 +95,16 @@ namespace FluentAssertions.Exceptions
 
                     .Then
                     .ForCondition(messageMatch)
-                    .FailWith($"Expected aggregate {type} message to be \"{expected.Message}\", but found \"{actual.Message}\".")
+
+                    .FailWith(
+                        $"Expected aggregate {type} message to be \"{expected.Message}\", " +
+                        $"but found \"{actual.Message}\".")
+
                     .Then
-                    .ForCondition(ExceptionDataMatch(actual, expected, "aggregate inner exception", because, becauseArgs))
+
+                    .ForCondition(
+                        ExceptionDataMatch(actual, expected, "aggregate inner exception", because, becauseArgs))
+
                     .FailWith("data to match but it does not.")
                     .Then
                     .ClearExpectation();

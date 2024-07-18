@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
 
@@ -33,6 +34,32 @@ namespace Xeptions.Tests
 
             // then
             Assert.True(actualComparisonResult);
+        }
+
+        [Fact]
+        public void ShouldReturnTrueIfExceptionsMatchWithEmptyErrorDetails()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: randomMessage);
+
+            expectedInnerException.AddData(
+                key: GetRandomString(),
+                values: GetRandomString());
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = expectedException.DeepClone();
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException, out string message);
+
+            // then
+            Assert.True(actualComparisonResult);
+            message.Should().BeEmpty();
         }
 
         [Fact]
