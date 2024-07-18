@@ -459,6 +459,35 @@ namespace Xeptions.Tests
         }
 
         [Fact]
+        public void ShouldReturnFalseIfExceptionMessageDontMatchWithErrorDetails()
+        {
+            // given
+            string randomExceptionMessage = GetRandomString();
+            string innerExceptionMessage = randomExceptionMessage;
+            string expectedExceptionMessage = GetRandomString();
+            string actualExceptionMessage = GetRandomString();
+
+            var innerException = new Xeption(
+                message: innerExceptionMessage);
+
+            var expectedException = new Xeption(
+                message: expectedExceptionMessage,
+                innerException: innerException);
+
+            var actualException = new Xeption(
+                message: actualExceptionMessage,
+                innerException: innerException);
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException, out string message);
+
+            // then
+            Assert.False(actualComparisonResult);
+            message.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Fact]
         public void ShouldReturnFalseIfInnerExceptionMessageDontMatch()
         {
             // given
