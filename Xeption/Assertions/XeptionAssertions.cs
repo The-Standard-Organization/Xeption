@@ -27,14 +27,28 @@ namespace FluentAssertions.Exceptions
                 ? new Xeption()
                 : new Xeption(Subject.Message, Subject.InnerException, Subject.Data);
 
-            Execute.Assertion
-                .BecauseOf(because, becauseArgs)
-                .WithExpectation("Expected the ")
-                .Given(() => Subject)
-                .ForCondition(subject => InnerExceptionsMatch(subject, expectation, because, becauseArgs))
-                .FailWith("to be equivalent to {0}{reason}, but it was not.", expectation)
-                .Then
-                .ClearExpectation();
+            if (Subject is AggregateException actualAggregate && expectation is AggregateException expectedAggregate)
+            {
+                Execute.Assertion
+                    .BecauseOf(because, becauseArgs)
+                    .WithExpectation("Expected the ")
+                    .Given(() => Subject)
+                    .ForCondition(subject => InnerExceptionsMatch(subject, expectation, "aggregate exception", because, becauseArgs))
+                    .FailWith("to be equivalent to {0}{reason}, but it was not.", expectation)
+                    .Then
+                    .ClearExpectation();
+            }
+            else
+            {
+                Execute.Assertion
+                    .BecauseOf(because, becauseArgs)
+                    .WithExpectation("Expected the ")
+                    .Given(() => Subject)
+                    .ForCondition(subject => InnerExceptionsMatch(subject, expectation, "exception", because, becauseArgs))
+                    .FailWith("to be equivalent to {0}{reason}, but it was not.", expectation)
+                    .Then
+                    .ClearExpectation();
+            }
 
             return new AndConstraint<XeptionAssertions<TException>>(this);
         }
@@ -42,6 +56,7 @@ namespace FluentAssertions.Exceptions
         private bool InnerExceptionsMatch(
             Exception actual,
             Exception expected,
+            string type,
             string because,
             params object[] becauseArgs)
         {
@@ -53,9 +68,8 @@ namespace FluentAssertions.Exceptions
                 Execute.Assertion
                     .BecauseOf(because, becauseArgs)
                     .FailWith(
-                        "Expected exception to be {0}, but found {1}.",
-                        expected?.GetType().FullName ?? "null",
-                        actual?.GetType().FullName ?? "null");
+                        $"Expected {type} exception to be \"{expected?.GetType().FullName ?? "null"}\", " +
+                        $"but found \"{actual?.GetType().FullName ?? "null"}\".");
 
                 return false;
             }
@@ -68,18 +82,12 @@ namespace FluentAssertions.Exceptions
                 .ForCondition(typeMatch)
 
                 .FailWith(
-                    "Expected exception type to be {0}, but found {1}.",
-                    expected.GetType().FullName,
-                    actual.GetType().FullName)
+                    $"Expected {type} type to be \"{expected.GetType().FullName}\", " +
+                    $"but found \"{actual.GetType().FullName}\".")
 
                 .Then
                 .ForCondition(messageMatch)
-
-                .FailWith(
-                    "Expected exception message to be {0}, but found {1}.",
-                    expected.Message,
-                    actual.Message)
-
+                .FailWith($"Expected {type} message to be \"{expected.Message}\", but found \"{actual.Message}\".")
                 .Then
                 .ForCondition(ExceptionDataMatch(actual, expected, because, becauseArgs))
                 .FailWith("data to match but it does not.");
@@ -90,13 +98,20 @@ namespace FluentAssertions.Exceptions
                 var expectedInnerExceptions = expectedAggregate.InnerExceptions;
 
                 var countMatch = actualInnerExceptions.Count == expectedInnerExceptions.Count;
-                Execute.Assertion
-                    .BecauseOf(because, becauseArgs)
-                    .ForCondition(countMatch)
-                    .FailWith(
-                        "Expected AggregateException inner exception count to be {0}, but found {1}.",
-                        expectedInnerExceptions.Count,
-                        actualInnerExceptions.Count);
+
+                if (!countMatch)
+                {
+                    Execute.Assertion
+                        .BecauseOf(because, becauseArgs)
+                        .ForCondition(countMatch)
+                        .FailWith(
+                            "Expected {0} count to be {1}, but found {2}.",
+                            type,
+                            expectedInnerExceptions.Count,
+                            actualInnerExceptions.Count);
+
+                    return false;
+                }
 
                 if (countMatch)
                 {
@@ -105,6 +120,7 @@ namespace FluentAssertions.Exceptions
                         if (!InnerExceptionsMatch(
                             actual: actualInnerExceptions[i],
                             expected: expectedInnerExceptions[i],
+                            type: "aggregate inner exception(s)",
                             because,
                             becauseArgs))
                         {
@@ -118,7 +134,9 @@ namespace FluentAssertions.Exceptions
                 return InnerExceptionsMatch(
                     actual: actual.InnerException,
                     expected: expected.InnerException,
-                    because, becauseArgs);
+                    type: "inner exception",
+                    because,
+                    becauseArgs);
             }
 
             return true;

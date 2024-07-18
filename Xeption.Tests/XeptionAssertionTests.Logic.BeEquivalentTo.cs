@@ -201,8 +201,8 @@ namespace Xeptions.Tests
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
-        [Fact(DisplayName = "03.2 - BeEquivalentToShouldFailIfInnerExceptionsDontMatchOnType")]
-        public void BeEquivalentToShouldFailIfInnerExceptionsDontMatchOnType()
+        [Fact(DisplayName = "03.2 - BeEquivalentToShouldFailIfInnerExceptionsTypeDontMatch")]
+        public void BeEquivalentToShouldFailIfInnerExceptionsTypeDontMatch()
         {
             // given
             string randomMessage = GetRandomString();
@@ -218,7 +218,7 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             string expectedMessage =
-                $"Expected exception type to be \"{expectedInnerException.GetType().FullName}\", " +
+                $"Expected inner exception type to be \"{expectedInnerException.GetType().FullName}\", " +
                 $"but found \"{actualInnerException.GetType().FullName}\".";
 
             // when
@@ -232,8 +232,8 @@ namespace Xeptions.Tests
             actualError.Message.Should().Contain(expectedMessage);
         }
 
-        [Fact(DisplayName = "03.3 - BeEquivalentToShouldFailIfInnerExceptionMessagesDontMatch")]
-        public void BeEquivalentToShouldFailIfInnerExceptionMessagesDontMatch()
+        [Fact(DisplayName = "03.3 - BeEquivalentToShouldFailIfInnerExceptionMessageDontMatch")]
+        public void BeEquivalentToShouldFailIfInnerExceptionMessageDontMatch()
         {
             // given
             string randomMessage = GetRandomString();
@@ -249,7 +249,7 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             string expectedMessage =
-                $"Expected exception message to be \"{expectedInnerException.Message}\", " +
+                $"Expected inner exception message to be \"{expectedInnerException.Message}\", " +
                 $"but found \"{actualInnerException.Message}\"";
 
             // when
@@ -263,7 +263,7 @@ namespace Xeptions.Tests
             actualError.Message.Should().Contain(expectedMessage);
         }
 
-        [Fact(DisplayName = "02.4 - BeEquivalentToShouldPassIfInnerExceptionDataMatch")]
+        [Fact(DisplayName = "03.4 - BeEquivalentToShouldPassIfInnerExceptionDataMatch")]
         public void BeEquivalentToShouldPassIfInnerExceptionDataMatch()
         {
             // given
@@ -286,7 +286,6 @@ namespace Xeptions.Tests
                 key: actualData.Key,
                 values: actualData.Value.ToArray());
 
-
             var expectedException = new Xeption(
                 message: exceptionMessage,
                 innerException: expectedInnerException);
@@ -299,72 +298,158 @@ namespace Xeptions.Tests
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
-        // TODO: Remove old tests below at the end of the refactoring
+        [Fact(DisplayName = "03.5 - BeEquivalentToShouldFailIfInnerExceptionDataDontMatch")]
+        public void BeEquivalentToShouldFailIfAggregateInnerExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string mutualKey = GetRandomString();
+            KeyValuePair<string, List<string>> expectedDataOne = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataTwo = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> actualData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+            KeyValuePair<string, List<string>> actualDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
 
-        [Fact]
-        public void BeEquivalentToShouldPassIfInnerExceptionMessagesMatch()
+            var expectedInnerException = new Xeption(
+                message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedDataTwo.Key,
+                values: expectedDataTwo.Value.ToArray());
+
+            expectedInnerException.AddData(
+                key: expectedDataOne.Key,
+                values: expectedDataOne.Value.ToArray());
+
+            expectedInnerException.AddData(
+                key: expectedDataSameKeyName.Key,
+                values: expectedDataSameKeyName.Value.ToArray());
+
+            var actualInnerException = new Xeption(
+                message: exceptionMessage);
+
+            actualInnerException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            actualInnerException.AddData(
+                key: actualDataSameKeyName.Key,
+                values: actualDataSameKeyName.Value.ToArray());
+
+            string titleMessage =
+                $"Expected exception with type '{expectedInnerException.GetType().FullName}' " +
+                $"and message '{expectedInnerException.Message}' to:";
+
+            string errorCountMessage =
+                $"- have an expected data item count to be {expectedInnerException.Data.Count}, " +
+                $"but found {actualInnerException.Data.Count}.";
+
+            string messageOne =
+                $"- contain key '{expectedDataOne.Key}', but it was not found.";
+
+            string messageTwo =
+                $"- contain key '{expectedDataTwo.Key}', but it was not found.";
+
+            string messageThree =
+                $"- not contain key '{actualData.Key}'.";
+
+            string messageFour =
+                $"- not contain key '{actualData.Key}'.";
+
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            // when
+            Action assertAction = () =>
+                actualException.Should().BeEquivalentTo(expectedException);
+
+            XunitException actualError =
+                Assert.Throws<XunitException>(assertAction);
+
+            //then
+            actualError.Message.Should().Contain(errorCountMessage);
+            actualError.Message.Should().Contain(messageOne);
+            actualError.Message.Should().Contain(messageTwo);
+            actualError.Message.Should().Contain(messageThree);
+            actualError.Message.Should().Contain(messageFour);
+        }
+
+        //=======================
+
+        [Fact(DisplayName = "04.1 - BeEquivalentToShouldPassIfAggregateExceptionsMatch")]
+        public void BeEquivalentToShouldPassIfAggregateExceptionsMatch()
         {
             // given
             string randomMessage = GetRandomString();
-            var expectedException = new Xeption(message: randomMessage);
-            var actualException = new Xeption(message: randomMessage);
+            Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Xeption actualInnerException = new Xeption(message: randomMessage);
+            string aggregateExceptionMessage = GetRandomString();
 
-            // when then
-            actualException.Should().BeEquivalentTo(expectedException);
-        }
+            AggregateException expectedAggregateException = new AggregateException(
+                message: aggregateExceptionMessage,
+                innerExceptions: new List<Exception> { expectedInnerException });
 
-        [Fact]
-        public void ShouldPassIfInnerExceptionDataCountMatch()
-        {
-            // given
-            string exceptionMessage = GetRandomString();
-            var expectedInnerException = new Xeption(message: exceptionMessage);
-            var actualInnerException = new Xeption(message: exceptionMessage);
+            AggregateException actualAggregateException = new AggregateException(
+                message: aggregateExceptionMessage,
+                innerExceptions: new List<Exception> { actualInnerException });
 
             var expectedException = new Xeption(
-                message: exceptionMessage,
-                innerException: expectedInnerException);
+                message: randomMessage,
+                innerException: expectedAggregateException);
 
             var actualException = new Xeption(
-                message: exceptionMessage,
-                innerException: actualInnerException);
+                message: randomMessage,
+                innerException: actualAggregateException);
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
         }
 
-        [Fact]
-        public void ShouldPassIfInnerExceptionDataMatch()
+        [Fact(DisplayName = "04.2 - BeEquivalentToShouldFailIfAggregateExceptionsDontMatchOnMessage")]
+        public void BeEquivalentToShouldFailIfAggregateExceptionsDontMatchOnMessage()
         {
             // given
-            string exceptionMessage = GetRandomString();
-            string randomKey = GetRandomString();
-            string randomValue = GetRandomString();
-            string expectedInnerExceptionDataKey = randomKey;
-            string expectedInnerExceptionDataValue = randomValue;
-            string actualInnerExceptionDataKey = randomKey;
-            string actualInnerExceptionDataValue = randomValue;
-            var expectedInnerException = new Xeption(message: exceptionMessage);
-            var actualInnerException = new Xeption(message: exceptionMessage);
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerException = new Exception(message: randomMessage);
+            string aggregateExpectedMessage = GetRandomString();
+            string aggregateActualMessage = GetRandomString();
 
-            expectedInnerException.AddData(
-                key: expectedInnerExceptionDataKey,
-                values: expectedInnerExceptionDataValue);
+            AggregateException expectedAggregateException = new AggregateException(
+                message: aggregateExpectedMessage);
 
-            actualInnerException.AddData(
-                key: actualInnerExceptionDataKey,
-                values: actualInnerExceptionDataValue);
+            AggregateException actualAggregateException = new AggregateException(
+                message: aggregateActualMessage);
 
             var expectedException = new Xeption(
-                message: exceptionMessage,
-                innerException: expectedInnerException);
+                message: randomMessage,
+                innerException: expectedAggregateException);
 
             var actualException = new Xeption(
-                message: exceptionMessage,
-                innerException: actualInnerException);
+                message: randomMessage,
+                innerException: actualAggregateException);
 
-            // when then
-            actualException.Should().BeEquivalentTo(expectedException);
+            string expectedMessage =
+                $"Expected inner exception message to be " +
+                $"\"{expectedAggregateException.Message}\", " +
+                $"but found \"{actualAggregateException.Message}\".";
+
+            // when
+            Action assertAction = () =>
+                actualException.Should().BeEquivalentTo(expectedException);
+
+            XunitException actualError =
+                Assert.Throws<XunitException>(assertAction);
+
+            //then
+            actualError.Message.Should().Contain(expectedMessage);
         }
+
+
     }
 }
