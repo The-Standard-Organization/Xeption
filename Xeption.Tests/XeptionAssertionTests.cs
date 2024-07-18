@@ -29,7 +29,7 @@ namespace Xeptions.Tests
                 .ToList();
 
             var keyValuePair = new KeyValuePair<string, List<string>>(
-                key: GetRandomString(),
+                key: keyName,
                 value: values);
 
             return keyValuePair;

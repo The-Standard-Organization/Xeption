@@ -77,23 +77,25 @@ namespace FluentAssertions.Exceptions
             var typeMatch = actual.GetType().FullName == expected.GetType().FullName;
             var messageMatch = actual.Message == expected.Message;
 
-            Execute.Assertion
-                .BecauseOf(because, becauseArgs)
-                .ForCondition(typeMatch)
-
-                .FailWith(
-                    $"Expected {type} type to be \"{expected.GetType().FullName}\", " +
-                    $"but found \"{actual.GetType().FullName}\".")
-
-                .Then
-                .ForCondition(messageMatch)
-                .FailWith($"Expected {type} message to be \"{expected.Message}\", but found \"{actual.Message}\".")
-                .Then
-                .ForCondition(ExceptionDataMatch(actual, expected, because, becauseArgs))
-                .FailWith("data to match but it does not.");
-
             if (actual is AggregateException actualAggregate && expected is AggregateException expectedAggregate)
             {
+                Execute.Assertion
+                    .BecauseOf(because, becauseArgs)
+                    .ForCondition(typeMatch)
+
+                    .FailWith(
+                        $"Expected aggregate {type} type to be \"{expected.GetType().FullName}\", " +
+                        $"but found \"{actual.GetType().FullName}\".")
+
+                    .Then
+                    .ForCondition(messageMatch)
+                    .FailWith($"Expected aggregate {type} message to be \"{expected.Message}\", but found \"{actual.Message}\".")
+                    .Then
+                    .ForCondition(ExceptionDataMatch(actual, expected, "aggregate inner exception", because, becauseArgs))
+                    .FailWith("data to match but it does not.")
+                    .Then
+                    .ClearExpectation();
+
                 var actualInnerExceptions = actualAggregate.InnerExceptions;
                 var expectedInnerExceptions = expectedAggregate.InnerExceptions;
 
@@ -120,7 +122,7 @@ namespace FluentAssertions.Exceptions
                         if (!InnerExceptionsMatch(
                             actual: actualInnerExceptions[i],
                             expected: expectedInnerExceptions[i],
-                            type: "aggregate inner exception(s)",
+                            type: $"aggregate inner exception [{i}]",
                             because,
                             becauseArgs))
                         {
@@ -131,10 +133,27 @@ namespace FluentAssertions.Exceptions
             }
             else
             {
+                Execute.Assertion
+                    .BecauseOf(because, becauseArgs)
+                    .ForCondition(typeMatch)
+
+                    .FailWith(
+                        $"Expected {type} type to be \"{expected.GetType().FullName}\", " +
+                        $"but found \"{actual.GetType().FullName}\".")
+
+                    .Then
+                    .ForCondition(messageMatch)
+                    .FailWith($"Expected {type} message to be \"{expected.Message}\", but found \"{actual.Message}\".")
+                    .Then
+                    .ForCondition(ExceptionDataMatch(actual, expected, type, because, becauseArgs))
+                    .FailWith("data to match but it does not.")
+                    .Then
+                    .ClearExpectation();
+
                 return InnerExceptionsMatch(
                     actual: actual.InnerException,
                     expected: expected.InnerException,
-                    type: "inner exception",
+                    type: type == "aggregate inner exception" ? "aggregate inner exception" : "inner exception",
                     because,
                     becauseArgs);
             }
@@ -145,6 +164,7 @@ namespace FluentAssertions.Exceptions
         private bool ExceptionDataMatch(
             Exception actual,
             Exception expected,
+            string type,
             string because,
             params object[] becauseArgs)
         {
@@ -160,8 +180,8 @@ namespace FluentAssertions.Exceptions
                 Execute.Assertion
                     .BecauseOf(because, becauseArgs)
                     .FailWith(
-                        $"Expected exception with type '{expected.GetType().FullName}' " +
-                            $"and message '{expected.Message}' to have data as {0}, but found {1}.",
+                        $"Expected {type} with type '{expected.GetType().FullName}' " +
+                            $"to have data as {0}, but found {1}.",
                         expectedData?.Count == null ? "null" : "not null",
                         actualData?.Count == null ? "null" : "not null");
 
@@ -181,8 +201,10 @@ namespace FluentAssertions.Exceptions
             {
                 if (!actualData.Contains(key))
                 {
+                    var expectedValues = string.Join(", ", expectedData[key] as List<string>);
+
                     dataSummary.AppendLine(
-                        $"- contain key '{key}', but it was not found.");
+                        $"- contain key '{key}' with value(s) [{expectedValues}].");
                 }
             }
 
@@ -191,7 +213,7 @@ namespace FluentAssertions.Exceptions
                 if (!expectedData.Contains(key))
                 {
                     dataSummary.AppendLine(
-                        $"- not contain key '{key}'.");
+                        $"- NOT contain key '{key}'.");
                 }
             }
 
@@ -205,7 +227,7 @@ namespace FluentAssertions.Exceptions
                     if (!Equals(actualValues, expectedValues))
                     {
                         dataSummary.AppendLine(
-                            $"- find key '{key}' with value(s) [{expectedValues}], " +
+                            $"- have key '{key}' with value(s) [{expectedValues}], " +
                             $"but found value(s) [{actualValues}].");
                     }
                 }
@@ -213,8 +235,7 @@ namespace FluentAssertions.Exceptions
 
             if (dataSummary.Length > 0)
             {
-                string errorMessage = $"Expected exception with type '{expected.GetType().FullName}' " +
-                            $"and message '{expected.Message}' to:{Environment.NewLine}" +
+                string errorMessage = $"Expected {type} to:{Environment.NewLine}" +
                             $"{dataSummary.ToString()}";
 
                 Execute.Assertion
