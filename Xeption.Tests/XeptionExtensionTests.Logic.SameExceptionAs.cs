@@ -406,6 +406,31 @@ namespace Xeptions.Tests
         }
 
         [Fact]
+        public void ShouldReturnTrueIfOuterExceptionsMatchWithNullInnerExceptionsWithNoErrorDetails()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = null;
+            Xeption actualInnerException = null;
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            // when
+            bool actualComparisonResult =
+                expectedException.SameExceptionAs(actualException, out string message);
+
+            // then
+            Assert.True(actualComparisonResult);
+            message.Should().BeNullOrEmpty();
+        }
+
+        [Fact]
         public void ShouldReturnFalseIfExceptionMessageDontMatch()
         {
             // given
