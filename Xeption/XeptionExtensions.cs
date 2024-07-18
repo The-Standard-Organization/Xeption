@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using FluentAssertions;
 
 namespace Xeptions
@@ -42,5 +43,8 @@ namespace Xeptions
                 return false;
             }
         }
+
+        public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
