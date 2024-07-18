@@ -45,7 +45,8 @@ namespace Xeptions.Tests
             var actualException = new Exception(message: randomMessage);
 
             string expectedMessage =
-                "Expected exception type to be \"Xeptions.Xeption\", but found \"System.Exception\".";
+                $"Expected exception type to be \"{expectedException.GetType().FullName}\", " +
+                $"but found \"{actualException.GetType().FullName}\".";
 
             // when
             Action assertAction = () =>
@@ -210,6 +211,37 @@ namespace Xeptions.Tests
 
             // when then
             actualException.Should().BeEquivalentTo(expectedException);
+        }
+
+        [Fact(DisplayName = "05.2 - BeEquivalentToShouldFailIfInnerExceptionsDontMatchOnType")]
+        public void BeEquivalentToShouldFailIfInnerExceptionsDontMatchOnType()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerException = new Exception(message: randomMessage);
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            string expectedMessage =
+                $"Expected exception type to be \"{expectedInnerException.GetType().FullName}\", " +
+                $"but found \"{actualInnerException.GetType().FullName}\".";
+
+            // when
+            Action assertAction = () =>
+                actualException.Should().BeEquivalentTo(expectedException);
+
+            XunitException actualError =
+                Assert.Throws<XunitException>(assertAction);
+
+            //then
+            actualError.Message.Should().Contain(expectedMessage);
         }
 
         // TODO: Remove old tests below at the end of the refactoring
