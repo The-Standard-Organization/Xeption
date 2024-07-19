@@ -21,6 +21,7 @@ namespace Xeptions
             try
             {
                 exception.Should().BeEquivalentTo(otherException);
+
                 return true;
             }
             catch (Exception)
@@ -35,6 +36,7 @@ namespace Xeptions
             {
                 exception.Should().BeEquivalentTo(otherException);
                 message = string.Empty;
+
                 return true;
             }
             catch (Exception error)
