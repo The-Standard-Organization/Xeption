@@ -66,10 +66,10 @@ namespace FluentAssertions.Exceptions
             string because,
             params object[] becauseArgs)
         {
-            if (actual == null && expected == null)
+            if (actual is null && expected is null)
                 return true;
 
-            if (actual == null || expected == null)
+            if (actual is null || expected is null)
             {
                 Execute.Assertion
                     .BecauseOf(because, becauseArgs)

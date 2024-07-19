@@ -24,7 +24,7 @@ namespace Xeptions.Tests
                 keyName = GetRandomString();
             }
 
-            List<string> values = Enumerable.Range(start: 0, count: count)
+            List<string> values = Enumerable.Range(start: 0, count)
                 .Select(_ => GetRandomString())
                 .ToList();
 

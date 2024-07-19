@@ -48,7 +48,7 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
             actualXeption.UpsertDataList(randomKey, randomValue);
 
-            StringBuilder expectedMessage = new StringBuilder();
+            var expectedMessage = new StringBuilder();
             expectedMessage.AppendLine($"Expected data to: ");
 
             expectedMessage.AppendLine(
@@ -82,7 +82,7 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
             expectedXeption.UpsertDataList(randomKey, randomValue);
 
-            StringBuilder expectedMessage = new StringBuilder();
+            var expectedMessage = new StringBuilder();
             expectedMessage.AppendLine($"Expected data to: ");
 
             expectedMessage.AppendLine(
@@ -126,7 +126,7 @@ namespace Xeptions.Tests
             string actualValues = ((List<string>)actualXeption.Data[randomKey])
                 .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
-            StringBuilder expectedMessage = new StringBuilder();
+            var expectedMessage = new StringBuilder();
             expectedMessage.AppendLine($"Expected data to: ");
 
             expectedMessage.AppendLine(
