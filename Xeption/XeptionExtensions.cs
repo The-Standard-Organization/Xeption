@@ -42,7 +42,7 @@ namespace Xeptions
             catch (Exception error)
             {
                 message = error.Message;
-
+                
                 return false;
             }
         }
