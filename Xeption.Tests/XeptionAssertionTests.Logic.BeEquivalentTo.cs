@@ -151,7 +151,7 @@ namespace Xeptions.Tests
                 key: actualData.Key,
                 values: actualData.Value.ToArray());
 
-            StringBuilder expectedError = new StringBuilder();
+            var expectedError = new StringBuilder();
             expectedError.AppendLine($"Expected exception to:");
 
             expectedError.AppendLine(
@@ -337,7 +337,7 @@ namespace Xeptions.Tests
                 key: actualData.Key,
                 values: actualData.Value.ToArray());
 
-            StringBuilder expectedError = new StringBuilder();
+            var expectedError = new StringBuilder();
             expectedError.AppendLine($"Expected inner exception to:");
 
             expectedError.AppendLine(

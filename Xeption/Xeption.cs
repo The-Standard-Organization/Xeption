@@ -77,7 +77,7 @@ namespace Xeptions
         public (bool IsEqual, string Message) DataEqualsWithDetail(IDictionary dictionary)
         {
             bool isEqual = true;
-            StringBuilder messageStringBuilder = new StringBuilder();
+            var messageStringBuilder = new StringBuilder();
             isEqual = CompareDataKeys(dictionary, isEqual, messageStringBuilder);
 
             string errorMessage = String.IsNullOrWhiteSpace(messageStringBuilder.ToString())

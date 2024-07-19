@@ -201,7 +201,7 @@ namespace FluentAssertions.Exceptions
                 return false;
             }
 
-            StringBuilder dataSummary = new StringBuilder();
+            var dataSummary = new StringBuilder();
 
             if (actualData.Count != expectedData.Count)
             {
