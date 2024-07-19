@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
@@ -24,11 +25,11 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
 
             // when
-            var actualComparisonResult = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
+            (bool isEqual, string message) = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeTrue();
-            actualComparisonResult.Message.Should().BeNullOrEmpty();
+            isEqual.Should().BeTrue();
+            message.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -47,19 +48,22 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
             actualXeption.UpsertDataList(randomKey, randomValue);
 
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected data to: ");
+
+            expectedMessage.AppendLine(
+                $"- have a count of {expectedXeption.Data.Count}, " +
+                $"but found {actualXeption.Data.Count}.");
+
+            expectedMessage.AppendLine($"- NOT contain key '{randomKey}'.");
+
             // when
-            var actualComparisonResult = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
+            (bool isEqual, string message) = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeFalse();
-            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected data item count to be {expectedXeption.Data.Count}, " +
-                    $"but found {actualXeption.Data.Count}.");
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Did not expect to find key '{randomKey}'.");
+            isEqual.Should().BeFalse();
+            message.Should().NotBeNullOrEmpty();
+            message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
 
         [Fact]
@@ -78,20 +82,24 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
             expectedXeption.UpsertDataList(randomKey, randomValue);
 
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected data to: ");
+
+            expectedMessage.AppendLine(
+                $"- have a count of {expectedXeption.Data.Count}, " +
+                $"but found {actualXeption.Data.Count}.");
+
+            expectedMessage.AppendLine(
+                $"- contain key '{randomKey}' with value(s) [{randomValue}].");
+
             // when
-            var actualComparisonResult = actualXeption
+            (bool isEqual, string message) = actualXeption
                 .DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeFalse();
-            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected data item count to be {expectedXeption.Data.Count}, " +
-                    $"but found {actualXeption.Data.Count}.");
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected to find key '{randomKey}'.");
+            isEqual.Should().BeFalse();
+            message.Should().NotBeNullOrEmpty();
+            message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
 
         [Fact]
@@ -118,17 +126,21 @@ namespace Xeptions.Tests
             string actualValues = ((List<string>)actualXeption.Data[randomKey])
                 .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected data to: ");
+
+            expectedMessage.AppendLine(
+                $"- have key '{randomKey}' with value(s) ['{expectedValues}'], " +
+                $"but found value(s) ['{actualValues}'].");
+
             // when
-            var actualComparisonResult = actualXeption
+            (bool isEqual, string message) = actualXeption
                 .DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeFalse();
-            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected to find key '{randomKey}' with value(s) ['{expectedValues}'], " +
-                    $"but found value(s) ['{actualValues}'].");
+            isEqual.Should().BeFalse();
+            message.Should().NotBeNullOrEmpty();
+            message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
     }
 }

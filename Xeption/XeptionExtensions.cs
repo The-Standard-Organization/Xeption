@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq.Expressions;
+using FluentAssertions;
 
 namespace Xeptions
 {
@@ -17,15 +18,33 @@ namespace Xeptions
 
         public static bool SameExceptionAs(this Exception exception, Exception otherException)
         {
-            return
-                (exception is null && otherException is null) ||
-                (exception?.GetType()?.FullName == otherException?.GetType()?.FullName
-                && exception?.Message == otherException?.Message
-                && ((Xeption)exception).DataEquals(otherException?.Data)
-                && ((exception?.InnerException is null && otherException?.InnerException is null) ||
-                (exception?.InnerException?.GetType()?.FullName == otherException?.InnerException?.GetType()?.FullName
-                && exception?.InnerException?.Message == otherException?.InnerException?.Message
-                && ((Xeption)(exception?.InnerException)).DataEquals(otherException?.InnerException?.Data))));
+            try
+            {
+                exception.Should().BeEquivalentTo(otherException);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static bool SameExceptionAs(this Exception exception, Exception otherException, out string message)
+        {
+            try
+            {
+                exception.Should().BeEquivalentTo(otherException);
+                message = String.Empty;
+
+                return true;
+            }
+            catch (Exception error)
+            {
+                message = error.Message;
+                
+                return false;
+            }
         }
 
         public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>

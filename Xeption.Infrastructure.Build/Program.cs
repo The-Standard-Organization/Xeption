@@ -99,7 +99,7 @@ namespace Xeptions.Infrastructure.Build
             string buildScriptPath = "../../../../.github/workflows/dotnet.yml";
             string directoryPath = Path.GetDirectoryName(buildScriptPath);
 
-            if (!Directory.Exists(directoryPath))
+            if (Directory.Exists(directoryPath) is false)
             {
                 Directory.CreateDirectory(directoryPath);
             }
