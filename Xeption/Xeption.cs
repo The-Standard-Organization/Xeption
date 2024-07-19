@@ -80,8 +80,8 @@ namespace Xeptions
             StringBuilder messageStringBuilder = new StringBuilder();
             isEqual = CompareDataKeys(dictionary, isEqual, messageStringBuilder);
 
-            string errorMessage = string.IsNullOrWhiteSpace(messageStringBuilder.ToString())
-                ? string.Empty
+            string errorMessage = String.IsNullOrWhiteSpace(messageStringBuilder.ToString())
+                ? String.Empty
                 : $"Expected data to: {Environment.NewLine}{messageStringBuilder.ToString()}";
 
             return (isEqual, errorMessage);
@@ -144,7 +144,7 @@ namespace Xeptions
 
                 foreach (DictionaryEntry dictionaryEntry in missingItems)
                 {
-                    var values = string.Join(", ", dictionaryEntry.Value as List<string>);
+                    var values = String.Join(", ", dictionaryEntry.Value as List<string>);
 
                     AppendMessage(
                         messageStringBuilder,
@@ -222,7 +222,7 @@ namespace Xeptions
 
         private void AppendMessage(StringBuilder builder, string message)
         {
-            if (!string.IsNullOrEmpty(message))
+            if (!String.IsNullOrEmpty(message))
             {
                 builder.AppendLine(message);
             }

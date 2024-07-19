@@ -214,7 +214,7 @@ namespace FluentAssertions.Exceptions
             {
                 if (!actualData.Contains(key))
                 {
-                    var expectedValues = string.Join(", ", expectedData[key] as List<string>);
+                    var expectedValues = String.Join(", ", expectedData[key] as List<string>);
 
                     dataSummary.AppendLine(
                         $"- contain key '{key}' with value(s) [{expectedValues}].");
@@ -234,8 +234,8 @@ namespace FluentAssertions.Exceptions
             {
                 if (actualData.Contains(key))
                 {
-                    var actualValues = string.Join(", ", actualData[key] as List<string>);
-                    var expectedValues = string.Join(", ", expectedData[key] as List<string>);
+                    var actualValues = String.Join(", ", actualData[key] as List<string>);
+                    var expectedValues = String.Join(", ", expectedData[key] as List<string>);
 
                     if (!Equals(actualValues, expectedValues))
                     {

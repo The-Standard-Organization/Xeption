@@ -35,7 +35,7 @@ namespace Xeptions
             try
             {
                 exception.Should().BeEquivalentTo(otherException);
-                message = string.Empty;
+                message = String.Empty;
 
                 return true;
             }

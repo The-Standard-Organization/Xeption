@@ -19,7 +19,7 @@ namespace Xeptions.Tests
 
         private static KeyValuePair<string, List<string>> GenerateKeyValuePair(int count, string keyName = "")
         {
-            if (string.IsNullOrWhiteSpace(keyName))
+            if (String.IsNullOrWhiteSpace(keyName))
             {
                 keyName = GetRandomString();
             }
