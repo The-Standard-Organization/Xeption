@@ -222,7 +222,7 @@ namespace Xeptions
 
         private void AppendMessage(StringBuilder builder, string message)
         {
-            if (!String.IsNullOrEmpty(message))
+            if (String.IsNullOrEmpty(message) is false)
             {
                 builder.AppendLine(message);
             }

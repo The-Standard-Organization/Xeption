@@ -114,7 +114,7 @@ namespace FluentAssertions.Exceptions
 
                 bool countMatch = actualInnerExceptions.Count == expectedInnerExceptions.Count;
 
-                if (!countMatch)
+                if (countMatch is false)
                 {
                     Execute.Assertion
                         .BecauseOf(because, becauseArgs)
@@ -132,12 +132,12 @@ namespace FluentAssertions.Exceptions
                 {
                     for (int i = 0; i < actualInnerExceptions.Count; i++)
                     {
-                        if (!InnerExceptionsMatch(
+                        if (InnerExceptionsMatch(
                             actual: actualInnerExceptions[i],
                             expected: expectedInnerExceptions[i],
                             type: $"aggregate inner exception [{i}]",
                             because,
-                            becauseArgs))
+                            becauseArgs) != true)
                         {
                             return false;
                         }
@@ -212,7 +212,7 @@ namespace FluentAssertions.Exceptions
 
             foreach (var key in expectedData.Keys)
             {
-                if (!actualData.Contains(key))
+                if (actualData.Contains(key) is false)
                 {
                     var expectedValues = String.Join(", ", expectedData[key] as List<string>);
 
@@ -223,7 +223,7 @@ namespace FluentAssertions.Exceptions
 
             foreach (var key in actualData.Keys)
             {
-                if (!expectedData.Contains(key))
+                if (expectedData.Contains(key) is false)
                 {
                     dataSummary.AppendLine(
                         $"- NOT contain key '{key}'.");
@@ -237,7 +237,7 @@ namespace FluentAssertions.Exceptions
                     var actualValues = String.Join(", ", actualData[key] as List<string>);
                     var expectedValues = String.Join(", ", expectedData[key] as List<string>);
 
-                    if (!Equals(actualValues, expectedValues))
+                    if (Equals(actualValues, expectedValues) is false)
                     {
                         dataSummary.AppendLine(
                             $"- have key '{key}' with value(s) [{expectedValues}], " +
