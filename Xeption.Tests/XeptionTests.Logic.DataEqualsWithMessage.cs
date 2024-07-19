@@ -126,6 +126,13 @@ namespace Xeptions.Tests
             string actualValues = ((List<string>)actualXeption.Data[randomKey])
                 .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
+            StringBuilder expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected data to: ");
+
+            expectedMessage.AppendLine(
+                $"- have key '{randomKey}' with value(s) ['{expectedValues}'], " +
+                $"but found value(s) ['{actualValues}'].");
+
             // when
             var actualComparisonResult = actualXeption
                 .DataEqualsWithDetail(expectedXeption.Data);
@@ -133,10 +140,7 @@ namespace Xeptions.Tests
             // then
             actualComparisonResult.IsEqual.Should().BeFalse();
             actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected to find key '{randomKey}' with value(s) ['{expectedValues}'], " +
-                    $"but found value(s) ['{actualValues}'].");
+            actualComparisonResult.Message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
     }
 }
