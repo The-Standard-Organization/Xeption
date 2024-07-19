@@ -80,8 +80,8 @@ namespace FluentAssertions.Exceptions
                 return false;
             }
 
-            var typeMatch = actual.GetType().FullName == expected.GetType().FullName;
-            var messageMatch = actual.Message == expected.Message;
+            bool typeMatch = actual.GetType().FullName == expected.GetType().FullName;
+            bool messageMatch = actual.Message == expected.Message;
 
             if (actual is AggregateException actualAggregate && expected is AggregateException expectedAggregate)
             {
@@ -112,7 +112,7 @@ namespace FluentAssertions.Exceptions
                 var actualInnerExceptions = actualAggregate.InnerExceptions;
                 var expectedInnerExceptions = expectedAggregate.InnerExceptions;
 
-                var countMatch = actualInnerExceptions.Count == expectedInnerExceptions.Count;
+                bool countMatch = actualInnerExceptions.Count == expectedInnerExceptions.Count;
 
                 if (!countMatch)
                 {

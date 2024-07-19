@@ -25,11 +25,11 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
 
             // when
-            var actualComparisonResult = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
+            (bool isEqual, string message) = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeTrue();
-            actualComparisonResult.Message.Should().BeNullOrEmpty();
+            isEqual.Should().BeTrue();
+            message.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -58,12 +58,12 @@ namespace Xeptions.Tests
             expectedMessage.AppendLine($"- NOT contain key '{randomKey}'.");
 
             // when
-            var actualComparisonResult = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
+            (bool isEqual, string message) = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeFalse();
-            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-            actualComparisonResult.Message.Should().BeEquivalentTo(expectedMessage.ToString());
+            isEqual.Should().BeFalse();
+            message.Should().NotBeNullOrEmpty();
+            message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
 
         [Fact]
@@ -93,13 +93,13 @@ namespace Xeptions.Tests
                 $"- contain key '{randomKey}' with value(s) [{randomValue}].");
 
             // when
-            var actualComparisonResult = actualXeption
+            (bool isEqual, string message) = actualXeption
                 .DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeFalse();
-            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-            actualComparisonResult.Message.Should().BeEquivalentTo(expectedMessage.ToString());
+            isEqual.Should().BeFalse();
+            message.Should().NotBeNullOrEmpty();
+            message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
 
         [Fact]
@@ -134,13 +134,13 @@ namespace Xeptions.Tests
                 $"but found value(s) ['{actualValues}'].");
 
             // when
-            var actualComparisonResult = actualXeption
+            (bool isEqual, string message) = actualXeption
                 .DataEqualsWithDetail(expectedXeption.Data);
 
             // then
-            actualComparisonResult.IsEqual.Should().BeFalse();
-            actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-            actualComparisonResult.Message.Should().BeEquivalentTo(expectedMessage.ToString());
+            isEqual.Should().BeFalse();
+            message.Should().NotBeNullOrEmpty();
+            message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
     }
 }
