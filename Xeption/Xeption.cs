@@ -80,7 +80,11 @@ namespace Xeptions
             StringBuilder messageStringBuilder = new StringBuilder();
             isEqual = CompareDataKeys(dictionary, isEqual, messageStringBuilder);
 
-            return (isEqual, messageStringBuilder.ToString());
+            string errorMessage = string.IsNullOrWhiteSpace(messageStringBuilder.ToString())
+                ? string.Empty
+                : $"Expected data to: {Environment.NewLine}{messageStringBuilder.ToString()}";
+
+            return (isEqual, errorMessage);
         }
 
         private bool CompareDataKeys(IDictionary dictionary, bool isEqual, StringBuilder messageStringBuilder)
@@ -96,7 +100,7 @@ namespace Xeptions
 
                 AppendMessage(
                     messageStringBuilder,
-                    $"- Expected data item count to be {dictionary.Count}, but found {this.Data.Count}.");
+                    $"- have a count of {dictionary.Count}, but found {this.Data.Count}.");
             }
 
             (IDictionary additionalItems, IDictionary missingItems, IDictionary sharedItems) =
@@ -122,7 +126,7 @@ namespace Xeptions
                 {
                     AppendMessage(
                         messageStringBuilder,
-                        $"- Did not expect to find key '{dictionaryEntry.Key}'.");
+                        $"- NOT contain key '{dictionaryEntry.Key}'.");
                 }
             }
 
@@ -140,9 +144,11 @@ namespace Xeptions
 
                 foreach (DictionaryEntry dictionaryEntry in missingItems)
                 {
+                    var values = string.Join(", ", dictionaryEntry.Value as List<string>);
+
                     AppendMessage(
                         messageStringBuilder,
-                        $"- Expected to find key '{dictionaryEntry.Key}'.");
+                        $"- contain key '{dictionaryEntry.Key}' with value(s) [{values}].");
                 }
             }
 
@@ -171,7 +177,7 @@ namespace Xeptions
 
                         AppendMessage(
                             messageStringBuilder,
-                            $"- Expected to find key '{dictionaryEntry.Key}' " +
+                            $"- have key '{dictionaryEntry.Key}' " +
                             $"with value(s) ['{expectedValues}'], " +
                             $"but found value(s) ['{actualValues}'].");
                     }

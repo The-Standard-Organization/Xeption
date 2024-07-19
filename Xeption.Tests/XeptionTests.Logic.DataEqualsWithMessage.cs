@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
@@ -47,19 +48,22 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
             actualXeption.UpsertDataList(randomKey, randomValue);
 
+            StringBuilder expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected data to: ");
+
+            expectedMessage.AppendLine(
+                $"- have a count of {expectedXeption.Data.Count}, " +
+                $"but found {actualXeption.Data.Count}.");
+
+            expectedMessage.AppendLine($"- NOT contain key '{randomKey}'.");
+
             // when
             var actualComparisonResult = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
 
             // then
             actualComparisonResult.IsEqual.Should().BeFalse();
             actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected data item count to be {expectedXeption.Data.Count}, " +
-                    $"but found {actualXeption.Data.Count}.");
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Did not expect to find key '{randomKey}'.");
+            actualComparisonResult.Message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
 
         [Fact]
