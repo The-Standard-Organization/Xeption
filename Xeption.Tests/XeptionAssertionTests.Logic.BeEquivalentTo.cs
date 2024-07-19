@@ -1,4 +1,4 @@
-﻿// ----------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
@@ -546,7 +546,5 @@ namespace Xeptions.Tests
             //then
             actualError.Message.Should().Contain(expectedMessage);
         }
-
-
     }
 }

@@ -261,7 +261,6 @@ namespace FluentAssertions.Exceptions
             return true;
         }
 
-
         protected override string Identifier => "Exception";
     }
 }
