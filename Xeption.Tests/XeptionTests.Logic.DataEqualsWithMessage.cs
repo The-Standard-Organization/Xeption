@@ -82,6 +82,16 @@ namespace Xeptions.Tests
             Xeption actualXeption = expectedXeption.DeepClone();
             expectedXeption.UpsertDataList(randomKey, randomValue);
 
+            StringBuilder expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected data to: ");
+
+            expectedMessage.AppendLine(
+                $"- have a count of {expectedXeption.Data.Count}, " +
+                $"but found {actualXeption.Data.Count}.");
+
+            expectedMessage.AppendLine(
+                $"- contain key '{randomKey}' with value(s) [{randomValue}].");
+
             // when
             var actualComparisonResult = actualXeption
                 .DataEqualsWithDetail(expectedXeption.Data);
@@ -89,13 +99,7 @@ namespace Xeptions.Tests
             // then
             actualComparisonResult.IsEqual.Should().BeFalse();
             actualComparisonResult.Message.Should().NotBeNullOrEmpty();
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected data item count to be {expectedXeption.Data.Count}, " +
-                    $"but found {actualXeption.Data.Count}.");
-
-            actualComparisonResult.Message.Should()
-                .Contain($"- Expected to find key '{randomKey}'.");
+            actualComparisonResult.Message.Should().BeEquivalentTo(expectedMessage.ToString());
         }
 
         [Fact]
