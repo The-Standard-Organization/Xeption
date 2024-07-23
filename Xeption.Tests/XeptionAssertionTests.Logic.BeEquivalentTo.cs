@@ -467,9 +467,9 @@ namespace Xeptions.Tests
                 innerException: actualAggregateException);
 
             string expectedMessage =
-                $"Expected aggregate inner exception message to be " +
+                $"Expected exception message to be " +
                 $"\"{expectedAggregateException.Message}\", " +
-                $"but found \"{actualAggregateException.Message}\".";
+                $"but found \"{actualAggregateException.Message}\"";
 
             // when
             Action assertAction = () =>
