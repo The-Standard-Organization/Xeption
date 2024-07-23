@@ -30,7 +30,7 @@ namespace Xeptions
         public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static bool IsSameExceptionsAs(Exception exception, Exception otherException, out string message)
+        internal static bool IsSameExceptionsAs(Exception exception, Exception otherException, out string message)
         {
             if (exception is null && otherException is null)
             {
@@ -54,7 +54,7 @@ namespace Xeptions
                 invalidException = true;
 
                 errors.AppendLine($"Expected exception to be \"{otherException.GetType().FullName ?? "null"}\", " +
-                    $"but found: {exception.GetType().FullName ?? "null"}");
+                    $"but found \"{exception.GetType().FullName ?? "null"}\"");
             }
 
             if (exception.Message != otherException.Message)
@@ -62,11 +62,11 @@ namespace Xeptions
                 invalidException = true;
 
                 errors.AppendLine($"Expected exception message to be \"{otherException.Message}\", " +
-                    $"but found: {exception.Message}");
+                    $"but found \"{exception.Message}\"");
             }
 
-            Xeption xeption = (Xeption)exception;
-            (bool isDataEqual, string dataMessage) = xeption.DataEqualsWithDetail(otherException.Data);
+            (bool isDataEqual, string dataMessage) =
+                Xeption.CompareDataKeys(exception.Data, otherException.Data);
 
             if (isDataEqual == false)
             {
@@ -76,7 +76,7 @@ namespace Xeptions
 
             if (invalidException == true)
             {
-                message = errors.ToString();
+                message = errors.ToString().TrimEnd('\r', '\n');
                 return false;
             }
 
@@ -108,7 +108,7 @@ namespace Xeptions
 
                     if (invalidException == true)
                     {
-                        message = aggregateErrors.ToString();
+                        message = aggregateErrors.ToString().TrimEnd('\r', '\n');
                         return false;
                     }
                 }

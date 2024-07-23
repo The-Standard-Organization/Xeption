@@ -85,7 +85,7 @@ namespace Xeptions
             return (isEqual, errorMessage);
         }
 
-        private static (bool IsMatch, string Message) CompareDataKeys(
+        internal static (bool IsMatch, string Message) CompareDataKeys(
             IDictionary dictionary,
             IDictionary otherDictionary)
         {
@@ -96,12 +96,12 @@ namespace Xeptions
 
             bool isMatch = true;
             var errors = new StringBuilder();
-
+            errors.AppendLine($"Expected exception to:");
             bool unmatched = dictionary.Count != otherDictionary.Count;
 
             if (dictionary.Count != otherDictionary.Count)
             {
-                errors.AppendLine($"- have a count of {otherDictionary.Count}, but found {dictionary.Count}.");
+                errors.AppendLine($"- have a count of {otherDictionary.Count}, but found {dictionary.Count}");
             }
 
             (IDictionary additionalItems, IDictionary missingItems, IDictionary sharedItems) =
@@ -146,11 +146,11 @@ namespace Xeptions
 
                 foreach (DictionaryEntry dictionaryEntry in additionalItems)
                 {
-                    additionalErrors.AppendLine($"- NOT contain key '{dictionaryEntry.Key}'.");
+                    additionalErrors.AppendLine($"- NOT contain key \"{dictionaryEntry.Key}\"");
                 }
             }
 
-            return (hasAdditionalItems, additionalErrors.ToString());
+            return (hasAdditionalItems, additionalErrors.ToString().TrimEnd('\r', '\n'));
         }
 
         private static (bool hasMissingItems, string missingErrors) EvaluateMissingKeys(IDictionary missingItems)
@@ -163,11 +163,11 @@ namespace Xeptions
                 foreach (DictionaryEntry dictionaryEntry in missingItems)
                 {
                     var values = String.Join(", ", dictionaryEntry.Value as List<string>);
-                    missingErrors.AppendLine($"- contain key '{dictionaryEntry.Key}' with value(s) [{values}].");
+                    missingErrors.AppendLine($"- contain key \"{dictionaryEntry.Key}\" with value(s) [{values}]");
                 }
             }
 
-            return (hasMissingItems, missingErrors.ToString());
+            return (hasMissingItems, missingErrors.ToString().TrimEnd('\r', '\n'));
         }
 
         private static (bool unMatchedItems, string unMatchedItemsErrors) EvaluateSharedKeys(
@@ -192,13 +192,13 @@ namespace Xeptions
                         unMatchedItems = true;
 
                         unMatchedItemsErrors.AppendLine(
-                            $"- have key '{dictionaryEntry.Key}' " +
+                            $"- have key \"{dictionaryEntry.Key}\" " +
                             $"with value(s) ['{expectedValues}'], " +
-                            $"but found value(s) ['{actualValues}'].");
+                            $"but found value(s) ['{actualValues}']");
                     }
                 }
 
-                return (unMatchedItems, unMatchedItemsErrors.ToString());
+                return (unMatchedItems, unMatchedItemsErrors.ToString().TrimEnd('\r', '\n'));
             }
 
             return (false, string.Empty);

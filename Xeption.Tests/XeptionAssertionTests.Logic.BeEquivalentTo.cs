@@ -46,8 +46,8 @@ namespace Xeptions.Tests
             var actualException = new Exception(message: randomMessage);
 
             string expectedMessage =
-                $"Expected exception type to be \"{expectedException.GetType().FullName}\", " +
-                $"but found \"{actualException.GetType().FullName}\".";
+                $"Expected exception to be \"{expectedException.GetType().FullName}\", " +
+                $"but found \"{actualException.GetType().FullName}\"";
 
             // when
             Action assertAction = () =>
@@ -155,21 +155,21 @@ namespace Xeptions.Tests
             expectedError.AppendLine($"Expected exception to:");
 
             expectedError.AppendLine(
-                $"- have an expected data item count to be {expectedException.Data.Count}, " +
-                $"but found {actualException.Data.Count}.");
+                $"- have a count of {expectedException.Data.Count}, " +
+                $"but found {actualException.Data.Count}");
 
             expectedError.AppendLine(
-                $"- contain key '{expectedDataOne.Key}' with value(s) [{expectedDataOne.Value[0]}].");
+                $"- NOT contain key \"{actualData.Key}\"");
 
             expectedError.AppendLine(
-                $"- contain key '{expectedDataTwo.Key}' with value(s) [{expectedDataTwo.Value[0]}].");
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) [{expectedDataOne.Value[0]}]");
 
             expectedError.AppendLine(
-                $"- NOT contain key '{actualData.Key}'.");
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) [{expectedDataTwo.Value[0]}]");
 
             expectedError.AppendLine(
-                $"- have key '{mutualKey}' with value(s) [{expectedDataSameKeyName.Value[0]}], " +
-                $"but found value(s) [{actualDataSameKeyName.Value[0]}].");
+                $"- have key \"{mutualKey}\" with value(s) ['{expectedDataSameKeyName.Value[0]}'], " +
+                $"but found value(s) ['{actualDataSameKeyName.Value[0]}']");
 
             // when
             Action assertAction = () =>
@@ -179,7 +179,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString());
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
         }
 
         [Fact(DisplayName = "03.1 - BeEquivalentToShouldPassIfInnerExceptionsMatch")]
@@ -219,8 +219,8 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             string expectedMessage =
-                $"Expected inner exception type to be \"{expectedInnerException.GetType().FullName}\", " +
-                $"but found \"{actualInnerException.GetType().FullName}\".";
+                $"Expected exception to be \"{expectedInnerException.GetType().FullName}\", " +
+                $"but found \"{actualInnerException.GetType().FullName}\"";
 
             // when
             Action assertAction = () =>
@@ -250,7 +250,7 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             string expectedMessage =
-                $"Expected inner exception message to be \"{expectedInnerException.Message}\", " +
+                $"Expected exception message to be \"{expectedInnerException.Message}\", " +
                 $"but found \"{actualInnerException.Message}\"";
 
             // when
@@ -338,7 +338,7 @@ namespace Xeptions.Tests
                 values: actualData.Value.ToArray());
 
             var expectedError = new StringBuilder();
-            expectedError.AppendLine($"Expected inner exception to:");
+            expectedError.AppendLine($"Expected exception to:");
 
             expectedError.AppendLine(
                 $"- have an expected data item count to be {expectedInnerException.Data.Count}, " +
