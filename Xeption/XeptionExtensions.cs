@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Text;
 using FluentAssertions;
 
 namespace Xeptions
@@ -18,36 +19,116 @@ namespace Xeptions
 
         public static bool SameExceptionAs(this Exception exception, Exception otherException)
         {
-            try
-            {
-                exception.Should().BeEquivalentTo(otherException);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return IsSameExceptionsAs(exception, otherException, out string message);
         }
 
         public static bool SameExceptionAs(this Exception exception, Exception otherException, out string message)
         {
-            try
-            {
-                exception.Should().BeEquivalentTo(otherException);
-                message = String.Empty;
-
-                return true;
-            }
-            catch (Exception error)
-            {
-                message = error.Message;
-                
-                return false;
-            }
+            return IsSameExceptionsAs(exception, otherException, out message);
         }
 
         public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
+
+        private static bool IsSameExceptionsAs(Exception exception, Exception otherException, out string message)
+        {
+            if (exception is null && otherException is null)
+            {
+                message = String.Empty;
+
+                return true;
+            }
+
+            if (exception is null || otherException is null)
+            {
+                message = GetDifferences(exception, otherException).Message;
+
+                return false;
+            }
+
+            var errors = new StringBuilder();
+            bool invalidException = false;
+
+            if (exception.GetType().FullName != otherException.GetType().FullName)
+            {
+                invalidException = true;
+
+                errors.AppendLine($"Expected exception to be \"{otherException.GetType().FullName ?? "null"}\", " +
+                    $"but found: {exception.GetType().FullName ?? "null"}");
+            }
+
+            if (exception.Message != otherException.Message)
+            {
+                invalidException = true;
+
+                errors.AppendLine($"Expected exception message to be \"{otherException.Message}\", " +
+                    $"but found: {exception.Message}");
+            }
+
+            Xeption xeption = (Xeption)exception;
+            (bool isDataEqual, string dataMessage) = xeption.DataEqualsWithDetail(otherException.Data);
+
+            if (isDataEqual == false)
+            {
+                invalidException = true;
+                errors.AppendLine(dataMessage);
+            }
+
+            if (invalidException == true)
+            {
+                message = errors.ToString();
+                return false;
+            }
+
+            if (exception is AggregateException aggregateException
+                && otherException is AggregateException otherAggregateException)
+            {
+                if (aggregateException.InnerExceptions.Count != otherAggregateException.InnerExceptions.Count)
+                {
+                    message =
+                        $"Expected aggregate exception to contain " +
+                        $"{otherAggregateException.InnerExceptions.Count} inner exception(s), " +
+                        $"but found {aggregateException.InnerExceptions.Count}";
+
+                    return false;
+                }
+                else
+                {
+                    var aggregateErrors = new StringBuilder("Aggregate exception differences:");
+
+                    for (int i = 0; i < aggregateException.InnerExceptions.Count; i++)
+                    {
+                        if (!aggregateException.InnerExceptions[i].SameExceptionAs(
+                            otherAggregateException.InnerExceptions[i], out string innerMessage))
+                        {
+                            invalidException = true;
+                            errors.AppendLine($" - Difference in inner exception at index {i}: {innerMessage}");
+                        }
+                    }
+
+                    if (invalidException == true)
+                    {
+                        message = aggregateErrors.ToString();
+                        return false;
+                    }
+                }
+            }
+
+            return exception.InnerException.SameExceptionAs(otherException.InnerException, out message);
+        }
+
+        private static (bool IsMatch, string Message) GetDifferences(Exception exception, Exception otherException)
+        {
+            try
+            {
+                exception.Should().BeEquivalentTo(otherException);
+
+                return (true, String.Empty);
+            }
+            catch (Exception error)
+            {
+                return (true, error.Message);
+            }
+        }
     }
 }

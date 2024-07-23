@@ -63,7 +63,7 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
             message.Should().NotBeNullOrEmpty();
-            message.Should().BeEquivalentTo(expectedMessage.ToString());
+            message.Should().BeEquivalentTo(expectedMessage.ToString().TrimEnd('\r', '\n'));
         }
 
         [Fact]
@@ -99,11 +99,11 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
             message.Should().NotBeNullOrEmpty();
-            message.Should().BeEquivalentTo(expectedMessage.ToString());
+            message.Should().BeEquivalentTo(expectedMessage.ToString().Trim('\r', '\n'));
         }
 
         [Fact]
-        public void ShouldReturnFalseAndMessageStringIfExpectedDataContainsKeysMatchingKeysWithUnmatchedValues()
+        public void ShouldReturnFalseAndMessageStringIfExpectedDataContainsKeysWithUnmatchedValues()
         {
             // given
             Xeption randomXeption = new Xeption();
@@ -140,7 +140,7 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
             message.Should().NotBeNullOrEmpty();
-            message.Should().BeEquivalentTo(expectedMessage.ToString());
+            message.Should().BeEquivalentTo(expectedMessage.ToString().Trim('\r', '\n'));
         }
     }
 }

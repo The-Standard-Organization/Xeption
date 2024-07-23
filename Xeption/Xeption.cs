@@ -76,133 +76,150 @@ namespace Xeptions
 
         public (bool IsEqual, string Message) DataEqualsWithDetail(IDictionary dictionary)
         {
-            bool isEqual = true;
-            var messageStringBuilder = new StringBuilder();
-            isEqual = CompareDataKeys(dictionary, isEqual, messageStringBuilder);
+            (bool isEqual, string error) = CompareDataKeys(this.Data, dictionary);
 
-            string errorMessage = String.IsNullOrWhiteSpace(messageStringBuilder.ToString())
+            string errorMessage = String.IsNullOrWhiteSpace(error)
                 ? String.Empty
-                : $"Expected data to: {Environment.NewLine}{messageStringBuilder.ToString()}";
+                : $"Expected data to: {Environment.NewLine}{error}";
 
             return (isEqual, errorMessage);
         }
 
-        private bool CompareDataKeys(IDictionary dictionary, bool isEqual, StringBuilder messageStringBuilder)
+        private static (bool IsMatch, string Message) CompareDataKeys(
+            IDictionary dictionary,
+            IDictionary otherDictionary)
         {
-            if (this.Data.Count == 0 && dictionary.Count == 0)
+            if (dictionary.Count == 0 && otherDictionary.Count == 0)
             {
-                return isEqual;
+                return (true, String.Empty);
             }
 
-            if (this.Data.Count != dictionary.Count)
-            {
-                isEqual = false;
+            bool isMatch = true;
+            var errors = new StringBuilder();
 
-                AppendMessage(
-                    messageStringBuilder,
-                    $"- have a count of {dictionary.Count}, but found {this.Data.Count}.");
+            bool unmatched = dictionary.Count != otherDictionary.Count;
+
+            if (dictionary.Count != otherDictionary.Count)
+            {
+                errors.AppendLine($"- have a count of {otherDictionary.Count}, but found {dictionary.Count}.");
             }
 
             (IDictionary additionalItems, IDictionary missingItems, IDictionary sharedItems) =
-                GetDataDifferences(dictionary);
+                GetDataDifferences(dictionary, otherDictionary);
 
-            isEqual = EvaluateAdditionalKeys(isEqual, messageStringBuilder, additionalItems);
-            isEqual = EvaluateMissingKeys(isEqual, messageStringBuilder, missingItems);
-            isEqual = EvaluateSharedKeys(isEqual, messageStringBuilder, sharedItems);
+            (bool hasAdditionalItems, string additionalErrors) = EvaluateAdditionalKeys(additionalItems);
+            (bool hasMissingItems, string missingErrors) = EvaluateMissingKeys(missingItems);
+            (bool unMatchedItems, string unMatchedItemsErrors) = EvaluateSharedKeys(dictionary, sharedItems);
 
-            return isEqual;
+            if (unmatched || hasAdditionalItems || hasMissingItems || unMatchedItems)
+            {
+                if (string.IsNullOrEmpty(additionalErrors) is false)
+                {
+                    errors.AppendLine(additionalErrors);
+                }
+
+                if (string.IsNullOrEmpty(missingErrors) is false)
+                {
+                    errors.AppendLine(missingErrors);
+                }
+
+                if (string.IsNullOrEmpty(unMatchedItemsErrors) is false)
+                {
+                    errors.AppendLine(unMatchedItemsErrors);
+                }
+
+                return (false, errors.ToString().TrimEnd('\r', '\n'));
+            }
+
+            return (true, string.Empty);
         }
 
-        private bool EvaluateAdditionalKeys(
-            bool isEqual,
-            StringBuilder messageStringBuilder,
+        private static (bool hasAdditionalItems, string additionalErrors) EvaluateAdditionalKeys(
             IDictionary additionalItems)
         {
+            bool hasAdditionalItems = additionalItems?.Count > 0;
+            var additionalErrors = new StringBuilder();
+
             if (additionalItems?.Count > 0)
             {
-                isEqual = false;
+                hasAdditionalItems = true;
 
                 foreach (DictionaryEntry dictionaryEntry in additionalItems)
                 {
-                    AppendMessage(
-                        messageStringBuilder,
-                        $"- NOT contain key '{dictionaryEntry.Key}'.");
+                    additionalErrors.AppendLine($"- NOT contain key '{dictionaryEntry.Key}'.");
                 }
             }
 
-            return isEqual;
+            return (hasAdditionalItems, additionalErrors.ToString());
         }
 
-        private bool EvaluateMissingKeys(
-            bool isEqual,
-            StringBuilder messageStringBuilder,
-            IDictionary missingItems)
+        private static (bool hasMissingItems, string missingErrors) EvaluateMissingKeys(IDictionary missingItems)
         {
+            bool hasMissingItems = missingItems?.Count > 0;
+            var missingErrors = new StringBuilder();
+
             if (missingItems?.Count > 0)
             {
-                isEqual = false;
-
                 foreach (DictionaryEntry dictionaryEntry in missingItems)
                 {
                     var values = String.Join(", ", dictionaryEntry.Value as List<string>);
-
-                    AppendMessage(
-                        messageStringBuilder,
-                        $"- contain key '{dictionaryEntry.Key}' with value(s) [{values}].");
+                    missingErrors.AppendLine($"- contain key '{dictionaryEntry.Key}' with value(s) [{values}].");
                 }
             }
 
-            return isEqual;
+            return (hasMissingItems, missingErrors.ToString());
         }
 
-        private bool EvaluateSharedKeys(
-            bool isEqual,
-            StringBuilder messageStringBuilder,
+        private static (bool unMatchedItems, string unMatchedItemsErrors) EvaluateSharedKeys(
+            IDictionary dictionary,
             IDictionary sharedItems)
         {
             if (sharedItems?.Count > 0)
             {
+                bool unMatchedItems = false;
+                var unMatchedItemsErrors = new StringBuilder();
+
                 foreach (DictionaryEntry dictionaryEntry in sharedItems)
                 {
-
                     string expectedValues = ((List<string>)dictionaryEntry.Value)
                             .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
-                    string actualValues = ((List<string>)this.Data[dictionaryEntry.Key])
+                    string actualValues = ((List<string>)dictionary[dictionaryEntry.Key])
                         .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
                     if (actualValues != expectedValues)
                     {
-                        isEqual = false;
+                        unMatchedItems = true;
 
-                        AppendMessage(
-                            messageStringBuilder,
+                        unMatchedItemsErrors.AppendLine(
                             $"- have key '{dictionaryEntry.Key}' " +
                             $"with value(s) ['{expectedValues}'], " +
                             $"but found value(s) ['{actualValues}'].");
                     }
                 }
+
+                return (unMatchedItems, unMatchedItemsErrors.ToString());
             }
 
-            return isEqual;
+            return (false, string.Empty);
         }
 
-        private (
+        private static (
             IDictionary AdditionalItems,
             IDictionary MissingItems,
             IDictionary SharedItems)
-            GetDataDifferences(IDictionary dictionary)
+            GetDataDifferences(IDictionary dictionary, IDictionary otherDictionary)
         {
-            IDictionary additionalItems = this.Data.DeepClone();
-            IDictionary missingItems = dictionary.DeepClone();
-            IDictionary sharedItems = dictionary.DeepClone();
+            IDictionary additionalItems = dictionary.DeepClone();
+            IDictionary missingItems = otherDictionary.DeepClone();
+            IDictionary sharedItems = otherDictionary.DeepClone();
 
-            foreach (DictionaryEntry dictionaryEntry in dictionary)
+            foreach (DictionaryEntry dictionaryEntry in otherDictionary)
             {
                 additionalItems.Remove(dictionaryEntry.Key);
             }
 
-            foreach (DictionaryEntry dictionaryEntry in this.Data)
+            foreach (DictionaryEntry dictionaryEntry in dictionary)
             {
                 missingItems.Remove(dictionaryEntry.Key);
             }
@@ -218,14 +235,6 @@ namespace Xeptions
             }
 
             return (additionalItems, missingItems, sharedItems);
-        }
-
-        private void AppendMessage(StringBuilder builder, string message)
-        {
-            if (String.IsNullOrEmpty(message) is false)
-            {
-                builder.AppendLine(message);
-            }
         }
     }
 }
