@@ -5,7 +5,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Text;
-using FluentAssertions;
 
 namespace Xeptions
 {
@@ -41,7 +40,8 @@ namespace Xeptions
 
             if (exception is null || otherException is null)
             {
-                message = GetDifferences(exception, otherException).Message;
+                message = $"Expected exception to be \"{otherException?.GetType()?.FullName ?? "null"}\", " +
+                    $"but found \"{exception?.GetType()?.FullName ?? "null"}\"";
 
                 return false;
             }
@@ -53,8 +53,8 @@ namespace Xeptions
             {
                 invalidException = true;
 
-                errors.AppendLine($"Expected exception to be \"{otherException.GetType().FullName ?? "null"}\", " +
-                    $"but found \"{exception.GetType().FullName ?? "null"}\"");
+                errors.AppendLine($"Expected exception to be \"{otherException?.GetType()?.FullName ?? "null"}\", " +
+                    $"but found \"{exception?.GetType()?.FullName ?? "null"}\"");
             }
 
             if (exception.Message != otherException.Message)
@@ -118,20 +118,6 @@ namespace Xeptions
             }
 
             return exception.InnerException.SameExceptionAs(otherException.InnerException, out message);
-        }
-
-        private static (bool IsMatch, string Message) GetDifferences(Exception exception, Exception otherException)
-        {
-            try
-            {
-                exception.Should().BeEquivalentTo(otherException);
-
-                return (true, String.Empty);
-            }
-            catch (Exception error)
-            {
-                return (true, error.Message);
-            }
         }
     }
 }

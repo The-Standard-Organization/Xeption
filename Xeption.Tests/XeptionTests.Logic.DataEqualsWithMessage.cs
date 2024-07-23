@@ -90,7 +90,7 @@ namespace Xeptions.Tests
                 $"but found {actualXeption.Data.Count}");
 
             expectedMessage.AppendLine(
-                $"- contain key \"{randomKey}\" with value(s) [{randomValue}]");
+                $"- contain key \"{randomKey}\" with value(s) ['{randomValue}']");
 
             // when
             (bool isEqual, string message) = actualXeption

@@ -155,17 +155,17 @@ namespace Xeptions.Tests
             expectedError.AppendLine($"Expected exception to:");
 
             expectedError.AppendLine(
-                $"- have a count of {expectedException.Data.Count}, " +
+                $"- have a data count of {expectedException.Data.Count}, " +
                 $"but found {actualException.Data.Count}");
 
             expectedError.AppendLine(
                 $"- NOT contain key \"{actualData.Key}\"");
 
             expectedError.AppendLine(
-                $"- contain key \"{expectedDataOne.Key}\" with value(s) [{expectedDataOne.Value[0]}]");
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) ['{expectedDataOne.Value[0]}']");
 
             expectedError.AppendLine(
-                $"- contain key \"{expectedDataTwo.Key}\" with value(s) [{expectedDataTwo.Value[0]}]");
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) ['{expectedDataTwo.Value[0]}']");
 
             expectedError.AppendLine(
                 $"- have key \"{mutualKey}\" with value(s) ['{expectedDataSameKeyName.Value[0]}'], " +
@@ -341,21 +341,21 @@ namespace Xeptions.Tests
             expectedError.AppendLine($"Expected exception to:");
 
             expectedError.AppendLine(
-                $"- have a count of {expectedInnerException.Data.Count}, " +
+                $"- have a data count of {expectedInnerException.Data.Count}, " +
                 $"but found {actualInnerException.Data.Count}");
 
             expectedError.AppendLine(
                 $"- NOT contain key \"{actualData.Key}\"");
 
             expectedError.AppendLine(
-                $"- contain key \"{expectedDataOne.Key}\" with value(s) [{expectedDataOne.Value[0]}]");
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) ['{expectedDataOne.Value[0]}']");
 
             expectedError.AppendLine(
-                $"- contain key \"{expectedDataTwo.Key}\" with value(s) [{expectedDataTwo.Value[0]}]");
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) ['{expectedDataTwo.Value[0]}']");
 
             expectedError.AppendLine(
-                $"- have key \"{mutualKey}\" with value(s) [{expectedDataSameKeyName.Value[0]}], " +
-                $"but found value(s) [{actualDataSameKeyName.Value[0]}]");
+                $"- have key \"{mutualKey}\" with value(s) ['{expectedDataSameKeyName.Value[0]}'], " +
+                $"but found value(s) ['{actualDataSameKeyName.Value[0]}']");
 
             var expectedException = new Xeption(
                 message: exceptionMessage,
@@ -533,10 +533,10 @@ namespace Xeptions.Tests
             expectedMessage.AppendLine($"Aggregate exception differences:");
             expectedMessage.AppendLine($"* Difference in inner exception at index[0] - Expected exception to:");
             expectedMessage.AppendLine($"- NOT contain key \"{unexpectedKey}\"");
-            expectedMessage.AppendLine($"- contain key \"{expectedKey}\" with value(s) [{expectedValue}]");
+            expectedMessage.AppendLine($"- contain key \"{expectedKey}\" with value(s) ['{expectedValue}']");
 
-            expectedMessage.AppendLine($"- have key \"{sameKey}\" with value(s) [{expectedSameValue}], " +
-                $"but found value(s) [{unexpectedSameValue}]");
+            expectedMessage.AppendLine($"- have key \"{sameKey}\" with value(s) ['{expectedSameValue}'], " +
+                $"but found value(s) ['{unexpectedSameValue}']");
 
             // when
             Action assertAction = () =>

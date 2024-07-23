@@ -159,7 +159,7 @@ namespace Xeptions
                 foreach (DictionaryEntry dictionaryEntry in missingItems)
                 {
                     var values = String.Join(", ", dictionaryEntry.Value as List<string>);
-                    missingErrors.AppendLine($"- contain key \"{dictionaryEntry.Key}\" with value(s) [{values}]");
+                    missingErrors.AppendLine($"- contain key \"{dictionaryEntry.Key}\" with value(s) ['{values}']");
                 }
             }
 
