@@ -78,11 +78,7 @@ namespace Xeptions
         {
             (bool isEqual, string error) = CompareDataKeys(this.Data, dictionary);
 
-            string errorMessage = String.IsNullOrWhiteSpace(error)
-                ? String.Empty
-                : $"Expected data to: {Environment.NewLine}{error}";
-
-            return (isEqual, errorMessage);
+            return (isEqual, error);
         }
 
         internal static (bool IsMatch, string Message) CompareDataKeys(
@@ -101,7 +97,7 @@ namespace Xeptions
 
             if (dictionary.Count != otherDictionary.Count)
             {
-                errors.AppendLine($"- have a count of {otherDictionary.Count}, but found {dictionary.Count}");
+                errors.AppendLine($"- have a data count of {otherDictionary.Count}, but found {dictionary.Count}");
             }
 
             (IDictionary additionalItems, IDictionary missingItems, IDictionary sharedItems) =
@@ -193,8 +189,8 @@ namespace Xeptions
 
                         unMatchedItemsErrors.AppendLine(
                             $"- have key \"{dictionaryEntry.Key}\" " +
-                            $"with value(s) [{expectedValues}], " +
-                            $"but found value(s) [{actualValues}]");
+                            $"with value(s) ['{expectedValues}'], " +
+                            $"but found value(s) ['{actualValues}']");
                     }
                 }
 
