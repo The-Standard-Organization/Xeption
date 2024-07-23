@@ -193,8 +193,8 @@ namespace Xeptions
 
                         unMatchedItemsErrors.AppendLine(
                             $"- have key \"{dictionaryEntry.Key}\" " +
-                            $"with value(s) ['{expectedValues}'], " +
-                            $"but found value(s) ['{actualValues}']");
+                            $"with value(s) [{expectedValues}], " +
+                            $"but found value(s) [{actualValues}]");
                     }
                 }
 

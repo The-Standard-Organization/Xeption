@@ -94,7 +94,8 @@ namespace Xeptions
                 }
                 else
                 {
-                    var aggregateErrors = new StringBuilder("Aggregate exception differences:");
+                    var aggregateErrors = new StringBuilder();
+                    aggregateErrors.AppendLine("Aggregate exception differences:");
 
                     for (int i = 0; i < aggregateException.InnerExceptions.Count; i++)
                     {
@@ -102,7 +103,9 @@ namespace Xeptions
                             otherAggregateException.InnerExceptions[i], out string innerMessage))
                         {
                             invalidException = true;
-                            errors.AppendLine($" - Difference in inner exception at index {i}: {innerMessage}");
+
+                            aggregateErrors
+                                .AppendLine($"* Difference in inner exception at index[{i}] - {innerMessage}");
                         }
                     }
 

@@ -341,21 +341,21 @@ namespace Xeptions.Tests
             expectedError.AppendLine($"Expected exception to:");
 
             expectedError.AppendLine(
-                $"- have an expected data item count to be {expectedInnerException.Data.Count}, " +
-                $"but found {actualInnerException.Data.Count}.");
+                $"- have a count of {expectedInnerException.Data.Count}, " +
+                $"but found {actualInnerException.Data.Count}");
 
             expectedError.AppendLine(
-                $"- contain key '{expectedDataOne.Key}' with value(s) [{expectedDataOne.Value[0]}].");
+                $"- NOT contain key \"{actualData.Key}\"");
 
             expectedError.AppendLine(
-                $"- contain key '{expectedDataTwo.Key}' with value(s) [{expectedDataTwo.Value[0]}].");
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) [{expectedDataOne.Value[0]}]");
 
             expectedError.AppendLine(
-                $"- NOT contain key '{actualData.Key}'.");
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) [{expectedDataTwo.Value[0]}]");
 
             expectedError.AppendLine(
-                $"- have key '{mutualKey}' with value(s) [{expectedDataSameKeyName.Value[0]}], " +
-                $"but found value(s) [{actualDataSameKeyName.Value[0]}].");
+                $"- have key \"{mutualKey}\" with value(s) [{expectedDataSameKeyName.Value[0]}], " +
+                $"but found value(s) [{actualDataSameKeyName.Value[0]}]");
 
             var expectedException = new Xeption(
                 message: exceptionMessage,
@@ -373,7 +373,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString());
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
         }
 
         [Fact(DisplayName = "04.1 - BeEquivalentToShouldPassIfAggregateExceptionsMatch")]
@@ -428,9 +428,9 @@ namespace Xeptions.Tests
                 innerException: actualAggregateException);
 
             string expectedMessage =
-                $"Expected aggregate inner exception message to be " +
+                $"Expected exception message to be " +
                 $"\"{expectedAggregateException.Message}\", " +
-                $"but found \"{actualAggregateException.Message}\".";
+                $"but found \"{actualAggregateException.Message}\"";
 
             // when
             Action assertAction = () =>
@@ -529,12 +529,14 @@ namespace Xeptions.Tests
                 message: randomMessage,
                 innerException: actualAggregateException);
 
-            string expectedMessage =
-                $"Expected aggregate inner exception [0] to:{Environment.NewLine}" +
-                $"- contain key '{expectedKey}' with value(s) [{expectedValue}].{Environment.NewLine}" +
-                $"- NOT contain key '{unexpectedKey}'.{Environment.NewLine}" +
-                $"- have key '{sameKey}' with value(s) [{expectedSameValue}], " +
-                $"but found value(s) [{unexpectedSameValue}].";
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Aggregate exception differences:");
+            expectedMessage.AppendLine($"* Difference in inner exception at index[0] - Expected exception to:");
+            expectedMessage.AppendLine($"- NOT contain key \"{unexpectedKey}\"");
+            expectedMessage.AppendLine($"- contain key \"{expectedKey}\" with value(s) [{expectedValue}]");
+
+            expectedMessage.AppendLine($"- have key \"{sameKey}\" with value(s) [{expectedSameValue}], " +
+                $"but found value(s) [{unexpectedSameValue}]");
 
             // when
             Action assertAction = () =>
@@ -544,7 +546,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().Contain(expectedMessage);
+            actualError.Message.Should().Contain(expectedMessage.ToString().TrimEnd('\r', '\n'));
         }
     }
 }
