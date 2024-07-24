@@ -1491,5 +1491,119 @@ namespace Xeptions.Tests
             Assert.False(result);
             actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
+
+        [Fact(DisplayName = "07.4 - Aggregate - Level 0 - SameExceptionAsShouldPassIfInnerExceptionDataMatch")]
+        public void AggregateSameExceptionAsShouldPassIfInnerExceptionsDataMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            KeyValuePair<string, List<string>> randomData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedData = randomData.DeepClone();
+            KeyValuePair<string, List<string>> actualData = randomData.DeepClone();
+
+            var expectedInnerException = new Xeption(
+                message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedData.Key,
+                values: expectedData.Value.ToArray());
+
+            var actualInnerException = new Xeption(
+                message: exceptionMessage);
+
+            actualInnerException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            var expectedException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: expectedInnerException);
+
+            var actualException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: actualInnerException);
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
+        }
+
+        [Fact(DisplayName = "07.5 - Aggregate - Level 0 - SameExceptionAsShouldFailIfInnerExceptionDataDontMatch")]
+        public void AggregateSameExceptionAsShouldFailIfInnerExceptionsDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string mutualKey = GetRandomString();
+            KeyValuePair<string, List<string>> expectedDataOne = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataTwo = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> actualData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+            KeyValuePair<string, List<string>> actualDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+
+            var expectedInnerException = new Xeption(
+                message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedDataOne.Key,
+                values: expectedDataOne.Value.ToArray());
+
+            expectedInnerException.AddData(
+                key: expectedDataTwo.Key,
+                values: expectedDataTwo.Value.ToArray());
+
+            expectedInnerException.AddData(
+                key: expectedDataSameKeyName.Key,
+                values: expectedDataSameKeyName.Value.ToArray());
+
+            var actualInnerException = new Xeption(
+                message: exceptionMessage);
+
+            actualInnerException.AddData(
+                key: actualDataSameKeyName.Key,
+                values: actualDataSameKeyName.Value.ToArray());
+
+            actualInnerException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Aggregate exception differences:");
+            expectedMessage.AppendLine($"* Difference in inner exception at index[0] - Expected exception to:");
+
+            expectedMessage.AppendLine(
+                $"- have a data count of {expectedInnerException.Data.Count}, " +
+                $"but found {actualInnerException.Data.Count}");
+
+            expectedMessage.AppendLine(
+                $"- NOT contain key \"{actualData.Key}\"");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) ['{expectedDataOne.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) ['{expectedDataTwo.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- have key \"{mutualKey}\" with value(s) ['{expectedDataSameKeyName.Value[0]}'], " +
+                $"but found value(s) ['{actualDataSameKeyName.Value[0]}']");
+
+            var expectedException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: expectedInnerException);
+
+            var actualException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: actualInnerException);
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            //then
+            Assert.False(result);
+            actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+        }
     }
 }
