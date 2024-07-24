@@ -20,8 +20,8 @@ namespace FluentAssertions.Exceptions
             string because = "",
             params object[] becauseArgs)
         {
-            var actualException = Subject;
-            var expectedException = expectation;
+            Exception actualException = Subject;
+            Exception expectedException = expectation;
 
             bool isMatch = XeptionExtensions
                 .IsSameExceptionsAs(actualException, expectedException, out string message);

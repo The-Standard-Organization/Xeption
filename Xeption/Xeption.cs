@@ -114,17 +114,17 @@ namespace Xeptions
 
             if (unmatched || hasAdditionalItems || hasMissingItems || unMatchedItems)
             {
-                if (string.IsNullOrEmpty(additionalErrors) is false)
+                if (String.IsNullOrWhiteSpace(additionalErrors) is false)
                 {
                     errors.AppendLine(additionalErrors);
                 }
 
-                if (string.IsNullOrEmpty(missingErrors) is false)
+                if (String.IsNullOrWhiteSpace(missingErrors) is false)
                 {
                     errors.AppendLine(missingErrors);
                 }
 
-                if (string.IsNullOrEmpty(unMatchedItemsErrors) is false)
+                if (String.IsNullOrWhiteSpace(unMatchedItemsErrors) is false)
                 {
                     errors.AppendLine(unMatchedItemsErrors);
                 }

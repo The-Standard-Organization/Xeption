@@ -16,15 +16,11 @@ namespace Xeptions
         public static bool IsNotFrom(this Exception exception, string origin) =>
             exception.TargetSite?.ReflectedType?.Name != origin;
 
-        public static bool SameExceptionAs(this Exception exception, Exception otherException)
-        {
-            return IsSameExceptionsAs(exception, otherException, out string message);
-        }
+        public static bool SameExceptionAs(this Exception exception, Exception otherException) =>
+            IsSameExceptionsAs(exception, otherException, out string message);
 
-        public static bool SameExceptionAs(this Exception exception, Exception otherException, out string message)
-        {
-            return IsSameExceptionsAs(exception, otherException, out message);
-        }
+        public static bool SameExceptionAs(this Exception exception, Exception otherException, out string message) =>
+            IsSameExceptionsAs(exception, otherException, out message);
 
         public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
