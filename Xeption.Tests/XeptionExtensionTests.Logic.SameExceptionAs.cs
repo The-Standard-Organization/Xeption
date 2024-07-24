@@ -684,11 +684,11 @@ namespace Xeptions.Tests
             Xeption actualException = null;
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             // then
             Assert.True(result);
-            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
 
         [Fact(DisplayName = "02.1 - Level 0 - SameExceptionAsShouldPassIfExceptionsMatch")]
@@ -700,11 +700,11 @@ namespace Xeptions.Tests
             var actualException = new Xeption(message: randomMessage);
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             // then
             Assert.True(result);
-            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
 
         [Fact(DisplayName = "02.2 - Level 0 - SameExceptionAsShouldFailIfExceptionsDontMatchOnType")]
@@ -720,11 +720,11 @@ namespace Xeptions.Tests
                 $"but found \"{actualException.GetType().FullName}\"";
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             //then
             Assert.False(result);
-            actualMmessage.Should().BeEquivalentTo(expectedMessage);
+            actualMessage.Should().BeEquivalentTo(expectedMessage);
         }
 
         [Fact(DisplayName = "02.3 - Level 0 - SameExceptionAsShouldFailIfExceptionMessagesDontMatch")]
@@ -739,11 +739,11 @@ namespace Xeptions.Tests
                 $"but found \"{actualException.Message}\"";
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             //then
             Assert.False(result);
-            actualMmessage.Should().BeEquivalentTo(expectedMessage);
+            actualMessage.Should().BeEquivalentTo(expectedMessage);
         }
 
         [Fact(DisplayName = "02.4 - Level 0 - SameExceptionAsShouldPassIfExceptionDataMatch")]
@@ -770,11 +770,11 @@ namespace Xeptions.Tests
                 values: actualData.Value.ToArray());
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             // then
             Assert.True(result);
-            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
 
         [Fact(DisplayName = "02.5 - Level 0 - SameExceptionAsShouldFailIfExceptionDataDontMatch")]
@@ -840,11 +840,11 @@ namespace Xeptions.Tests
                 $"but found value(s) ['{actualDataSameKeyName.Value[0]}']");
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             //then
             Assert.False(result);
-            actualMmessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+            actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
 
         [Fact(DisplayName = "03.1 - Level 0 - SameExceptionAsShouldPassIfInnerExceptionsMatch")]
@@ -864,11 +864,11 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             // then
             Assert.True(result);
-            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
 
         [Fact(DisplayName = "03.2 - Level 1 - SameExceptionAsShouldFailIfInnerExceptionsTypeDontMatch")]
@@ -892,11 +892,11 @@ namespace Xeptions.Tests
                 $"but found \"{actualInnerException.GetType().FullName}\"";
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             //then
             Assert.False(result);
-            actualMmessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+            actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
 
         [Fact(DisplayName = "03.3 - Level 1 - SameExceptionAsShouldFailIfInnerExceptionMessageDontMatch")]
@@ -920,11 +920,11 @@ namespace Xeptions.Tests
                 $"but found \"{actualInnerException.Message}\"";
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             //then
             Assert.False(result);
-            actualMmessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+            actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
 
         [Fact(DisplayName = "03.4 - Level 1 - SameExceptionAsShouldPassIfInnerExceptionDataMatch")]
@@ -959,11 +959,85 @@ namespace Xeptions.Tests
                 innerException: actualInnerException);
 
             // when
-            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
 
             // then
             Assert.True(result);
-            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
+        }
+
+        [Fact(DisplayName = "03.5 - Level 1 - SameExceptionAsShouldFailIfInnerExceptionDataDontMatch")]
+        public void SameExceptionAsShouldFailIfInnerExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string mutualKey = GetRandomString();
+            KeyValuePair<string, List<string>> expectedDataOne = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataTwo = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> actualData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+            KeyValuePair<string, List<string>> actualDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+
+            var expectedInnerException = new Xeption(
+                message: exceptionMessage);
+
+            expectedInnerException.AddData(
+                key: expectedDataOne.Key,
+                values: expectedDataOne.Value.ToArray());
+
+            expectedInnerException.AddData(
+                key: expectedDataTwo.Key,
+                values: expectedDataTwo.Value.ToArray());
+
+            expectedInnerException.AddData(
+                key: expectedDataSameKeyName.Key,
+                values: expectedDataSameKeyName.Value.ToArray());
+
+            var actualInnerException = new Xeption(
+                message: exceptionMessage);
+
+            actualInnerException.AddData(
+                key: actualDataSameKeyName.Key,
+                values: actualDataSameKeyName.Value.ToArray());
+
+            actualInnerException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected inner exception (level 1) to:");
+
+            expectedMessage.AppendLine(
+                $"- have a data count of {expectedInnerException.Data.Count}, " +
+                $"but found {actualInnerException.Data.Count}");
+
+            expectedMessage.AppendLine(
+                $"- NOT contain key \"{actualData.Key}\"");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) ['{expectedDataOne.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) ['{expectedDataTwo.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- have key \"{mutualKey}\" with value(s) ['{expectedDataSameKeyName.Value[0]}'], " +
+                $"but found value(s) ['{actualDataSameKeyName.Value[0]}']");
+
+            var expectedException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerException);
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            //then
+            Assert.False(result);
+            actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
     }
 }
