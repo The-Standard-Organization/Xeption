@@ -682,11 +682,11 @@ namespace Xeptions.Tests
             Xeption actualException = null;
 
             // when
-            var result = actualException.SameExceptionAs(expectedException, out string message);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
 
             // then
             Assert.True(result);
-            Assert.True(String.IsNullOrWhiteSpace(message));
+            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
         }
 
         [Fact(DisplayName = "02.1 - Level 0 - SameExceptionAsShouldPassIfExceptionsMatch")]
@@ -698,11 +698,31 @@ namespace Xeptions.Tests
             var actualException = new Xeption(message: randomMessage);
 
             // when
-            var result = actualException.SameExceptionAs(expectedException, out string message);
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
 
             // then
             Assert.True(result);
-            Assert.True(String.IsNullOrWhiteSpace(message));
+            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
+        }
+
+        [Fact(DisplayName = "02.2 - Level 0 - SameExceptionAsShouldFailIfExceptionsDontMatchOnType")]
+        public void SameExceptionAsShouldFailIfExceptionsDontMatchOnType()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedException = new Xeption(message: randomMessage);
+            var actualException = new Exception(message: randomMessage);
+
+            string expectedMessage =
+                $"Expected exception to be \"{expectedException.GetType().FullName}\", " +
+                $"but found \"{actualException.GetType().FullName}\"";
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+
+            //then
+            Assert.False(result);
+            actualMmessage.Should().BeEquivalentTo(expectedMessage);
         }
     }
 }
