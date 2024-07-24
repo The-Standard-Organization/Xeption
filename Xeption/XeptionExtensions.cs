@@ -89,7 +89,7 @@ namespace Xeptions
 
             if (invalidException == true)
             {
-                message = errors.ToString().TrimEnd('\r', '\n');
+                message = errors.ToString().Trim();
                 return false;
             }
 
@@ -124,7 +124,7 @@ namespace Xeptions
 
                     if (invalidException == true)
                     {
-                        message = aggregateErrors.ToString().TrimEnd('\r', '\n');
+                        message = aggregateErrors.ToString().Trim();
                         return false;
                     }
                 }

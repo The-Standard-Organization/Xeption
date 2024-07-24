@@ -129,7 +129,7 @@ namespace Xeptions
                     errors.AppendLine(unMatchedItemsErrors);
                 }
 
-                return (false, errors.ToString().TrimEnd('\r', '\n'));
+                return (false, errors.ToString().Trim());
             }
 
             return (true, string.Empty);
@@ -151,7 +151,7 @@ namespace Xeptions
                 }
             }
 
-            return (hasAdditionalItems, additionalErrors.ToString().TrimEnd('\r', '\n'));
+            return (hasAdditionalItems, additionalErrors.ToString().Trim());
         }
 
         private static (bool hasMissingItems, string missingErrors) EvaluateMissingKeys(IDictionary missingItems)
@@ -168,7 +168,7 @@ namespace Xeptions
                 }
             }
 
-            return (hasMissingItems, missingErrors.ToString().TrimEnd('\r', '\n'));
+            return (hasMissingItems, missingErrors.ToString().Trim());
         }
 
         private static (bool unMatchedItems, string unMatchedItemsErrors) EvaluateSharedKeys(
@@ -203,7 +203,7 @@ namespace Xeptions
                     }
                 }
 
-                return (unMatchedItems, unMatchedItemsErrors.ToString().TrimEnd('\r', '\n'));
+                return (unMatchedItems, unMatchedItemsErrors.ToString().Trim());
             }
 
             return (false, string.Empty);

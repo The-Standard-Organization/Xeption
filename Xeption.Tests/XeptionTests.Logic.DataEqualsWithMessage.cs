@@ -63,7 +63,7 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
             message.Should().NotBeNullOrEmpty();
-            message.Should().BeEquivalentTo(expectedMessage.ToString().TrimEnd('\r', '\n'));
+            message.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
 
         [Fact]

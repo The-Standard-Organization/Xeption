@@ -179,7 +179,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().Trim());
         }
 
         [Fact(DisplayName = "03.1 - Level 0 - BeEquivalentToShouldPassIfInnerExceptionsMatch")]
@@ -373,7 +373,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().Trim());
         }
 
         [Fact(DisplayName = "04.1 - Level 2 - BeEquivalentToShouldPassIfInnerInnerExceptionsMatch")]
@@ -607,7 +607,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().Trim());
         }
 
         [Fact(DisplayName = "05.0 - Aggregate - BeEquivalentToShouldPassIfNullExceptionsMatch")]
@@ -730,7 +730,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().Trim());
         }
 
         [Fact(DisplayName = "07.1 - Aggregate - BeEquivalentToShouldPassIfInnerExceptionMatch")]
@@ -926,7 +926,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().Trim());
         }
 
         [Fact(DisplayName = "08.1 - Aggregate - Level 1 - BeEquivalentToShouldPassIfInnerInnerExceptionsMatch")]
@@ -995,7 +995,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().Contain(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().Contain(expectedError.ToString().Trim());
         }
 
         [Fact(DisplayName = "08.3 - Aggregate - Level 1 - BeEquivalentToShouldFailIfInnerInnerExceptionMessageDontMatch")]
@@ -1036,7 +1036,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().Contain(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().Contain(expectedError.ToString().Trim());
         }
 
         [Fact(DisplayName = "08.4 - Aggregate - Level 1 - BeEquivalentToShouldPassIfInnerInnerExceptionDataMatch")]
@@ -1168,7 +1168,7 @@ namespace Xeptions.Tests
                 Assert.Throws<XunitException>(assertAction);
 
             //then
-            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().TrimEnd('\r', '\n'));
+            actualError.Message.Should().BeEquivalentTo(expectedError.ToString().Trim());
         }
     }
 }
