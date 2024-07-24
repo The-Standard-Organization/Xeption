@@ -29,8 +29,16 @@ namespace Xeptions
         public static Expression<Func<Exception, bool>> SameExceptionAs(Exception expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        internal static bool IsSameExceptionsAs(Exception exception, Exception otherException, out string message)
+        internal static bool IsSameExceptionsAs(
+            Exception exception,
+            Exception otherException,
+            out string message,
+            int exceptionLevel = 0)
         {
+            string exceptionLevelName = exceptionLevel == 0
+                ? "exception"
+                : $"inner exception (level {exceptionLevel})";
+
             if (exception is null && otherException is null)
             {
                 message = String.Empty;
@@ -40,7 +48,7 @@ namespace Xeptions
 
             if (exception is null || otherException is null)
             {
-                message = $"Expected exception to be \"{otherException?.GetType()?.FullName ?? "null"}\", " +
+                message = $"Expected {exceptionLevelName} to be \"{otherException?.GetType()?.FullName ?? "null"}\", " +
                     $"but found \"{exception?.GetType()?.FullName ?? "null"}\"";
 
                 return false;
@@ -53,7 +61,7 @@ namespace Xeptions
             {
                 invalidException = true;
 
-                errors.AppendLine($"Expected exception to be \"{otherException?.GetType()?.FullName ?? "null"}\", " +
+                errors.AppendLine($"Expected {exceptionLevelName} to be \"{otherException?.GetType()?.FullName ?? "null"}\", " +
                     $"but found \"{exception?.GetType()?.FullName ?? "null"}\"");
             }
 
@@ -61,7 +69,7 @@ namespace Xeptions
             {
                 invalidException = true;
 
-                errors.AppendLine($"Expected exception message to be \"{otherException.Message}\", " +
+                errors.AppendLine($"Expected {exceptionLevelName} message to be \"{otherException.Message}\", " +
                     $"but found \"{exception.Message}\"");
             }
 
@@ -117,7 +125,11 @@ namespace Xeptions
                 }
             }
 
-            return exception.InnerException.SameExceptionAs(otherException.InnerException, out message);
+            return IsSameExceptionsAs(
+                exception.InnerException,
+                otherException.InnerException,
+                out message,
+                exceptionLevel + 1);
         }
     }
 }
