@@ -3,6 +3,8 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 using FluentAssertions;
 using Force.DeepCloner;
 using Xunit;
@@ -723,6 +725,126 @@ namespace Xeptions.Tests
             //then
             Assert.False(result);
             actualMmessage.Should().BeEquivalentTo(expectedMessage);
+        }
+
+        [Fact(DisplayName = "02.3 - Level 0 - SameExceptionAsShouldFailIfExceptionMessagesDontMatch")]
+        public void SameExceptionAsShouldFailIfExceptionMessagesDontMatch()
+        {
+            // given
+            var expectedException = new Xeption(message: GetRandomString());
+            var actualException = new Xeption(message: GetRandomString());
+
+            string expectedMessage =
+                $"Expected exception message to be \"{expectedException.Message}\", " +
+                $"but found \"{actualException.Message}\"";
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+
+            //then
+            Assert.False(result);
+            actualMmessage.Should().BeEquivalentTo(expectedMessage);
+        }
+
+        [Fact(DisplayName = "02.4 - Level 0 - SameExceptionAsShouldPassIfExceptionDataMatch")]
+        public void SameExceptionAsShouldPassIfExceptionDataMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            KeyValuePair<string, List<string>> randomData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedData = randomData.DeepClone();
+            KeyValuePair<string, List<string>> actualData = randomData.DeepClone();
+
+            var expectedException = new Xeption(
+                message: exceptionMessage);
+
+            expectedException.AddData(
+                key: expectedData.Key,
+                values: expectedData.Value.ToArray());
+
+            var actualException = new Xeption(
+                message: exceptionMessage);
+
+            actualException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
+        }
+
+        [Fact(DisplayName = "02.5 - Level 0 - SameExceptionAsShouldFailIfExceptionDataDontMatch")]
+        public void SameExceptionAsShouldFailIfExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string mutualKey = $"mutual-{GetRandomString()}";
+            KeyValuePair<string, List<string>> expectedDataOne = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataTwo = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> actualData = GenerateKeyValuePair(count: 1);
+
+            KeyValuePair<string, List<string>> expectedDataSameKeyName =
+                GenerateKeyValuePair(count: 1, keyName: mutualKey);
+
+            KeyValuePair<string, List<string>> actualDataSameKeyName =
+                GenerateKeyValuePair(count: 1, keyName: mutualKey);
+
+            var expectedException = new Xeption(
+                message: exceptionMessage);
+
+            expectedException.AddData(
+                key: expectedDataOne.Key,
+                values: expectedDataOne.Value.ToArray());
+
+            expectedException.AddData(
+                key: expectedDataTwo.Key,
+                values: expectedDataTwo.Value.ToArray());
+
+            expectedException.AddData(
+                key: expectedDataSameKeyName.Key,
+                values: expectedDataSameKeyName.Value.ToArray());
+
+            var actualException = new Xeption(
+                message: exceptionMessage);
+
+            actualException.AddData(
+                key: actualDataSameKeyName.Key,
+                values: actualDataSameKeyName.Value.ToArray());
+
+            actualException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Expected exception to:");
+
+            expectedMessage.AppendLine(
+                $"- have a data count of {expectedException.Data.Count}, " +
+                $"but found {actualException.Data.Count}");
+
+            expectedMessage.AppendLine(
+                $"- NOT contain key \"{actualData.Key}\"");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) ['{expectedDataOne.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) ['{expectedDataTwo.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- have key \"{mutualKey}\" with value(s) ['{expectedDataSameKeyName.Value[0]}'], " +
+                $"but found value(s) ['{actualDataSameKeyName.Value[0]}']");
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+
+            //then
+            Assert.False(result);
+            actualMmessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
     }
 }
