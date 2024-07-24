@@ -1713,5 +1713,52 @@ namespace Xeptions.Tests
             Assert.False(result);
             actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
+
+        [Fact(DisplayName = "08.4 - Aggregate - Level 1 - SameExceptionAsShouldPassIfInnerInnerExceptionDataMatch")]
+        public void AggregateSameExceptionAsShouldPassIfInnerInnerExceptionsDataMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            KeyValuePair<string, List<string>> randomData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedData = randomData.DeepClone();
+            KeyValuePair<string, List<string>> actualData = randomData.DeepClone();
+
+            var expectedInnerInnerException = new Xeption(
+                message: exceptionMessage);
+
+            expectedInnerInnerException.AddData(
+                key: expectedData.Key,
+                values: expectedData.Value.ToArray());
+
+            var actualInnerInnerException = new Xeption(
+                message: exceptionMessage);
+
+            actualInnerInnerException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            Xeption expectedInnerException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerInnerException);
+
+            Xeption actualInnerException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerInnerException);
+
+            var expectedException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: expectedInnerException);
+
+            var actualException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: actualInnerException);
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
+        }
     }
 }
