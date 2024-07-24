@@ -1605,5 +1605,37 @@ namespace Xeptions.Tests
             Assert.False(result);
             actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
+
+        [Fact(DisplayName = "08.1 - Aggregate - Level 1 - SameExceptionAsShouldPassIfInnerInnerExceptionsMatch")]
+        public void AggregateSameExceptionAsShouldPassIfInnerInnerExceptionsMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerInnerException = new Xeption(message: randomMessage);
+            Xeption actualInnerInnerException = new Xeption(message: randomMessage);
+
+            Xeption expectedInnerException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerInnerException);
+
+            Xeption actualInnerException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerInnerException);
+
+            var expectedException = new AggregateException(
+                message: randomMessage,
+                innerExceptions: expectedInnerException);
+
+            var actualException = new AggregateException(
+                message: randomMessage,
+                innerExceptions: actualInnerException);
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
+        }
     }
 }

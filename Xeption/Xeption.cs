@@ -182,15 +182,8 @@ namespace Xeptions
 
                 foreach (DictionaryEntry dictionaryEntry in sharedItems)
                 {
-
                     string expectedValues = GetDictionaryValues(dictionaryEntry.Value);
                     string actualValues = GetDictionaryValues(dictionary[dictionaryEntry.Key]);
-
-                    //string expectedValues = ((List<string>)dictionaryEntry.Value)
-                    //        .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
-
-                    //string actualValues = ((List<string>)dictionary[dictionaryEntry.Key])
-                    //    .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
                     if (actualValues != expectedValues)
                     {
