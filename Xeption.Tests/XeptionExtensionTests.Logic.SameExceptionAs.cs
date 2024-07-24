@@ -870,5 +870,61 @@ namespace Xeptions.Tests
             Assert.True(result);
             Assert.True(String.IsNullOrWhiteSpace(actualMmessage));
         }
+
+        [Fact(DisplayName = "03.2 - Level 1 - SameExceptionAsShouldFailIfInnerExceptionsTypeDontMatch")]
+        public void SameExceptionAsShouldFailIfInnerExceptionsTypeDontMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerException = new Exception(message: randomMessage);
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            string expectedMessage =
+                $"Expected inner exception (level 1) to be \"{expectedInnerException.GetType().FullName}\", " +
+                $"but found \"{actualInnerException.GetType().FullName}\"";
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+
+            //then
+            Assert.False(result);
+            actualMmessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+        }
+
+        [Fact(DisplayName = "03.3 - Level 1 - SameExceptionAsShouldFailIfInnerExceptionMessageDontMatch")]
+        public void SameExceptionAsShouldFailIfInnerExceptionMessageDontMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedInnerException = new Xeption(message: GetRandomString());
+            var actualInnerException = new Xeption(message: GetRandomString());
+
+            var expectedException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerException);
+
+            var actualException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerException);
+
+            string expectedMessage =
+                $"Expected inner exception (level 1) message to be \"{expectedInnerException.Message}\", " +
+                $"but found \"{actualInnerException.Message}\"";
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMmessage);
+
+            //then
+            Assert.False(result);
+            actualMmessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+        }
     }
 }
