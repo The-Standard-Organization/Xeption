@@ -1760,5 +1760,91 @@ namespace Xeptions.Tests
             Assert.True(result);
             Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
+
+        [Fact(DisplayName = "08.5 - Aggregate - Level 1 - SameExceptionAsShouldFailIfInnerInnerExceptionDataDontMatch")]
+        public void AggregateSameExceptionAsShouldFailIfAggregateInnerInnerExceptionDataDontMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            string mutualKey = GetRandomString();
+            KeyValuePair<string, List<string>> expectedDataOne = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataTwo = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> actualData = GenerateKeyValuePair(count: 1);
+            KeyValuePair<string, List<string>> expectedDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+            KeyValuePair<string, List<string>> actualDataSameKeyName = GenerateKeyValuePair(count: 1, mutualKey);
+
+            var expectedInnerInnerException = new Xeption(
+                message: exceptionMessage);
+
+            expectedInnerInnerException.AddData(
+                key: expectedDataOne.Key,
+                values: expectedDataOne.Value.ToArray());
+
+            expectedInnerInnerException.AddData(
+                key: expectedDataTwo.Key,
+                values: expectedDataTwo.Value.ToArray());
+
+            expectedInnerInnerException.AddData(
+                key: expectedDataSameKeyName.Key,
+                values: expectedDataSameKeyName.Value.ToArray());
+
+            var actualInnerInnerException = new Xeption(
+                message: exceptionMessage);
+
+            actualInnerInnerException.AddData(
+                key: actualDataSameKeyName.Key,
+                values: actualDataSameKeyName.Value.ToArray());
+
+            actualInnerInnerException.AddData(
+                key: actualData.Key,
+                values: actualData.Value.ToArray());
+
+            Xeption expectedInnerException = new Xeption(
+                message: exceptionMessage,
+                innerException: expectedInnerInnerException);
+
+            Xeption actualInnerException = new Xeption(
+                message: exceptionMessage,
+                innerException: actualInnerInnerException);
+
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Aggregate exception differences:");
+
+            expectedMessage.AppendLine(
+                $"* Difference in inner exception at index[0] - " +
+                $"Expected inner exception (level 1) to:");
+
+            expectedMessage.AppendLine(
+                $"- have a data count of {expectedInnerInnerException.Data.Count}, " +
+                $"but found {actualInnerInnerException.Data.Count}");
+
+            expectedMessage.AppendLine(
+                $"- NOT contain key \"{actualData.Key}\"");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataOne.Key}\" with value(s) ['{expectedDataOne.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- contain key \"{expectedDataTwo.Key}\" with value(s) ['{expectedDataTwo.Value[0]}']");
+
+            expectedMessage.AppendLine(
+                $"- have key \"{mutualKey}\" with value(s) ['{expectedDataSameKeyName.Value[0]}'], " +
+                $"but found value(s) ['{actualDataSameKeyName.Value[0]}']");
+
+            var expectedException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: expectedInnerException);
+
+            var actualException = new AggregateException(
+                message: exceptionMessage,
+                innerExceptions: actualInnerException);
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            //then
+            Assert.False(result);
+            actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+        }
     }
 }
