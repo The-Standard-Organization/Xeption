@@ -1637,5 +1637,43 @@ namespace Xeptions.Tests
             Assert.True(result);
             Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
+
+        [Fact(DisplayName = "08.2 - Aggregate - Level 1 - SameExceptionAsShouldFailIfInnerInnerExceptionsTypeDontMatch")]
+        public void AggregateSameExceptionAsShouldFailIfInnerInnerExceptionsTypeDontMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            Xeption expectedInnerInnerException = new Xeption(message: randomMessage);
+            Exception actualInnerInnerException = new Exception(message: randomMessage);
+
+            Xeption expectedInnerException = new Xeption(
+                message: randomMessage,
+                innerException: expectedInnerInnerException);
+
+            Xeption actualInnerException = new Xeption(
+                message: randomMessage,
+                innerException: actualInnerInnerException);
+
+            var expectedException = new AggregateException(
+                message: randomMessage,
+                innerExceptions: expectedInnerException);
+
+            var actualException = new AggregateException(
+                message: randomMessage,
+                innerExceptions: actualInnerException);
+
+            var expectedMessage = new StringBuilder();
+            expectedMessage.AppendLine($"Aggregate exception differences:");
+            expectedMessage.AppendLine($"* Difference in inner exception at index[0] - " +
+                $"Expected inner exception (level 1) to be \"{expectedInnerInnerException.GetType().FullName}\", " +
+                $"but found \"{actualInnerInnerException.GetType().FullName}\"");
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            //then
+            Assert.False(result);
+            actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
+        }
     }
 }
