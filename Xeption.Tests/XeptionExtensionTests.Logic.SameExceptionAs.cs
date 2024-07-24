@@ -1287,5 +1287,21 @@ namespace Xeptions.Tests
             Assert.True(result);
             Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
+
+        [Fact(DisplayName = "06.1 - Aggregate - SameExceptionAsShouldPassIfExceptionsMatch")]
+        public void AggregateSameExceptionAsShouldPassIfExceptionsMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedException = new AggregateException(message: randomMessage);
+            var actualException = new AggregateException(message: randomMessage);
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
+        }
     }
 }
