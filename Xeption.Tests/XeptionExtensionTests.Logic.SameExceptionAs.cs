@@ -682,10 +682,27 @@ namespace Xeptions.Tests
             Xeption actualException = null;
 
             // when
-            var result = XeptionExtensions.SameExceptionAs(actualException, expectedException, out string message);
+            var result = actualException.SameExceptionAs(expectedException, out string message);
 
             // then
             Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(message));
+        }
+
+        [Fact(DisplayName = "02.1 - Level 0 - SameExceptionAsShouldPassIfExceptionsMatch")]
+        public void SameExceptionAsShouldPassIfExceptionsMatch()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var expectedException = new Xeption(message: randomMessage);
+            var actualException = new Xeption(message: randomMessage);
+
+            // when
+            var result = actualException.SameExceptionAs(expectedException, out string message);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(message));
         }
     }
 }
