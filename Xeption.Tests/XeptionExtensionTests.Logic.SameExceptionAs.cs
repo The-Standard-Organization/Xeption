@@ -673,5 +673,19 @@ namespace Xeptions.Tests
             Assert.False(actualComparisonResult);
             message.Should().NotBeNullOrWhiteSpace();
         }
+
+        [Fact(DisplayName = "01.0 - Level 0 - SameExceptionAsShouldPassIfNullExceptionsMatch")]
+        public void SameExceptionAsShouldPassIfNullExceptionsMatch()
+        {
+            // given
+            Xeption expectedException = null;
+            Xeption actualException = null;
+
+            // when
+            var result = XeptionExtensions.SameExceptionAs(actualException, expectedException, out string message);
+
+            // then
+            Assert.True(result);
+        }
     }
 }

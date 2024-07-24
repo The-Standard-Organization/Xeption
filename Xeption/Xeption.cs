@@ -83,16 +83,21 @@ namespace Xeptions
 
         internal static (bool IsMatch, string Message) CompareDataKeys(
             IDictionary dictionary,
-            IDictionary otherDictionary)
+            IDictionary otherDictionary,
+            int exceptionLevel = 0)
         {
             if (dictionary.Count == 0 && otherDictionary.Count == 0)
             {
                 return (true, String.Empty);
             }
 
+            string exceptionLevelName = exceptionLevel == 0
+                ? "exception"
+                : $"inner exception (level {exceptionLevel})";
+
             bool isMatch = true;
             var errors = new StringBuilder();
-            errors.AppendLine($"Expected exception to:");
+            errors.AppendLine($"Expected {exceptionLevelName} to:");
             bool unmatched = dictionary.Count != otherDictionary.Count;
 
             if (dictionary.Count != otherDictionary.Count)
@@ -158,7 +163,7 @@ namespace Xeptions
             {
                 foreach (DictionaryEntry dictionaryEntry in missingItems)
                 {
-                    var values = String.Join(", ", dictionaryEntry.Value as List<string>);
+                    var values = GetDictionaryValues(dictionaryEntry.Value);
                     missingErrors.AppendLine($"- contain key \"{dictionaryEntry.Key}\" with value(s) ['{values}']");
                 }
             }
@@ -177,11 +182,15 @@ namespace Xeptions
 
                 foreach (DictionaryEntry dictionaryEntry in sharedItems)
                 {
-                    string expectedValues = ((List<string>)dictionaryEntry.Value)
-                            .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
-                    string actualValues = ((List<string>)dictionary[dictionaryEntry.Key])
-                        .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
+                    string expectedValues = GetDictionaryValues(dictionaryEntry.Value);
+                    string actualValues = GetDictionaryValues(dictionary[dictionaryEntry.Key]);
+
+                    //string expectedValues = ((List<string>)dictionaryEntry.Value)
+                    //        .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
+
+                    //string actualValues = ((List<string>)dictionary[dictionaryEntry.Key])
+                    //    .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
                     if (actualValues != expectedValues)
                     {
@@ -198,6 +207,28 @@ namespace Xeptions
             }
 
             return (false, string.Empty);
+        }
+
+        private static string GetDictionaryValues(object values)
+        {
+            List<string> valuesList;
+
+            if (values is string[])
+            {
+                valuesList = ((string[])values).ToList();
+            }
+            else if (values is List<string>)
+            {
+                valuesList = (List<string>)values;
+            }
+            else
+            {
+                throw new InvalidCastException("Unsupported type in sharedItems dictionary.");
+            }
+
+            string stringValues = valuesList.Aggregate((t1, t2) => t1 + "','" + t2);
+
+            return stringValues;
         }
 
         private static (

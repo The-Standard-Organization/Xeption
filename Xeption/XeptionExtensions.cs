@@ -61,20 +61,25 @@ namespace Xeptions
             {
                 invalidException = true;
 
-                errors.AppendLine($"Expected {exceptionLevelName} to be \"{otherException?.GetType()?.FullName ?? "null"}\", " +
+                errors.AppendLine($"Expected {exceptionLevelName} to be " +
+                    $"\"{otherException?.GetType()?.FullName ?? "null"}\", " +
                     $"but found \"{exception?.GetType()?.FullName ?? "null"}\"");
             }
 
-            if (exception.Message != otherException.Message)
+            if ((exception is AggregateException
+                && otherException is AggregateException) is false)
             {
-                invalidException = true;
+                if (exception.Message != otherException.Message)
+                {
+                    invalidException = true;
 
-                errors.AppendLine($"Expected {exceptionLevelName} message to be \"{otherException.Message}\", " +
-                    $"but found \"{exception.Message}\"");
+                    errors.AppendLine($"Expected {exceptionLevelName} message to be \"{otherException.Message}\", " +
+                        $"but found \"{exception.Message}\"");
+                }
             }
 
             (bool isDataEqual, string dataMessage) =
-                Xeption.CompareDataKeys(exception.Data, otherException.Data);
+                Xeption.CompareDataKeys(exception.Data, otherException.Data, exceptionLevel);
 
             if (isDataEqual == false)
             {
