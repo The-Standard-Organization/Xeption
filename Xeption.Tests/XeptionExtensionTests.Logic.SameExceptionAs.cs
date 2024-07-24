@@ -1273,5 +1273,19 @@ namespace Xeptions.Tests
             actualMessage.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
 
+        [Fact(DisplayName = "05.0 - Aggregate - SameExceptionAsShouldPassIfNullExceptionsMatch")]
+        public void AggregateSameExceptionAsShouldPassIfNullExceptionsMatch()
+        {
+            // given
+            AggregateException expectedException = null;
+            AggregateException actualException = null;
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
+        }
     }
 }
