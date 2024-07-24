@@ -1303,5 +1303,36 @@ namespace Xeptions.Tests
             Assert.True(result);
             Assert.True(String.IsNullOrWhiteSpace(actualMessage));
         }
+
+        [Fact(DisplayName = "06.2 - Aggregate - SameExceptionAsShouldPassIfExceptionDataMatch")]
+        public void AggregateSameExceptionAsShouldPassIfExceptionDataMatch()
+        {
+            // given
+            string exceptionMessage = GetRandomString();
+            KeyValuePair<string, List<string>> randomData = GenerateKeyValuePair(count: 2);
+            KeyValuePair<string, List<string>> expectedData = randomData.DeepClone();
+            KeyValuePair<string, List<string>> actualData = randomData.DeepClone();
+
+            var expectedException = new AggregateException(
+                message: exceptionMessage);
+
+            expectedException.Data.Add(
+                key: expectedData.Key,
+                value: expectedData.Value.ToArray());
+
+            var actualException = new AggregateException(
+                message: exceptionMessage);
+
+            actualException.Data.Add(
+                key: actualData.Key,
+                value: actualData.Value.ToArray());
+
+            // when
+            bool result = actualException.SameExceptionAs(expectedException, out string actualMessage);
+
+            // then
+            Assert.True(result);
+            Assert.True(String.IsNullOrWhiteSpace(actualMessage));
+        }
     }
 }
