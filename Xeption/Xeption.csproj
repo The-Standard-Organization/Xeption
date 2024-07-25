@@ -10,18 +10,18 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageIcon>Xeption.png</PackageIcon>
 		<PackageIconUrl />
-		<Version>2.7</Version>
-		<AssemblyVersion>2.7.0.0</AssemblyVersion>
-		<FileVersion>2.7.0.0</FileVersion>
+		<Version>2.8</Version>
+		<AssemblyVersion>2.8.0.0</AssemblyVersion>
+		<FileVersion>2.8.0.0</FileVersion>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<PackageLicenseExpression></PackageLicenseExpression>
 		<PackageProjectUrl>https://www.xeption.net</PackageProjectUrl>
 		<PackageLicenseFile>License.txt</PackageLicenseFile>
 		<RepositoryUrl>https://github.com/hassanhabib/Xeption</RepositoryUrl>
-		<RepositoryType>Github</RepositoryType>
+		<RepositoryType>GitHub</RepositoryType>
 		<PackageTags>Exceptions .NET</PackageTags>
 		<PackageReleaseNotes>
-			Addition of a SameExceptionAs overload that can provide detail on differnces. 
+			Addition of a SameExceptionAs overload that can provide detail on differences. 
 			Aggregate exception support.
 		</PackageReleaseNotes>
 	</PropertyGroup>
