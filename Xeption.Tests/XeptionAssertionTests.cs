@@ -34,11 +34,5 @@ namespace Xeptions.Tests
 
             return keyValuePair;
         }
-
-        internal class OtherTarget
-        {
-            public static void ThrowingExceptionMethod() =>
-                throw new Exception();
-        }
     }
 }

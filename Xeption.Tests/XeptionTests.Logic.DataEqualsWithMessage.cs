@@ -33,7 +33,7 @@ namespace Xeptions.Tests
         }
 
         [Fact]
-        public void ShouldReturnFalsAndMessageStringIfActualDataContainsKeysNotInExpectedData()
+        public void ShouldReturnFalseAndMessageStringIfActualDataContainsKeysNotInExpectedData()
         {
             // given
             Xeption randomXeption = new Xeption();
@@ -49,13 +49,13 @@ namespace Xeptions.Tests
             actualXeption.UpsertDataList(randomKey, randomValue);
 
             var expectedMessage = new StringBuilder();
-            expectedMessage.AppendLine($"Expected data to: ");
+            expectedMessage.AppendLine($"Expected exception to:");
 
             expectedMessage.AppendLine(
-                $"- have a count of {expectedXeption.Data.Count}, " +
-                $"but found {actualXeption.Data.Count}.");
+                $"- have a data count of {expectedXeption.Data.Count}, " +
+                $"but found {actualXeption.Data.Count}");
 
-            expectedMessage.AppendLine($"- NOT contain key '{randomKey}'.");
+            expectedMessage.AppendLine($"- NOT contain key \"{randomKey}\"");
 
             // when
             (bool isEqual, string message) = actualXeption.DataEqualsWithDetail(expectedXeption.Data);
@@ -63,7 +63,7 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
             message.Should().NotBeNullOrEmpty();
-            message.Should().BeEquivalentTo(expectedMessage.ToString());
+            message.Should().BeEquivalentTo(expectedMessage.ToString().Trim());
         }
 
         [Fact]
@@ -83,14 +83,14 @@ namespace Xeptions.Tests
             expectedXeption.UpsertDataList(randomKey, randomValue);
 
             var expectedMessage = new StringBuilder();
-            expectedMessage.AppendLine($"Expected data to: ");
+            expectedMessage.AppendLine($"Expected exception to:");
 
             expectedMessage.AppendLine(
-                $"- have a count of {expectedXeption.Data.Count}, " +
-                $"but found {actualXeption.Data.Count}.");
+                $"- have a data count of {expectedXeption.Data.Count}, " +
+                $"but found {actualXeption.Data.Count}");
 
             expectedMessage.AppendLine(
-                $"- contain key '{randomKey}' with value(s) [{randomValue}].");
+                $"- contain key \"{randomKey}\" with value(s) ['{randomValue}']");
 
             // when
             (bool isEqual, string message) = actualXeption
@@ -99,11 +99,11 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
             message.Should().NotBeNullOrEmpty();
-            message.Should().BeEquivalentTo(expectedMessage.ToString());
+            message.Should().BeEquivalentTo(expectedMessage.ToString().Trim('\r', '\n'));
         }
 
         [Fact]
-        public void ShouldReturnFalseAndMessageStringIfExpectedDataContainsKeysMatchingKeysWithUnmatchedValues()
+        public void ShouldReturnFalseAndMessageStringIfExpectedDataContainsKeysWithUnmatchedValues()
         {
             // given
             Xeption randomXeption = new Xeption();
@@ -127,11 +127,11 @@ namespace Xeptions.Tests
                 .Select(value => value).Aggregate((t1, t2) => t1 + "','" + t2);
 
             var expectedMessage = new StringBuilder();
-            expectedMessage.AppendLine($"Expected data to: ");
+            expectedMessage.AppendLine($"Expected exception to:");
 
             expectedMessage.AppendLine(
-                $"- have key '{randomKey}' with value(s) ['{expectedValues}'], " +
-                $"but found value(s) ['{actualValues}'].");
+                $"- have key \"{randomKey}\" with value(s) ['{expectedValues}'], " +
+                $"but found value(s) ['{actualValues}']");
 
             // when
             (bool isEqual, string message) = actualXeption
@@ -140,7 +140,7 @@ namespace Xeptions.Tests
             // then
             isEqual.Should().BeFalse();
             message.Should().NotBeNullOrEmpty();
-            message.Should().BeEquivalentTo(expectedMessage.ToString());
+            message.Should().BeEquivalentTo(expectedMessage.ToString().Trim('\r', '\n'));
         }
     }
 }
