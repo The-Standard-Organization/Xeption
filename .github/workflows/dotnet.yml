@@ -4,6 +4,11 @@ on:
     branches:
     - main
   pull_request:
+    types:
+    - opened
+    - synchronize
+    - reopened
+    - closed
     branches:
     - main
 jobs:
@@ -53,7 +58,7 @@ jobs:
 
         sudo apt-get install xmlstarlet
 
-        version_number=$(xmlstarlet sel -t -v "//Version" -n ADotNet/ADotNet.csproj)
+        version_number=$(xmlstarlet sel -t -v "//Version" -n Xeption/Xeption.csproj)
 
         echo "$version_number"
 
@@ -72,7 +77,7 @@ jobs:
 
         sudo apt-get install xmlstarlet
 
-        package_release_notes=$(xmlstarlet sel -t -v "//PackageReleaseNotes" -n ADotNet/ADotNet.csproj)
+        package_release_notes=$(xmlstarlet sel -t -v "//PackageReleaseNotes" -n Xeption/Xeption.csproj)
 
         echo "$package_release_notes"
 
