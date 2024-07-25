@@ -17,6 +17,7 @@
 		<PackageLicenseExpression></PackageLicenseExpression>
 		<PackageProjectUrl>https://www.xeption.net</PackageProjectUrl>
 		<PackageLicenseFile>License.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/hassanhabib/Xeption</RepositoryUrl>
 		<RepositoryType>GitHub</RepositoryType>
 		<PackageTags>Exceptions .NET</PackageTags>
@@ -32,6 +33,10 @@
 			<PackagePath></PackagePath>
 		</None>
 		<None Include="Resources\Xeption.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\README.md">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>

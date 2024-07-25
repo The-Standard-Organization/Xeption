@@ -31,6 +31,7 @@ namespace Xeptions.Infrastructure.Build
 
                     PullRequest = new PullRequestEvent
                     {
+                        Types = new string[] { "opened", "synchronize", "reopened", "closed" },
                         Branches = new string[] { branchName }
                     }
                 },
