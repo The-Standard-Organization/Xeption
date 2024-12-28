@@ -16,6 +16,7 @@ namespace Xeptions.Infrastructure.Build
         static void Main(string[] args)
         {
             string branchName = "main";
+            string dotNetVersion = "9.0.100";
             var adotNetClient = new ADotNetClient();
 
             var githubPipeline = new GithubPipeline
@@ -38,6 +39,10 @@ namespace Xeptions.Infrastructure.Build
                 Jobs = new Dictionary<string, Job>
                 {
                     {
+                        "label",
+                        new LabelJobV2(runsOn: BuildMachines.UbuntuLatest)
+                    },
+                    {
                         "build",
                         new Job
                         {
@@ -56,7 +61,7 @@ namespace Xeptions.Infrastructure.Build
 
                                     With = new TargetDotNetVersionV3
                                     {
-                                        DotNetVersion = "7.0.201"
+                                        DotNetVersion = dotNetVersion
                                     }
                                 },
 
@@ -88,9 +93,10 @@ namespace Xeptions.Infrastructure.Build
                     },
                     {
                         "publish",
-                        new PublishJob(
+                        new PublishJobV2(
                             runsOn: BuildMachines.UbuntuLatest,
                             dependsOn: "add_tag",
+                            dotNetVersion: dotNetVersion,
                             nugetApiKey: "${{ secrets.NUGET_ACCESS }}")
                     }
                 }
