@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
 		<Authors>Hassan Habib, Christo du Toit</Authors>
 		<Company>Hassan Habib</Company>
 		<Description>Exceptional Exceptions</Description>
@@ -39,8 +41,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="DeepCloner" Version="0.10.4" />
-		<PackageReference Include="FluentAssertions" Version="7.0.0" />
+		<PackageReference Include="FluentAssertions" Version="8.2.0" />
 		<PackageReference Include="System.Linq" Version="4.3.0" />
+		<PackageReference Include="System.Net.Http" Version="4.3.4" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -10,9 +10,10 @@ using Xeptions;
 namespace FluentAssertions.Exceptions
 {
     public class XeptionAssertions<TException> : ReferenceTypeAssertions<Exception, XeptionAssertions<TException>>
-    where TException : Exception
+        where TException : Exception
     {
-        public XeptionAssertions(TException exception) : base(exception)
+        public XeptionAssertions(TException exception, AssertionChain assertionChain) 
+            : base(exception, assertionChain)
         { }
 
         public AndConstraint<XeptionAssertions<TException>> BeEquivalentTo(
@@ -26,12 +27,10 @@ namespace FluentAssertions.Exceptions
             bool isMatch = XeptionExtensions
                 .IsSameExceptionsAs(actualException, expectedException, out string message);
 
-            Execute.Assertion
+            CurrentAssertionChain
                 .ForCondition(isMatch)
                 .BecauseOf(because, becauseArgs)
-                .FailWith(message)
-                .Then
-                .ClearExpectation();
+                .FailWith(message);
 
             return new AndConstraint<XeptionAssertions<TException>>(this);
         }

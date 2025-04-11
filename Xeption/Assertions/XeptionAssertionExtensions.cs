@@ -4,6 +4,7 @@
 
 using System;
 using FluentAssertions.Exceptions;
+using FluentAssertions.Execution;
 
 namespace FluentAssertions
 {
@@ -12,7 +13,9 @@ namespace FluentAssertions
         public static XeptionAssertions<TException> Should<TException>(this TException actualValue)
         where TException : Exception
         {
-            return new XeptionAssertions<TException>(actualValue);
+            var assertionChain = AssertionChain.GetOrCreate();
+
+            return new XeptionAssertions<TException>(actualValue, assertionChain);
         }
     }
 }

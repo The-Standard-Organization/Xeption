@@ -95,7 +95,10 @@ namespace Xeptions
                 ? "exception"
                 : $"inner exception (level {exceptionLevel})";
 
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
             bool isMatch = true;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
+
             var errors = new StringBuilder();
             errors.AppendLine($"Expected {exceptionLevelName} to:");
             bool unmatched = dictionary.Count != otherDictionary.Count;
