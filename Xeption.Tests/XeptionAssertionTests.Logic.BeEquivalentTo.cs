@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------------------
 // Copyright (c) The Standard Organization, a coalition of the Good-Hearted Engineers
+// Licensed under The Standard Software License (TSSL).
+// See License.txt in the project root for license information.
 // ----------------------------------------------------------------------------------
 
 using System;
