@@ -39,7 +39,14 @@ namespace Xeptions
         {
             if (this.Data.Contains(key))
             {
-                (this.Data[key] as List<string>)?.Add(value);
+                if (this.Data[key] is List<string> existingList)
+                {
+                    existingList.Add(value);
+                }
+                else
+                {
+                    this.Data[key] = new List<string> { value };
+                }
             }
             else
             {
