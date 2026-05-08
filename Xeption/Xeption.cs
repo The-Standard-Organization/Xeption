@@ -220,6 +220,11 @@ namespace Xeptions
                 throw new InvalidCastException("Unsupported type in sharedItems dictionary.");
             }
 
+            if (valuesList.Count == 0)
+            {
+                return string.Empty;
+            }
+
             string stringValues = valuesList.Aggregate((t1, t2) => t1 + "','" + t2);
 
             return stringValues;
