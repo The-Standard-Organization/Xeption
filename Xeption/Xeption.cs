@@ -217,7 +217,7 @@ namespace Xeptions
             }
             else
             {
-                throw new InvalidCastException("Unsupported type in sharedItems dictionary.");
+                return values?.ToString() ?? string.Empty;
             }
 
             if (valuesList.Count == 0)
