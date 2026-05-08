@@ -15,6 +15,24 @@ namespace Xeptions.Tests
     public partial class XeptionTests
     {
         [Fact]
+        public void ShouldNotSilentlyDropValueWhenUpsertingOnNonStringListKey()
+        {
+            // given
+            string key = GetRandomMessage();
+            string upsertedValue = GetRandomMessage();
+            var xeption = new Xeption();
+            xeption.Data.Add(key, 42);
+
+            // when
+            xeption.UpsertDataList(key, upsertedValue);
+
+            // then
+            var storedList = xeption.Data[key] as List<string>;
+            storedList.Should().NotBeNull();
+            storedList.Should().Contain(upsertedValue);
+        }
+
+        [Fact]
         public void ShouldNotThrowWhenComparingDataWithNonStringListValues()
         {
             // given
