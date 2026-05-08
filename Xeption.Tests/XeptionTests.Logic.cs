@@ -15,6 +15,23 @@ namespace Xeptions.Tests
     public partial class XeptionTests
     {
         [Fact]
+        public void ShouldNotThrowWhenComparingDataWithNonStringListValues()
+        {
+            // given
+            var xeption = new Xeption();
+            xeption.Data.Add("someKey", 42);
+
+            var otherXeption = new Xeption();
+            otherXeption.Data.Add("someKey", 42);
+
+            // when
+            Action compareAction = () => xeption.DataEquals(otherXeption.Data);
+
+            // then
+            compareAction.Should().NotThrow();
+        }
+
+        [Fact]
         public void ShouldNotThrowWhenComparingDataWithEmptyValuesList()
         {
             // given
