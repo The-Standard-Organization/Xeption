@@ -15,6 +15,23 @@ namespace Xeptions.Tests
     public partial class XeptionTests
     {
         [Fact]
+        public void ShouldNotThrowWhenComparingDataWithEmptyValuesList()
+        {
+            // given
+            var xeption = new Xeption();
+            xeption.AddData(key: "someKey");
+
+            var otherXeption = new Xeption();
+            otherXeption.AddData(key: "someKey");
+
+            // when
+            Action compareAction = () => xeption.DataEquals(otherXeption.Data);
+
+            // then
+            compareAction.Should().NotThrow();
+        }
+
+        [Fact]
         public void ShouldInheritFromSystemException()
         {
             // given . when . then
