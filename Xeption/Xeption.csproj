@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net9.0;net10.0</TargetFrameworks>
 		<Authors>Hassan Habib, Christo du Toit</Authors>
-		<Company>Hassan Habib</Company>
+		<Company>Standard Organization</Company>
 		<Description>Exceptional Exceptions</Description>
-		<Copyright>Copyright (c) Hassan Habib</Copyright>
+		<Copyright>Copyright (c) Standard Organization</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageIcon>Xeption.png</PackageIcon>
@@ -15,9 +15,9 @@
 		<FileVersion>2.8.0.0</FileVersion>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<PackageLicenseExpression></PackageLicenseExpression>
-		<PackageProjectUrl>https://www.xeption.net</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/The-Standard-Organization/Xeption</PackageProjectUrl>
 		<PackageLicenseFile>License.txt</PackageLicenseFile>
-		<RepositoryUrl>https://github.com/hassanhabib/Xeption</RepositoryUrl>
+		<RepositoryUrl>https://github.com/The-Standard-Organization/Xeption</RepositoryUrl>
 		<RepositoryType>GitHub</RepositoryType>
 		<PackageTags>Exceptions .NET</PackageTags>
 		<PackageReleaseNotes>
@@ -39,8 +39,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DeepCloner" Version="0.10.4" />
-		<PackageReference Include="FluentAssertions" Version="7.0.0" />
-		<PackageReference Include="System.Linq" Version="4.3.0" />
+		<PackageReference Include="FluentAssertions" Version="[7.2.2]" />
 	</ItemGroup>
 
 	<ItemGroup>

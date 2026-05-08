@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Xeption.Infrastructure.Build/Xeption.Infrastructure.Build.csproj" />
+  <Project Path="Xeption.Tests/Xeption.Tests.csproj" />
+  <Project Path="Xeption/Xeption.csproj" />
+</Solution>

@@ -97,7 +97,6 @@ namespace Xeptions
                 ? "exception"
                 : $"inner exception (level {exceptionLevel})";
 
-            bool isMatch = true;
             var errors = new StringBuilder();
             errors.AppendLine($"Expected {exceptionLevelName} to:");
             bool unmatched = dictionary.Count != otherDictionary.Count;
