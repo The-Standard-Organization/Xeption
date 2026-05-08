@@ -79,13 +79,13 @@ namespace Xeptions
             (bool isDataEqual, string dataMessage) =
                 Xeption.CompareDataKeys(exception.Data, otherException.Data, exceptionLevel);
 
-            if (isDataEqual == false)
+            if (!isDataEqual)
             {
                 invalidException = true;
                 errors.AppendLine(dataMessage);
             }
 
-            if (invalidException == true)
+            if (invalidException)
             {
                 message = errors.ToString().Trim();
                 return false;
@@ -120,7 +120,7 @@ namespace Xeptions
                         }
                     }
 
-                    if (invalidException == true)
+                    if (invalidException)
                     {
                         message = aggregateErrors.ToString().Trim();
                         return false;

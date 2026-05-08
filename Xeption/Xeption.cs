@@ -122,25 +122,25 @@ namespace Xeptions
 
             if (unmatched || hasAdditionalItems || hasMissingItems || unMatchedItems)
             {
-                if (String.IsNullOrWhiteSpace(additionalErrors) is false)
-                {
-                    errors.AppendLine(additionalErrors);
-                }
+                if (!String.IsNullOrWhiteSpace(additionalErrors))
+                    {
+                        errors.AppendLine(additionalErrors);
+                    }
 
-                if (String.IsNullOrWhiteSpace(missingErrors) is false)
-                {
-                    errors.AppendLine(missingErrors);
-                }
+                    if (!String.IsNullOrWhiteSpace(missingErrors))
+                    {
+                        errors.AppendLine(missingErrors);
+                    }
 
-                if (String.IsNullOrWhiteSpace(unMatchedItemsErrors) is false)
-                {
-                    errors.AppendLine(unMatchedItemsErrors);
-                }
+                    if (!String.IsNullOrWhiteSpace(unMatchedItemsErrors))
+                    {
+                        errors.AppendLine(unMatchedItemsErrors);
+                    }
 
                 return (false, errors.ToString().Trim());
             }
 
-            return (true, string.Empty);
+            return (true, String.Empty);
         }
 
         private static (bool hasAdditionalItems, string additionalErrors) EvaluateAdditionalKeys(
@@ -183,11 +183,11 @@ namespace Xeptions
             IDictionary dictionary,
             IDictionary sharedItems)
         {
+            bool unMatchedItems = false;
+            var unMatchedItemsErrors = new StringBuilder();
+
             if (sharedItems?.Count > 0)
             {
-                bool unMatchedItems = false;
-                var unMatchedItemsErrors = new StringBuilder();
-
                 foreach (DictionaryEntry dictionaryEntry in sharedItems)
                 {
                     string expectedValues = GetDictionaryValues(dictionaryEntry.Value);
@@ -203,11 +203,9 @@ namespace Xeptions
                             $"but found value(s) ['{actualValues}']");
                     }
                 }
-
-                return (unMatchedItems, unMatchedItemsErrors.ToString().Trim());
             }
 
-            return (false, string.Empty);
+            return (unMatchedItems, unMatchedItemsErrors.ToString().Trim());
         }
 
         private static string GetDictionaryValues(object values)
@@ -224,12 +222,12 @@ namespace Xeptions
             }
             else
             {
-                return values?.ToString() ?? string.Empty;
+                return values?.ToString() ?? String.Empty;
             }
 
             if (valuesList.Count == 0)
             {
-                return string.Empty;
+                return String.Empty;
             }
 
             string stringValues = valuesList.Aggregate((t1, t2) => t1 + "','" + t2);

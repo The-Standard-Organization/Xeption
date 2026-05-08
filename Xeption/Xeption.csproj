@@ -10,11 +10,10 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageIcon>Xeption.png</PackageIcon>
 		<PackageIconUrl />
-		<Version>2.8</Version>
+		<Version>2.8.0</Version>
 		<AssemblyVersion>2.8.0.0</AssemblyVersion>
 		<FileVersion>2.8.0.0</FileVersion>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<PackageLicenseExpression></PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/The-Standard-Organization/Xeption</PackageProjectUrl>
 		<PackageLicenseFile>License.txt</PackageLicenseFile>
 		<RepositoryUrl>https://github.com/The-Standard-Organization/Xeption</RepositoryUrl>
