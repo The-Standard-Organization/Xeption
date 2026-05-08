@@ -15,6 +15,84 @@ namespace Xeptions.Tests
     public partial class XeptionTests
     {
         [Fact]
+        public void ShouldAppendToExistingListWhenUpsertingAfterAddDataFromDictionary()
+        {
+            // given
+            string key = GetRandomMessage();
+            string existingValue = GetRandomMessage();
+            string upsertedValue = GetRandomMessage();
+            var xeption = new Xeption();
+
+            var sourceDictionary = new System.Collections.Generic.Dictionary<string, string[]>
+            {
+                { key, new[] { existingValue } }
+            };
+
+            xeption.AddData(sourceDictionary);
+
+            // when
+            xeption.UpsertDataList(key, upsertedValue);
+
+            // then
+            var storedList = xeption.Data[key] as List<string>;
+            storedList.Should().NotBeNull();
+            storedList.Should().Contain(existingValue);
+            storedList.Should().Contain(upsertedValue);
+        }
+
+        [Fact]
+        public void ShouldNotSilentlyDropValueWhenUpsertingOnNonStringListKey()
+        {
+            // given
+            string key = GetRandomMessage();
+            string upsertedValue = GetRandomMessage();
+            var xeption = new Xeption();
+            xeption.Data.Add(key, 42);
+
+            // when
+            xeption.UpsertDataList(key, upsertedValue);
+
+            // then
+            var storedList = xeption.Data[key] as List<string>;
+            storedList.Should().NotBeNull();
+            storedList.Should().Contain(upsertedValue);
+        }
+
+        [Fact]
+        public void ShouldNotThrowWhenComparingDataWithNonStringListValues()
+        {
+            // given
+            var xeption = new Xeption();
+            xeption.Data.Add("someKey", 42);
+
+            var otherXeption = new Xeption();
+            otherXeption.Data.Add("someKey", 42);
+
+            // when
+            Action compareAction = () => xeption.DataEquals(otherXeption.Data);
+
+            // then
+            compareAction.Should().NotThrow();
+        }
+
+        [Fact]
+        public void ShouldNotThrowWhenComparingDataWithEmptyValuesList()
+        {
+            // given
+            var xeption = new Xeption();
+            xeption.AddData(key: "someKey");
+
+            var otherXeption = new Xeption();
+            otherXeption.AddData(key: "someKey");
+
+            // when
+            Action compareAction = () => xeption.DataEquals(otherXeption.Data);
+
+            // then
+            compareAction.Should().NotThrow();
+        }
+
+        [Fact]
         public void ShouldInheritFromSystemException()
         {
             // given . when . then
