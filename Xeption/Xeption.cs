@@ -134,19 +134,19 @@ namespace Xeptions
             if (unmatched || hasAdditionalItems || hasMissingItems || unMatchedItems)
             {
                 if (!String.IsNullOrWhiteSpace(additionalErrors))
-                    {
-                        errors.AppendLine(additionalErrors);
-                    }
+                {
+                    errors.AppendLine(additionalErrors);
+                }
 
-                    if (!String.IsNullOrWhiteSpace(missingErrors))
-                    {
-                        errors.AppendLine(missingErrors);
-                    }
+                if (!String.IsNullOrWhiteSpace(missingErrors))
+                {
+                    errors.AppendLine(missingErrors);
+                }
 
-                    if (!String.IsNullOrWhiteSpace(unMatchedItemsErrors))
-                    {
-                        errors.AppendLine(unMatchedItemsErrors);
-                    }
+                if (!String.IsNullOrWhiteSpace(unMatchedItemsErrors))
+                {
+                    errors.AppendLine(unMatchedItemsErrors);
+                }
 
                 return (false, errors.ToString().Trim());
             }
@@ -162,8 +162,6 @@ namespace Xeptions
 
             if (additionalItems?.Count > 0)
             {
-                hasAdditionalItems = true;
-
                 foreach (DictionaryEntry dictionaryEntry in additionalItems)
                 {
                     additionalErrors.AppendLine($"- NOT contain key \"{dictionaryEntry.Key}\"");

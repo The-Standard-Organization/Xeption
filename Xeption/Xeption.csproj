@@ -9,7 +9,6 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageIcon>Xeption.png</PackageIcon>
-		<PackageIconUrl />
 		<Version>2.8.0</Version>
 		<AssemblyVersion>2.8.0.0</AssemblyVersion>
 		<FileVersion>2.8.0.0</FileVersion>
@@ -20,8 +19,15 @@
 		<RepositoryType>GitHub</RepositoryType>
 		<PackageTags>Exceptions .NET</PackageTags>
 		<PackageReleaseNotes>
-			Addition of a SameExceptionAs overload that can provide detail on differences. 
-			Aggregate exception support.
+			Bug fixes and code quality improvements:
+			- Fixed crash in GetDictionaryValues when comparing empty List&lt;string&gt; values.
+			- Fixed crash in GetDictionaryValues when Data contains non-string-list values.
+			- Fixed UpsertDataList silently dropping data when key holds a non-List&lt;string&gt; value.
+			- Fixed AddData(IDictionary) not normalizing string[] values to List&lt;string&gt;.
+			- Refactored EvaluateSharedKeys for clarity (single return point).
+			- Removed boolean comparison anti-patterns.
+			- Fixed SemVer version format.
+			- Removed empty PackageLicenseExpression element.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
