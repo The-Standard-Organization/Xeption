@@ -68,7 +68,18 @@ namespace Xeptions
             {
                 foreach (DictionaryEntry item in dictionary)
                 {
-                    this.Data.Add(item.Key, item.Value);
+                    if (item.Value is List<string> listValue)
+                    {
+                        this.Data.Add(item.Key, listValue);
+                    }
+                    else if (item.Value is string[] arrayValue)
+                    {
+                        this.Data.Add(item.Key, arrayValue.ToList());
+                    }
+                    else
+                    {
+                        this.Data.Add(item.Key, item.Value);
+                    }
                 }
             }
         }
