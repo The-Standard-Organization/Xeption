@@ -15,6 +15,32 @@ namespace Xeptions.Tests
     public partial class XeptionTests
     {
         [Fact]
+        public void ShouldAppendToExistingListWhenUpsertingAfterAddDataFromDictionary()
+        {
+            // given
+            string key = GetRandomMessage();
+            string existingValue = GetRandomMessage();
+            string upsertedValue = GetRandomMessage();
+            var xeption = new Xeption();
+
+            var sourceDictionary = new System.Collections.Generic.Dictionary<string, string[]>
+            {
+                { key, new[] { existingValue } }
+            };
+
+            xeption.AddData(sourceDictionary);
+
+            // when
+            xeption.UpsertDataList(key, upsertedValue);
+
+            // then
+            var storedList = xeption.Data[key] as List<string>;
+            storedList.Should().NotBeNull();
+            storedList.Should().Contain(existingValue);
+            storedList.Should().Contain(upsertedValue);
+        }
+
+        [Fact]
         public void ShouldNotSilentlyDropValueWhenUpsertingOnNonStringListKey()
         {
             // given
